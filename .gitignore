@@ -7,6 +7,9 @@
 # ENV FILE
 env.php
 
+# NPM
+/node_modules/
+
 # COMPOSER
 composer.phar
 /vendor/
