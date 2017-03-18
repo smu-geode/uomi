@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    web:
+        image: abiosoft/caddy:latest
+        restart: always
+        ports:
+            - 80:80
+            - 443:443
+        environment:
+            CADDYPATH: /etc/caddycerts
+        links:
+            - php
+        volumes:
+            - ./config/Caddyfile:/etc/Caddyfile
+            - ~/.caddy:/etc/caddycerts
+            - ./build:/var/www/uomi
+            - ./logs/caddy:/var/log/caddy
+
+    php:
+        image: php:7-fpm
+        restart: always
+        ports:
+            - 9000:9000
+        volumes:
+            - ./build:/var/www/uomi
+            - ./logs/php:/var/log/php
+            - ./config/php.ini:/usr/local/etc/php/php.ini
+            - ./config/php-fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf
