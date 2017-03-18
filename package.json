@@ -1,0 +1,22 @@
+{
+  "name": "uomi",
+  "version": "1.0.0",
+  "description": "Uomi is a web app that helps manage personal lending.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smu-geode/uomi.git"
+  },
+  "author": "Team Geode (smu-geode)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smu-geode/uomi/issues"
+  },
+  "homepage": "https://github.com/smu-geode/uomi#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
