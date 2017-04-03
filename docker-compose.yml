@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+    web:
+        image: abiosoft/caddy:php
+        restart: always
+        ports:
+            - 80:80
+        environment:
+            CADDYPATH: /etc/caddycerts
+        links:
+            - database
+        volumes:
+            - ./config/dev/caddy/Caddyfile:/etc/Caddyfile
+            - caddy_data:/etc/caddycerts
+            - ./build:/var/www/uomi
+            - ./logs/caddy:/var/log/caddy
+            - ./logs/php:/var/log/php
+            - ./config/dev/php/php.ini:/usr/local/etc/php/php.ini
+            - ./config/dev/php/php-fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf
+
+    database:
+        image: mysql:latest
+        restart: always
+        ports:
+            - 3306:3306
+        volumes:
+            - database_data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: grandma-ill-fray-parch
+            MYSQL_DATABASE: uomi
+            MYSQL_USER: uomi
+            MYSQL_PASSWORD: repress-glimmer-trigram-uncoil
+
+volumes:
+    caddy_data:
+    database_data:
