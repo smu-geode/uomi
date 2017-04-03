@@ -1,7 +1,7 @@
-127.0.0.1:80
+uomi.dev:80
 
 root /var/www/uomi/public
-tls no
+tls off
 gzip
 log /var/log/caddy/access.log
 errors /var/log/caddy/error.log
@@ -11,4 +11,5 @@ rewrite /api {
 	to ../api.php?url={uri}
 }
 
-fastcgi ../api.php php:9000 php
+fastcgi ../api.php 127.0.0.1:9000 php
+startup php-fpm7

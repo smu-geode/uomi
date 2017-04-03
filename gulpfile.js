@@ -5,6 +5,7 @@ const sass = require('gulp-sass');
 const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
+const spawn = require('child_process').spawn;
 
 var paths = {
     html: 'src/public/*.html',
@@ -31,7 +32,7 @@ gulp.task('html', function() {
         .pipe(gulp.dest(buildPaths.html));
 });
 
-gulp.task('html:watch', function() {
+gulp.task('watch:html', function() {
     gulp.watch(paths.html, ['html']);
 });
 
@@ -45,7 +46,7 @@ gulp.task('img', function() {
         .pipe(gulp.dest(buildPaths.img));
 });
 
-gulp.task('img:watch', function() {
+gulp.task('watch:img', function() {
     gulp.watch(paths.img, ['img']);
 });
 
@@ -61,7 +62,7 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(buildPaths.css));
 });
 
-gulp.task('sass:watch', function() {
+gulp.task('watch:sass', function() {
     gulp.watch(paths.scss, ['sass']);
 });
 
@@ -74,7 +75,7 @@ gulp.task('js', function() {
         .pipe(gulp.dest(buildPaths.js));
 });
 
-gulp.task('js:watch', function() {
+gulp.task('watch:js', function() {
     gulp.watch(paths.js, ['js']);
 });
 
@@ -87,8 +88,50 @@ gulp.task('php', function() {
         .pipe(gulp.dest(buildPaths.php));
 });
 
-gulp.task('php:watch', function() {
+gulp.task('watch:php', function() {
     gulp.watch(paths.php, ['php']);
+});
+
+/*************************************/
+/* Docker Compose                    */
+/*************************************/
+
+function docker(cmdName) {
+	let cmd = spawn('bin/dev/' + cmdName + '.sh');
+	cmd.stdout.on('data', function(data) {
+		console.log('> ' + data.toString());
+	});
+	cmd.stderr.on('data', function(data) {
+		console.error('> ' + data.toString());
+	});
+	cmd.on('error', function(error) {
+		console.error('From spawn: ' + error);
+		return;
+	});
+}
+
+gulp.task('up', function() {
+	docker('up');
+});
+
+gulp.task('halt', function() {
+	docker('halt');
+});
+
+gulp.task('suspend', function() {
+	docker('suspend');
+});
+
+gulp.task('resume', function() {
+	docker('resume');
+});
+
+gulp.task('destroy', function() {
+	docker('destroy');
+});
+
+gulp.task('ssh', function() {
+	docker('ssh');
 });
 
 /*************************************/
@@ -99,6 +142,5 @@ gulp.task('clean', function() {
     return del(['build/*']);
 });
 
-gulp.task('watch', ['html:watch','img:watch','sass:watch','js:watch','php:watch']);
-
+gulp.task('watch', ['watch:html','watch:img','watch:sass','watch:js','watch:php']);
 gulp.task('default', ['html','img','sass','js','php']);
