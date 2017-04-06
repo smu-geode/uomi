@@ -32,74 +32,83 @@ const buildPaths = {
 /* HTML                              */
 /*************************************/
 
-gulp.task('html', function() {
-    return gulp.src(paths.html, { base: srcBase })
+gulp.task('html', (done) => {
+    gulp.src(paths.html, { base: srcBase })
         .pipe(gulp.dest(buildPaths.html));
+	done();
 });
 
-gulp.task('watch:html', function() {
-    return gulp.watch(paths.html, ['html']);
+gulp.task('watch:html', () => {
+    gulp.watch(paths.html, ['html']);
 });
 
 /*************************************/
 /* Images                            */
 /*************************************/
 
-gulp.task('img', function() {
-    return gulp.src(paths.img)
+gulp.task('img', (done) => {
+    gulp.src(paths.img)
 		.pipe(imagemin())
         .pipe(gulp.dest(buildPaths.img));
+	done();
 });
 
-gulp.task('watch:img', function() {
-    return gulp.watch(paths.img, ['img']);
+gulp.task('watch:img', () => {
+    gulp.watch(paths.img, ['img']);
 });
 
 /*************************************/
 /* SASS                              */
 /*************************************/
 
-gulp.task('sass', function() {
+gulp.task('sass', (done) => {
     return gulp.src(paths.scss)
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(buildPaths.css));
+	done();
 });
 
-gulp.task('watch:sass', function() {
-    return gulp.watch(paths.scss, ['sass']);
+gulp.task('watch:sass', () => {
+    gulp.watch(paths.scss, ['sass']);
 });
 
 /*************************************/
 /* Javascript                        */
 /*************************************/
 
-gulp.task('js', function() {
+gulp.task('js', (done) => {
     return gulp.src(paths.js)
         .pipe(gulp.dest(buildPaths.js));
+	done();
 });
 
-gulp.task('watch:js', function() {
-    return gulp.watch(paths.js, ['js']);
+gulp.task('watch:js', () => {
+    gulp.watch(paths.js, ['js']);
 });
 
 /*************************************/
 /* PHP                               */
 /*************************************/
 
-gulp.task('php', function() {
-    return gulp.src(paths.php)
+gulp.task('php', (done) => {
+    gulp.src(paths.php)
         .pipe(gulp.dest(buildPaths.php));
+	done();
 });
 
-gulp.task('php:vendor', function() {
-	return gulp.src(paths.phpVendor, { base: vendorBase })
+gulp.task('watch:php', () => {
+	gulp.watch(paths.php, ['php']);
+});
+
+gulp.task('php:vendor', (done) => {
+	gulp.src(paths.phpVendor, { base: vendorBase })
 		.pipe(gulp.dest(buildPaths.phpVendor));
+	done();
 })
 
-gulp.task('watch:php', function() {
-    gulp.watch(paths.php, ['php']);
+gulp.task('watch:php:vendor', () => {
 	gulp.watch(paths.phpVendor, ['php:vendor']);
 });
 
@@ -107,56 +116,58 @@ gulp.task('watch:php', function() {
 /* Docker Compose                    */
 /*************************************/
 
-function docker(cmdName) {
+function docker(cmdName, done) {
 	let cmd = spawn('bin/dev/' + cmdName + '.sh');
-	cmd.stdout.on('data', function(data) {
+	cmd.stdout.on('data', (data) => {
 		console.log('> ' + data.toString());
 	});
-	cmd.stderr.on('data', function(data) {
+	cmd.stderr.on('data', (data) => {
 		console.error('> ' + data.toString());
 	});
-	cmd.on('error', function(error) {
+	cmd.on('error', (error) => {
 		console.error('From spawn: ' + error);
 		return;
 	});
+	cmd.on('exit', done);
 }
 
 function dockerSsh() {
 	let ssh = spawn('bin/dev/ssh.sh', [], { stdio: [0, 1, 2] });
 }
 
-gulp.task('up', function() {
-	docker('up');
+gulp.task('up', (done) => {
+	docker('up', done);
 });
 
-gulp.task('halt', function() {
-	docker('halt');
+gulp.task('halt', (done) => {
+	docker('halt', done);
 });
 
-gulp.task('suspend', function() {
-	docker('suspend');
+gulp.task('suspend', (done) => {
+	docker('suspend', done);
 });
 
-gulp.task('resume', function() {
-	docker('resume');
+gulp.task('resume', (done) => {
+	docker('resume', done);
 });
 
-gulp.task('destroy', function() {
-	docker('destroy');
+gulp.task('destroy', (done) => {
+	docker('destroy', done);
 });
 
-gulp.task('ssh', function() {
+gulp.task('ssh', (done) => {
 	dockerSsh();
+	done();
 });
 
 /*************************************/
 /* General                           */
 /*************************************/
 
-gulp.task('clean', function() {
+gulp.task('clean', () => {
     return del(['build/*']);
 });
 
-gulp.task('watch', ['watch:html','watch:img','watch:sass','watch:js','watch:php']);
-gulp.task('build', ['html','img','sass','js','php', 'php:vendor']);
-gulp.task('default', ['build']);
+gulp.task('watch', gulp.parallel('watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor'));
+gulp.task('build', gulp.parallel('html','img','sass','js','php', 'php:vendor'));
+gulp.task('default', gulp.parallel('build'));
