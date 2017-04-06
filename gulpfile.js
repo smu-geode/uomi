@@ -4,8 +4,11 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
+const ts = require('gulp-typescript');
 const del = require('del');
 const spawn = require('child_process').spawn;
+const uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
 
 const srcBase = 'src/';
 const vendorBase = 'vendor/';
@@ -14,7 +17,8 @@ const paths = {
     html: './src/public/**/*.html',
 	img: './src/public/img/*.*',
     scss: './src/public/scss/*.scss',
-    js: './src/public/js/*.js',
+    js: './src/public/*.js',
+    ts: './src/public/**/*.ts',
 	php: './src/**/*.php',
 	phpVendor: './vendor/**/*.*'
 };
@@ -23,7 +27,7 @@ const buildPaths = {
     html: 'build/public/',
 	img: 'build/public/img/',
     css: 'build/public/css/',
-    js: 'build/public/js/',
+    js: 'build/public/',
 	php: 'build/',
 	phpVendor: 'build/vendor/'
 };
@@ -33,7 +37,7 @@ const buildPaths = {
 /*************************************/
 
 gulp.task('html', (done) => {
-    gulp.src(paths.html, { base: srcBase })
+    gulp.src(paths.html, { base: srcBase + 'html/' })
         .pipe(gulp.dest(buildPaths.html));
 	done();
 });
@@ -79,13 +83,39 @@ gulp.task('watch:sass', () => {
 /*************************************/
 
 gulp.task('js', (done) => {
-    return gulp.src(paths.js)
+    gulp.src(paths.js)
         .pipe(gulp.dest(buildPaths.js));
 	done();
 });
 
 gulp.task('watch:js', () => {
     gulp.watch(paths.js, gulp.parallel('js'));
+});
+
+/*************************************/
+/* Typescript                        */
+/*************************************/
+
+var tsProject = ts.createProject('src/public/tsconfig.json', {
+    typescript: require('typescript')
+});
+
+gulp.task('nodeModules', (done) => {
+    gulp.src('node_modules/**/*.*').pipe(gulp.dest('build/public/node_modules'));
+    done();
+});
+
+gulp.task('ts', (done) => {
+    var result = gulp.src(paths.ts, { base: srcBase })
+        .pipe(sourcemaps.init())
+        .pipe(tsProject())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('build/'));
+    done();
+});
+
+gulp.task('watch:ts', () => {
+    gulp.watch(paths.ts, gulp.parallel('ts'));
 });
 
 /*************************************/
@@ -168,6 +198,6 @@ gulp.task('clean', () => {
     return del(['build/*']);
 });
 
-gulp.task('watch', gulp.parallel('watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor'));
-gulp.task('build', gulp.parallel('html','img','sass','js','php', 'php:vendor'));
+gulp.task('watch', gulp.parallel('watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor', 'watch:ts'));
+gulp.task('build', gulp.parallel('html','img','sass','js','php', 'php:vendor', 'ts', 'nodeModules'));
 gulp.task('default', gulp.parallel('build'));
