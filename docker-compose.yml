@@ -8,19 +8,28 @@ services:
         tty: true
         ports:
             - 80:80
-        environment:
-            CADDYPATH: /etc/caddycerts
         links:
             - database
         volumes:
             - ./config/dev/caddy/Caddyfile:/etc/Caddyfile
+            - ./config/dev/php/php.ini:/etc/php7/php.ini
             - caddy_data:/etc/caddycerts
             - ./build:/var/www/uomi
             - ./logs/caddy:/var/log/caddy
             - ./logs/php:/var/log/php7
+            - ./logs/api:/var/log/api
+        environment:
+            CADDYPATH: /etc/caddycerts
+            UOMI_DEBUG: 1
+            UOMI_DB_HOST: 0.0.0.0:3306
+            UOMI_DB_NAME: uomi
+            UOMI_DB_USERNAME: uomi
+            UOMI_DB_PASSWORD: repress-glimmer-trigram-uncoil
 
     database:
-        image: mysql:latest
+        build:
+            context: .
+            dockerfile: ./data/mysql.Dockerfile
         restart: always
         ports:
             - 3306:3306

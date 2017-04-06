@@ -1,7 +1,7 @@
 <?php
 
-require '../vendor/autoload.php';
-//require 'lib/autoload.php';
+require 'vendor/autoload.php';
+require 'lib/autoload.php';
 
 $settings = require 'settings.php';
 $app = new \Slim\App($settings);
@@ -13,6 +13,15 @@ require 'errors.php';
 $c = $app->getContainer();
 \Uomi\registerErrorHandlers($c);
 
-echo('API goes here');
+// Setup Eloquent
+/*
+$capsule = new \Illuminate\Database\Capsule\Manager;
+$capsule->addConnection($settings['settings']['eloquent']);
+use Illuminate\Container\Container;
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+*/
 
-?>
+require 'routes.php';
+$c->get('logger')->info("Starting app");
+$app->run();

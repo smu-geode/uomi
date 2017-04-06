@@ -8,13 +8,15 @@ const del = require('del');
 const spawn = require('child_process').spawn;
 
 const srcBase = 'src/';
+const vendorBase = 'vendor/';
 
 const paths = {
     html: './src/public/**/*.html',
 	img: './src/public/img/*.*',
     scss: './src/public/scss/*.scss',
     js: './src/public/js/*.js',
-	php: './src/**/*.php'
+	php: './src/**/*.php',
+	phpVendor: './vendor/**/*.*'
 };
 
 const buildPaths = {
@@ -22,7 +24,8 @@ const buildPaths = {
 	img: 'build/public/img/',
     css: 'build/public/css/',
     js: 'build/public/js/',
-	php: 'build/'
+	php: 'build/',
+	phpVendor: 'build/vendor/'
 };
 
 /*************************************/
@@ -90,8 +93,14 @@ gulp.task('php', function() {
         .pipe(gulp.dest(buildPaths.php));
 });
 
+gulp.task('php:vendor', function() {
+	return gulp.src(paths.phpVendor, { base: vendorBase })
+		.pipe(gulp.dest(buildPaths.phpVendor));
+})
+
 gulp.task('watch:php', function() {
-    return gulp.watch(paths.php, ['php']);
+    gulp.watch(paths.php, ['php']);
+	gulp.watch(paths.phpVendor, ['php:vendor']);
 });
 
 /*************************************/
@@ -149,5 +158,5 @@ gulp.task('clean', function() {
 });
 
 gulp.task('watch', ['watch:html','watch:img','watch:sass','watch:js','watch:php']);
-gulp.task('build', ['html','img','sass','js','php']);
+gulp.task('build', ['html','img','sass','js','php', 'php:vendor']);
 gulp.task('default', ['build']);

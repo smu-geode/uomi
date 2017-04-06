@@ -1,22 +1,22 @@
 <?php
-// $env = require __DIR__ . '/../env.php';
+$env = $_ENV;
 return [
     'settings' => [
-        'debug' => $env['UOMI_DEBUG'],
+        'debug' => getenv('UOMI_DEBUG'),
         'logger' => [
             'name' => 'uomi',
-            'path' => '../logs/api.log',
+            'path' => '/var/log/api/api.log',
         ],
         // Eloquent settings
-        /*'eloquent' => [
+        'eloquent' => [
             'driver' => 'mysql',
-            'host' => $env['UOMI_DB_HOST'],
-            'database' => $env['UOMI_DB_NAME'],
-            'username' => $env['UOMI_DB_USERNAME'],
-            'password' => $env['UOMI_DB_PASSWORD'],
+            'host' => getenv('UOMI_DB_HOST'),
+            'database' => getenv('UOMI_DB_NAME'),
+            'username' => getenv('UOMI_DB_USERNAME'),
+            'password' => getenv('UOMI_DB_PASSWORD'),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_general_ci',
             'prefix' => '',
-        ]*/
+        ]
     ],
 ];
