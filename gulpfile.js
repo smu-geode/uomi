@@ -6,14 +6,15 @@ const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const spawn = require('child_process').spawn;
-const opn = require('opn');
+
+var srcBase = 'src/';
 
 var paths = {
-    html: 'src/public/*.html',
-	img: 'src/public/img/*.*',
-    scss: 'src/public/scss/*.scss',
-    js: 'src/public/js/*.js',
-	php: 'src/*.php'
+    html: './src/public/**/*.html',
+	img: './src/public/img/*.*',
+    scss: './src/public/scss/*.scss',
+    js: './src/public/js/*.js',
+	php: './src/**/*.php'
 };
 
 var buildPaths = {
@@ -29,12 +30,12 @@ var buildPaths = {
 /*************************************/
 
 gulp.task('html', function() {
-    return gulp.src(paths.html)
+    return gulp.src(paths.html, { base: srcBase })
         .pipe(gulp.dest(buildPaths.html));
 });
 
 gulp.task('watch:html', function() {
-    gulp.watch(paths.html, ['html']);
+    return gulp.watch(paths.html, ['html']);
 });
 
 /*************************************/
@@ -48,7 +49,7 @@ gulp.task('img', function() {
 });
 
 gulp.task('watch:img', function() {
-    gulp.watch(paths.img, ['img']);
+    return gulp.watch(paths.img, ['img']);
 });
 
 /*************************************/
@@ -64,7 +65,7 @@ gulp.task('sass', function() {
 });
 
 gulp.task('watch:sass', function() {
-    gulp.watch(paths.scss, ['sass']);
+    return gulp.watch(paths.scss, ['sass']);
 });
 
 /*************************************/
@@ -77,7 +78,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('watch:js', function() {
-    gulp.watch(paths.js, ['js']);
+    return gulp.watch(paths.js, ['js']);
 });
 
 /*************************************/
@@ -90,7 +91,7 @@ gulp.task('php', function() {
 });
 
 gulp.task('watch:php', function() {
-    gulp.watch(paths.php, ['php']);
+    return gulp.watch(paths.php, ['php']);
 });
 
 /*************************************/

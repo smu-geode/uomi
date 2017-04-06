@@ -18,8 +18,6 @@ services:
             - ./build:/var/www/uomi
             - ./logs/caddy:/var/log/caddy
             - ./logs/php:/var/log/php7
-            - ./config/dev/php/php.ini:/etc/php7/php.ini
-            - ./config/dev/php/php-fpm-www.conf:/etc/php7/php-fpm.d/www.conf
 
     database:
         image: mysql:latest
