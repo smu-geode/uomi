@@ -10,7 +10,7 @@ const uglify        = require('gulp-uglify');
 const concat        = require('gulp-concat');
 const spawn         = require('child_process').spawn;
 const del           = require('del');
-const browserSync   = require('browser-sync').create();
+// const browserSync   = require('browser-sync').create();
 const srcBase       = 'src/';
 const buildBase     = 'build/';
 const publicBase    = buildBase + 'public/';
@@ -198,7 +198,15 @@ gulp.task('clean', () => {
     return del(['build/*']);
 });
 
-gulp.task('watch', gulp.parallel(watchTasks));
 
+gulp.task('watch', gulp.parallel(watchTasks));
 gulp.task('build', gulp.parallel(buildTasks));
 gulp.task('default', gulp.parallel('build'));
+
+// gulp.task('sync', gulp.series(
+//     gulp.parallel('docker:up','build'),
+//     gulp.parallel(
+//         'watch',
+//         () => { browserSync.init({ proxy: "uomi.dev" }); }
+//     )
+// ));
