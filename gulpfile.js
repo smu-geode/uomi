@@ -1,43 +1,57 @@
 'use strict';
 
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const imagemin = require('gulp-imagemin');
-const sourcemaps = require('gulp-sourcemaps');
-const ts = require('gulp-typescript');
-const del = require('del');
-const spawn = require('child_process').spawn;
-const uglify = require('gulp-uglify');
-const concat = require('gulp-concat');
+const gulp          = require('gulp');
+const help          = require('gulp-help-four');
+const sass          = require('gulp-sass');
+const imagemin      = require('gulp-imagemin');
+const sourcemaps    = require('gulp-sourcemaps');
+const ts            = require('gulp-typescript');
+const uglify        = require('gulp-uglify');
+const concat        = require('gulp-concat');
+const spawn         = require('child_process').spawn;
+const del           = require('del');
+const browserSync   = require('browser-sync').create();
+const srcBase       = 'src/';
+const buildBase     = 'build/';
+const publicBase    = buildBase + 'public/';
+const vendorBase    = 'vendor/';
 
-const srcBase = 'src/';
-const vendorBase = 'vendor/';
+help(gulp, {});
 
 const paths = {
-    html: './src/public/**/*.html',
-	img: './src/public/img/*.*',
-    scss: './src/public/scss/*.scss',
-    js: './src/public/*.js',
-    ts: './src/public/**/*.ts',
-	php: './src/**/*.php',
-	phpVendor: './vendor/**/*.*'
+    html:           './src/public/**/*.html',
+	img:            './src/public/img/*.*',
+    scss:           './src/public/scss/*.scss',
+    js:             './src/public/*.js',
+    ts:             './src/public/**/*.ts',
+	php:            './src/**/*.php',
+	phpVendor:      './vendor/**/*.*'
+};
+
+const bases = {
+    html:           srcBase + 'html/',
+    ts:             srcBase,
+    phpVendor:      vendorBase
 };
 
 const buildPaths = {
-    html: 'build/public/',
-	img: 'build/public/img/',
-    css: 'build/public/css/',
-    js: 'build/public/',
-	php: 'build/',
-	phpVendor: 'build/vendor/'
+    html:           'build/public/',
+	img:            'build/public/img/',
+    css:            'build/public/css/',
+    js:             'build/public/',
+	php:            'build/',
+	phpVendor:      'build/vendor/'
 };
+
+const buildTasks = ['html','img','sass','js','php','php:vendor','ts','nodeModules'];
+const watchTasks = ['watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor','watch:ts'];
 
 /*************************************/
 /* HTML                              */
 /*************************************/
 
 gulp.task('html', (done) => {
-    gulp.src(paths.html, { base: srcBase + 'html/' })
+    gulp.src(paths.html, { base: bases.html })
         .pipe(gulp.dest(buildPaths.html));
 	done();
 });
@@ -106,7 +120,7 @@ gulp.task('nodeModules', (done) => {
 });
 
 gulp.task('ts', (done) => {
-    var result = gulp.src(paths.ts, { base: srcBase })
+    var result = gulp.src(paths.ts, { base: bases.ts })
         .pipe(sourcemaps.init())
         .pipe(tsProject())
         .pipe(sourcemaps.write('.'))
@@ -133,7 +147,7 @@ gulp.task('watch:php', () => {
 });
 
 gulp.task('php:vendor', (done) => {
-	gulp.src(paths.phpVendor, { base: vendorBase })
+	gulp.src(paths.phpVendor, { base: bases.phpVendor })
 		.pipe(gulp.dest(buildPaths.phpVendor));
 	done();
 })
@@ -149,13 +163,13 @@ gulp.task('watch:php:vendor', () => {
 function docker(cmdName, done) {
 	let cmd = spawn('bin/dev/' + cmdName + '.sh');
 	cmd.stdout.on('data', (data) => {
-		console.log('> ' + data.toString());
+		process.stdout.write(data.toString());
 	});
 	cmd.stderr.on('data', (data) => {
-		console.error('> ' + data.toString());
+		process.stderr.write(data.toString());
 	});
 	cmd.on('error', (error) => {
-		console.error('From spawn: ' + error);
+		process.stderr.write('From spawn: ' + error);
 		return;
 	});
 	cmd.on('exit', done);
@@ -165,24 +179,10 @@ function dockerSsh() {
 	let ssh = spawn('bin/dev/ssh.sh', [], { stdio: [0, 1, 2] });
 }
 
-gulp.task('up', (done) => {
-	docker('up', done);
-});
-
-gulp.task('halt', (done) => {
-	docker('halt', done);
-});
-
-gulp.task('suspend', (done) => {
-	docker('suspend', done);
-});
-
-gulp.task('resume', (done) => {
-	docker('resume', done);
-});
-
-gulp.task('destroy', (done) => {
-	docker('destroy', done);
+['up', 'halt', 'suspend', 'resume', 'destroy', 'status'].forEach(name => {
+    gulp.task('docker:' + name, (done) => {
+    	docker(name, done);
+    });
 });
 
 gulp.task('ssh', (done) => {
@@ -198,6 +198,7 @@ gulp.task('clean', () => {
     return del(['build/*']);
 });
 
-gulp.task('watch', gulp.parallel('watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor', 'watch:ts'));
-gulp.task('build', gulp.parallel('html','img','sass','js','php', 'php:vendor', 'ts', 'nodeModules'));
+gulp.task('watch', gulp.parallel(watchTasks));
+
+gulp.task('build', gulp.parallel(buildTasks));
 gulp.task('default', gulp.parallel('build'));
