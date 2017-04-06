@@ -39,7 +39,7 @@ gulp.task('html', (done) => {
 });
 
 gulp.task('watch:html', () => {
-    gulp.watch(paths.html, ['html']);
+    gulp.watch(paths.html, gulp.parallel('html'));
 });
 
 /*************************************/
@@ -54,7 +54,7 @@ gulp.task('img', (done) => {
 });
 
 gulp.task('watch:img', () => {
-    gulp.watch(paths.img, ['img']);
+    gulp.watch(paths.img, gulp.parallel('img'));
 });
 
 /*************************************/
@@ -71,7 +71,7 @@ gulp.task('sass', (done) => {
 });
 
 gulp.task('watch:sass', () => {
-    gulp.watch(paths.scss, ['sass']);
+    gulp.watch(paths.scss, gulp.parallel('sass'));
 });
 
 /*************************************/
@@ -85,7 +85,7 @@ gulp.task('js', (done) => {
 });
 
 gulp.task('watch:js', () => {
-    gulp.watch(paths.js, ['js']);
+    gulp.watch(paths.js, gulp.parallel('js'));
 });
 
 /*************************************/
@@ -99,7 +99,7 @@ gulp.task('php', (done) => {
 });
 
 gulp.task('watch:php', () => {
-	gulp.watch(paths.php, ['php']);
+	gulp.watch(paths.php, gulp.parallel('php'));
 });
 
 gulp.task('php:vendor', (done) => {
@@ -109,7 +109,7 @@ gulp.task('php:vendor', (done) => {
 })
 
 gulp.task('watch:php:vendor', () => {
-	gulp.watch(paths.phpVendor, ['php:vendor']);
+	gulp.watch(paths.phpVendor, gulp.parallel('php:vendor'));
 });
 
 /*************************************/
