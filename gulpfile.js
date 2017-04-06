@@ -6,6 +6,7 @@ const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const spawn = require('child_process').spawn;
+const opn = require('opn');
 
 var paths = {
     html: 'src/public/*.html',
@@ -110,6 +111,10 @@ function docker(cmdName) {
 	});
 }
 
+function dockerSsh() {
+	let ssh = spawn('bin/dev/ssh.sh', [], { stdio: [0, 1, 2] });
+}
+
 gulp.task('up', function() {
 	docker('up');
 });
@@ -131,7 +136,7 @@ gulp.task('destroy', function() {
 });
 
 gulp.task('ssh', function() {
-	docker('ssh');
+	dockerSsh();
 });
 
 /*************************************/

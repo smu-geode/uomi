@@ -4,6 +4,8 @@ services:
     web:
         image: abiosoft/caddy:php
         restart: always
+        stdin_open: true
+        tty: true
         ports:
             - 80:80
         environment:
@@ -15,9 +17,9 @@ services:
             - caddy_data:/etc/caddycerts
             - ./build:/var/www/uomi
             - ./logs/caddy:/var/log/caddy
-            - ./logs/php:/var/log/php
-            - ./config/dev/php/php.ini:/usr/local/etc/php/php.ini
-            - ./config/dev/php/php-fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf
+            - ./logs/php:/var/log/php7
+            - ./config/dev/php/php.ini:/etc/php7/php.ini
+            - ./config/dev/php/php-fpm-www.conf:/etc/php7/php-fpm.d/www.conf
 
     database:
         image: mysql:latest
