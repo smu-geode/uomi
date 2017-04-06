@@ -14,14 +14,11 @@ $c = $app->getContainer();
 \Uomi\registerErrorHandlers($c);
 
 // Setup Eloquent
-/*
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($settings['settings']['eloquent']);
 use Illuminate\Container\Container;
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
-*/
 
 require 'routes.php';
-$c->get('logger')->info("Starting app.");
 $app->run();
