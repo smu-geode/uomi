@@ -23,5 +23,5 @@ $capsule->bootEloquent();
 */
 
 require 'routes.php';
-$c->get('logger')->info("Starting app");
+$c->get('logger')->info("Starting app.");
 $app->run();
