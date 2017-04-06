@@ -8,7 +8,7 @@
 /build/
 
 # ENV FILE
-env.php
+.env
 
 # NPM
 /node_modules/

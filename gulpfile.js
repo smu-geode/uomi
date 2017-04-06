@@ -7,9 +7,9 @@ const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const spawn = require('child_process').spawn;
 
-var srcBase = 'src/';
+const srcBase = 'src/';
 
-var paths = {
+const paths = {
     html: './src/public/**/*.html',
 	img: './src/public/img/*.*',
     scss: './src/public/scss/*.scss',
@@ -17,7 +17,7 @@ var paths = {
 	php: './src/**/*.php'
 };
 
-var buildPaths = {
+const buildPaths = {
     html: 'build/public/',
 	img: 'build/public/img/',
     css: 'build/public/css/',
@@ -149,4 +149,5 @@ gulp.task('clean', function() {
 });
 
 gulp.task('watch', ['watch:html','watch:img','watch:sass','watch:js','watch:php']);
-gulp.task('default', ['html','img','sass','js','php']);
+gulp.task('build', ['html','img','sass','js','php']);
+gulp.task('default', ['build']);
