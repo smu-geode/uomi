@@ -3,12 +3,12 @@
 require 'vendor/autoload.php';
 require 'lib/autoload.php';
 
-$settings = require 'settings.php';
+$settings = require 'slim/settings.php';
 $app = new \Slim\App($settings);
 
-require 'dependencies.php';
-require 'middleware.php';
-require 'errors.php';
+require 'slim/dependencies.php';
+require 'slim/middleware.php';
+require 'slim/errors.php';
 
 $c = $app->getContainer();
 \Uomi\registerErrorHandlers($c);
@@ -20,5 +20,5 @@ use Illuminate\Container\Container;
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-require 'routes.php';
+require 'slim/routes.php';
 $app->run();
