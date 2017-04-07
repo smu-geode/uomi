@@ -27,14 +27,13 @@ services:
             UOMI_DB_PASSWORD: repress-glimmer-trigram-uncoil
 
     database:
-        build:
-            context: .
-            dockerfile: ./data/mysql.Dockerfile
+        image: mysql:latest
         restart: always
         ports:
             - 3306:3306
         volumes:
             - database_data:/var/lib/mysql
+            - ./data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
         environment:
             MYSQL_ROOT_PASSWORD: grandma-ill-fray-parch
             MYSQL_DATABASE: uomi

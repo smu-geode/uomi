@@ -185,7 +185,7 @@ function dockerSsh() {
     });
 });
 
-gulp.task('ssh', (done) => {
+gulp.task('docker:ssh', (done) => {
 	dockerSsh();
 	done();
 });
