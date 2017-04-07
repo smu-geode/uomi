@@ -1,11 +1,21 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 	<head>
-		<title>Hi</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<title>Uomi</title>
+		<base href="/">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
-		<h1>Hello World</h1>
+		<app>Loading</app>
+
+		<script src="node_modules/core-js/client/shim.min.js"></script>
+		<script src="node_modules/zone.js/dist/zone.js"></script>
+		<script src="node_modules/systemjs/dist/system.src.js"></script>
+		<script src="systemjs.config.js"></script>
+		<script>
+			System.import('main.js').catch(function(err){ console.error(err); });
+		</script>
 	</body>
 </html>
