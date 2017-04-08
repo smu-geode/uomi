@@ -1,84 +1,121 @@
 # Dump of tables for the uomi database!
 # ------------------------------------------------------------
+
 CREATE DATABASE IF NOT EXISTS uomi;
 
-CREATE TABLE IF NOT EXISTS `users`(
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `email` varchar(256) NOT NULL,
- `name` varchar(128) DEFAULT NULL,
- `password` char(128) DEFAULT NULL,
- `salt` char(64) DEFAULT NULL,
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+CREATE TABLE IF NOT EXISTS `users` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `email` varchar(256) NOT NULL,
+    `name` varchar(128) DEFAULT NULL,
+    `password` char(128) DEFAULT NULL,
+    `salt` char(64) DEFAULT NULL,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `settings`(
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `user_id` int(11) unsigned NOT NULL,
- `allow_notif` boolean NULL DEFAULT 1,
- `borrow_requests` boolean NULL DEFAULT 2,
- `payback_reminders` boolean NULL DEFAULT 1,
- `view_email` boolean NULL DEFAULT 1,
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(`id`),
-  KEY `user_sett` (`user_id`),
-  CONSTRAINT `user_sett` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+
+CREATE TABLE IF NOT EXISTS `friends` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) unsigned NOT NULL,
+    `friend_id` int(11) unsigned NOT NULL,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY (`id`),
+
+    KEY `user` (`user_id`),
+    KEY `friend` (`friend_id`),
+
+    CONSTRAINT `user_friends` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `friend` FOREIGN KEY (`friend_id`) REFERENCES `users` (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS `settings` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) unsigned NOT NULL,
+
+    `allow_notifications` boolean NULL DEFAULT 0,
+    `borrow_requests` boolean NULL DEFAULT 0,
+    `payback_reminders` boolean NULL DEFAULT 0,
+    `view_email` boolean NULL DEFAULT 0,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY(`id`),
+
+    KEY `user` (`user_id`),
+
+    CONSTRAINT `user_settings` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE IF NOT EXISTS `categories` (
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `name` varchar(64) NOT NULL,
- `use_count` int(11) DEFAULT 1,
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(`id`)
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(254) NOT NULL,
+    `icon` varchar(254) NOT NULL,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY(`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 CREATE TABLE IF NOT EXISTS `loans` (
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `to_user` int(11) unsigned NOT NULL,
- `from_user` int(11) unsigned NOT NULL,
- `details` varchar(256) DEFAULT NULL,
- `amount_cents` int(16) unsigned NOT NULL,
- `category_id` int(11) unsigned DEFAULT NULL,
- `posted_date` timestamp DEFAULT CURRENT_TIMESTAMP,
- `accepted_date` timestamp DEFAULT '2001-01-01 00:00:00',
- `resolved_date` timestamp DEFAULT '2001-01-01 00:00:00',
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(`id`),
-  KEY `borrower` (`to_user`),
-  KEY `lender` (`from_user`),
-  KEY `category` (`category_id`),
-  CONSTRAINT `borrower` FOREIGN KEY (`to_user`) REFERENCES `users` (`id`),
-  CONSTRAINT `lender` FOREIGN KEY (`from_user`) REFERENCES `users` (`id`),
-  CONSTRAINT `category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+
+    `borrower_id` int(11) unsigned NOT NULL,
+    `lender_id` int(11) unsigned NOT NULL,
+
+    `details` text DEFAULT NULL,
+    `amount_cents` int(16) unsigned NOT NULL,
+    `category_id` int(11) unsigned DEFAULT NULL,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `confirmed_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `completed_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY(`id`),
+
+    KEY `borrower` (`borrower_id`),
+    KEY `lender` (`lender_id`),
+    KEY `category` (`category_id`),
+
+    CONSTRAINT `borrower` FOREIGN KEY (`borrower_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `lender` FOREIGN KEY (`lender_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS `payments` (
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `loan_id` int(11) unsigned NOT NULL,
- `details` varchar(256) DEFAULT NULL,
- `amount_cents` int(16) unsigned NOT NULL,
- `posted_date` timestamp DEFAULT CURRENT_TIMESTAMP,
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(`id`),
-  KEY `loan` (`loan_id`),
-  CONSTRAINT `loan` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `loan_id` int(11) unsigned NOT NULL,
+    `details` text DEFAULT NULL,
+    `amount_cents` int(16) unsigned NOT NULL,
 
-CREATE TABLE IF NOT EXISTS `notifications` (
- `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- `user_id` int(11) unsigned NOT NULL,
- `data` varchar(1024) DEFAULT NULL,
- `notification_date` timestamp DEFAULT CURRENT_TIMESTAMP,
- `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
- `updated_at` timestamp DEFAULT '2001-01-01 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(`id`),
-  KEY `user_notf` (`user_id`),
-  CONSTRAINT `user_notf` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    `sender_id` int(11) unsigned NOT NULL,
+    `receiver_id` int(11) unsigned NOT NULL,
+
+    PRIMARY KEY(`id`),
+
+    KEY `loan` (`loan_id`),
+    KEY `sender` (`sender_id`),
+    KEY `receiver` (`receiver_id`),
+    CONSTRAINT `loan` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`),
+    CONSTRAINT `sender` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `receiver` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
