@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="input-group">
+		<input 	type="text"
+				id="user_email"
+				class="form-control"
+				placeholder="Email"
+				[(ngModel)]="user.email" />
+		<br />
+		<input 	type="password"
+				id="user_password"
+				class="form-control"
+				placeholder="Password"
+				[(ngModel)]="user.password" />
+		<br />
+		<input 	type="password"
+				id="user_password_verify"
+				class="form-control"
+				placeholder="Verify password"
+				[(ngModel)]="user.passwordVerify" />
+		<span class="input-group-btn">
+			<button (click)="createUser()"
+					[disabled]="(!user.password || !user.email) || 
+								user.password != user.passwordVerify"
+					class="btn btn-default"
+					type="button">
+				<!--<span class="glyphicon glyphicon-chevron-right"></span> -->
+				Create Account
+			</button>
+		</span>
+	</div>
+</div>
