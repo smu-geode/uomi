@@ -9,10 +9,10 @@ namespace Uomi;
 use \stdClass;
 
 class Status {
-    private $isError;
-    private $data;
-    private $message;
-    private $type;
+    public $isError;
+    public $data;
+    public $message;
+    public $type;
 
     function __construct($data = null, $message = null, $isError = false, $type = null) {
         $this->data = $data ?? new stdClass; // empty object
@@ -21,19 +21,19 @@ class Status {
         $this->type = $type;
     }
 
-    public function noError(): StatusContainer {
-        return new StatusContainer($this->data, $this->message, false, null);
+    public function noError(): Status {
+        return new Status($this->data, $this->message, false, null);
     }
 
-    public function error($type = null): StatusContainer {
-        return new StatusContainer($this->data, $this->message, true, $type);
+    public function error($type = null): Status {
+        return new Status($this->data, $this->message, true, $type);
     }
 
-    public function message(string $message): StatusContainer {
-        return new StatusContainer($this->data, $message, $this->isError, $this->type);
+    public function message(string $message): Status {
+        return new Status($this->data, $message, $this->isError, $this->type);
     }
 
-    public function data(object $data): StatusContainer {
-        return new StatusContainer($data, $this->message, $this->isError, $this->type);
+    public function data($data): Status {
+        return new Status($data, $this->message, $this->isError, $this->type);
     }
 }

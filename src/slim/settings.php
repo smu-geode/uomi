@@ -2,7 +2,7 @@
 $env = $_ENV;
 return [
     'settings' => [
-        'debug' => getenv('UOMI_DEBUG'),
+        'debug' => (getenv('UOMI_DEBUG') == 1),
         'logger' => [
             'name' => 'uomi',
             'path' => '/var/log/api/api.log',

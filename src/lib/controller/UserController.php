@@ -14,8 +14,8 @@ use \Respect\Validation\Exceptions\NestedValidationException;
 
 // ROUTES
 $this->group('/users', function() {
-    $this->get('/{user_id}', '\Uomi\UserController:getUserHandler');
-    $this->post('/', '\Uomi\UserController:postUserCollectionHandler');
+    $this->get('/{user_id}', '\Uomi\Controller\UserController:getUserHandler');
+    $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
 
 class UserController {
@@ -27,8 +27,8 @@ class UserController {
     function __construct(Container $c) {
         $this->container = $c;
 
-		$this->emailValidator = v::email()->length(null, 254);
-		$this->passwordValidator = v::length(8, 254);
+		$this->emailValidator = v::email()->length(null, 254)->setName('Email');
+		$this->passwordValidator = v::notEmpty()->length(8, 254)->setName('Password');
     }
 
     private static function arrayToHtmlUnorderedList(array $a): string {
@@ -55,13 +55,13 @@ class UserController {
 
         $form = $req->getParsedBody();
 
-        $email = $form['email'];
-        $plainTextPassword = $form['password'];
+        $email = $form['email'] ?? null;
+        $plainTextPassword = $form['password'] ?? null;
 
 		// FIELD VALIDATION
         try {
-			$this->emailValidator->check($email);
-			$this->passwordValidator->check($plainTextPassword);
+			$this->emailValidator->assert($email);
+			$this->passwordValidator->assert($plainTextPassword);
         } catch(NestedValidationException $exception) {
 			// this gets an array of human readable validation fixes
             return self::badUserRegistrationResponse($res, $exception->getMessages());
@@ -79,7 +79,7 @@ class UserController {
 		$user->password = new HashedPassword($plainTextPassword);
 		$user->save();
 
-		$stat = new Status($user);
+		$stat = new \Uomi\Status($user);
 		$stat = $stat->message('User successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created
     }
@@ -118,9 +118,9 @@ class UserController {
     public static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
 		$message = self::arrayToHtmlUnorderedList($errorStrings);
 
-        $stat = new Status([ 'errors' => $errorStrings ]);
+        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
         $stat = $stat->error('BadUserRegistration')->message($message);
 
-        $res = $res->withStatus(400)->withJson($stat); // Bad Request
+        return $res->withStatus(400)->withJson($stat); // Bad Request
     }
 }
