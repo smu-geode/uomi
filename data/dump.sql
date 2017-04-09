@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `loans` (
     `borrower_id` int(11) unsigned NOT NULL,
     `lender_id` int(11) unsigned NOT NULL,
 
+    `confirmed` boolean DEFAULT 0,
     `details` text DEFAULT NULL,
     `amount_cents` int(16) unsigned NOT NULL,
     `category_id` int(11) unsigned DEFAULT NULL,
@@ -95,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `loans` (
     CONSTRAINT `borrower` FOREIGN KEY (`borrower_id`) REFERENCES `users` (`id`),
     CONSTRAINT `lender` FOREIGN KEY (`lender_id`) REFERENCES `users` (`id`),
     CONSTRAINT `category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -115,7 +117,9 @@ CREATE TABLE IF NOT EXISTS `payments` (
     KEY `loan` (`loan_id`),
     KEY `sender` (`sender_id`),
     KEY `receiver` (`receiver_id`),
+    
     CONSTRAINT `loan` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`),
     CONSTRAINT `sender` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
     CONSTRAINT `receiver` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

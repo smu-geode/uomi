@@ -1,9 +1,10 @@
 <?php
 
-// use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use \Slim\Http\Request;
+use \Slim\Http\Response;
 
 $app->group('/api', function() {
-	require 'lib/UserController.php';
+	require 'lib/controller/SessionController.php';
+	require 'lib/controller/UserController.php';
+	require 'lib/controller/LoanController.php';
 });
