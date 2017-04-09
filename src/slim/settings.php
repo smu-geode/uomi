@@ -10,7 +10,8 @@ return [
         // Eloquent settings
         'eloquent' => [
             'driver' => 'mysql',
-            'host' => getenv('UOMI_DB_HOST'),
+            'host' => 'database',
+            'port' => getenv('UOMI_DB_PORT'),
             'database' => getenv('UOMI_DB_NAME'),
             'username' => getenv('UOMI_DB_USERNAME'),
             'password' => getenv('UOMI_DB_PASSWORD'),

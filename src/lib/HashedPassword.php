@@ -1,5 +1,7 @@
 <?php
-namespace Uomi;
+
+namespace \Uomi;
+
 class HashedPassword {
     private $salt;
     private $hash;
