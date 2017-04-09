@@ -1,5 +1,6 @@
 <?php
 namespace \Uomi\Model;
+
 class User extends \Illuminate\Database\Eloquent\Model {
 
 	// wrap the password field (passed in by $value)
@@ -7,6 +8,11 @@ class User extends \Illuminate\Database\Eloquent\Model {
     public function getPasswordAttribute($value): HashedPassword {
         return HashedPassword::withHash($value, $this->salt);
     }
+
+	public function setFirstNameAttribute(HashedPassword $value) {
+		$this->attributes['password'] = $value->getHash();
+		$this->attributes['salt'] = $value->getSalt();
+	}
 
     // public function models() {
     //     return $this->hasMany('Uomi\Model','foreign_key_in_user');
@@ -18,7 +24,10 @@ class User extends \Illuminate\Database\Eloquent\Model {
     // ];
 
 	// Hide this information from the API
-    protected $hidden = ['password','salt','created_at','updated_at'];
+    protected $hidden = ['password','salt'];
+
+	// Cast these fields to dates
+	protected $dates = ['created_at','updated_at'];
 
     // public function getCustomAttributeName() {
     //     return $this->attributes['type'] == 'something';

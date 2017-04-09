@@ -4,7 +4,7 @@
 // { "isError": false, "data": { `data` }, "message": "...", "type": "..." }
 // Where message is a human readable status message that can be non-empty
 
-namespace \Uomi;
+namespace Uomi;
 
 use \stdClass;
 
