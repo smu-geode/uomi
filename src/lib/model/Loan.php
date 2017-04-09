@@ -1,5 +1,5 @@
 <?php
-namespace \Uomi\Model;
+namespace Uomi\Model;
 
 class Loan extends \Illuminate\Database\Eloquent\Model {
 

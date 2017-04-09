@@ -1,6 +1,6 @@
 <?php
 
-namespace \Uomi\Controller;
+namespace Uomi\Controller;
 
 use \Slim\Http\Request;
 use \Slim\Http\Response;
