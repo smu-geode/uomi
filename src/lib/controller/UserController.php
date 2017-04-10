@@ -8,10 +8,6 @@ use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use \Respect\Validation\Validator as v;
-use \Respect\Validation\Exceptions\ValidationException;
-use \Respect\Validation\Exceptions\NestedValidationException;
-
 // ROUTES
 $this->group('/users', function() {
     $this->get('/{user_id}', '\Uomi\Controller\UserController:getUserHandler');
@@ -21,22 +17,9 @@ $this->group('/users', function() {
 class UserController {
 
     private $container;
-	private $emailValidator;
-	private $passwordValidator;
 
     function __construct(Container $c) {
         $this->container = $c;
-
-		$this->emailValidator = v::email()->length(null, 254)->setName('Email');
-		$this->passwordValidator = v::notEmpty()->length(8, 254)->setName('Password');
-    }
-
-    private static function arrayToHtmlUnorderedList(array $a): string {
-        $li = array_map(function($e){
-			$he = htmlspecialchars($e);
-			return "<li>$he</li>";
-	    }, $a);
-		return '<ul>'. implode('',$li) .'</ul>';
     }
 
     public function getUserHandler(Request $req, Response $res): Response {
@@ -53,31 +36,16 @@ class UserController {
 
     public function postUserCollectionHandler(Request $req, Response $res): Response {
 
-        $form = $req->getParsedBody();
+        $data = $req->getParsedBody();
 
-        $email = $form['email'] ?? null;
-        $plainTextPassword = $form['password'] ?? null;
+		// Create the user
+		$factory = new \Uomi\Factory\UserFactory($this->container);
 
-		// FIELD VALIDATION
-        try {
-			$this->emailValidator->assert($email);
-			$this->passwordValidator->assert($plainTextPassword);
-        } catch(NestedValidationException $exception) {
-			// this gets an array of human readable validation fixes
-            return self::badUserRegistrationResponse($res, $exception->getMessages());
-        }
-
-		// CONFLICT CHECKS
-		if($otherUser = User::where('email',$email)->first()) {
-			$esc = htmlspecialchars($email);
-			return self::badUserRegistrationResponse($res, ["The email $esc is already in use."]);
+		try {
+			$user = $factory->submitUserRegistrationForm($data);
+		} catch(\RuntimeException $e) {
+			return self::badUserRegistrationResponse($res, $factory->getErrors());
 		}
-
-		// CREATION
-		$user = new \Uomi\Model\User();
-		$user->email = $email;
-		$user->password = new HashedPassword($plainTextPassword);
-		$user->save();
 
 		$stat = new \Uomi\Status($user);
 		$stat = $stat->message('User successfully created.');
@@ -116,10 +84,8 @@ class UserController {
     */
 
     public static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
-		$message = self::arrayToHtmlUnorderedList($errorStrings);
-
         $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
-        $stat = $stat->error('BadUserRegistration')->message($message);
+        $stat = $stat->error('BadUserRegistration')->message('There was an error in registering the user.');
 
         return $res->withStatus(400)->withJson($stat); // Bad Request
     }
