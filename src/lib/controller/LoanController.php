@@ -10,7 +10,8 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // ROUTES
 $this->group('/loans', function() {
-    // $this->get('/{user_id}', '\Uomi\UserController:getUserHandler');
+    $this->get('/{user_id}', '\Uomi\UserController:getUserHandler');
+    $this->post('/', '\Uomi\LoanController:postLoanHandler');
 });
 
 class LoanController {
@@ -19,6 +20,26 @@ class LoanController {
 
     function __construct(Container $c) {
         $this->container = $c;
+    }
+
+    public function postLoanHandler(Request $req, Response $res): Response {
+        $form = $req->getParsedBody();
+
+        $to = $form['to'] ?? null;
+        $from = $form['from'] ?? null;
+        $amount = $form['amount'] ?? null;
+        $category_id = $form['category_id'] ?? null;
+
+        $loan = new \Uomi\Model\Loan();
+        $loan->$to = $to;
+        $loan->$from = $from;
+        $loan->$amount = $amount;
+        $loan->$category_id = $category_id;
+        $loan->save();
+
+        $stat = new \Uomi\Status($loan);
+		$stat = $stat->message('Loan successfully created.');
+		return $res->withStatus(201)->withJson($stat);
     }
 
     /*
