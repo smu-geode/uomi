@@ -15,7 +15,7 @@ $c = $app->getContainer();
 // Setup Eloquent
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($settings['settings']['eloquent']);
-use Illuminate\Container\Container;
+use \Illuminate\Container\Container;
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 

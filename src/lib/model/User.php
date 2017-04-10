@@ -1,5 +1,7 @@
 <?php
-namespace \Uomi\Model;
+namespace Uomi\Model;
+
+use \Uomi\HashedPassword;
 
 class User extends \Illuminate\Database\Eloquent\Model {
 
@@ -9,7 +11,7 @@ class User extends \Illuminate\Database\Eloquent\Model {
         return HashedPassword::withHash($value, $this->salt);
     }
 
-	public function setFirstNameAttribute(HashedPassword $value) {
+	public function setPasswordAttribute(HashedPassword $value) {
 		$this->attributes['password'] = $value->getHash();
 		$this->attributes['salt'] = $value->getSalt();
 	}

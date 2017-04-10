@@ -10,7 +10,7 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // ROUTES
 $this->group('/sessions', function() {
-    // $this->get('/{user_id}', '\Uomi\UserController:getUserHandler');
+	$this->post('/', '\Uomi\SessionController:postSessionCollectionHandler');
 });
 
 class SessionController {
