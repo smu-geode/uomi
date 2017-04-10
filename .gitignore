@@ -25,6 +25,9 @@ composer.phar
 # ELOQUENT
 *.sqlite
 
+# LOGS
+*.log
+
 # WINDOWS
 # Windows image file caches
 Thumbs.db
