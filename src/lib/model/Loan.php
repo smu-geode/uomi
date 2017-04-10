@@ -2,7 +2,7 @@
 namespace Uomi\Model;
 
 class Loan extends \Illuminate\Database\Eloquent\Model {
-	
+
 	protected $cast = [
 		'confirmed' => 'boolean',
 	];
@@ -12,11 +12,11 @@ class Loan extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function borrower() {
-		return $this->hasOne('Uomi/User', 'from');
+		return $this->hasOne('Uomi\User', 'from');
 	}
 
 	public function category() {
-		return $this->hasOne('Uomi/Category','category_id');
+		return $this->hasOne('Uomi\Category','category_id');
 	}
 
 	public function payments() {
