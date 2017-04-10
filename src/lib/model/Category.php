@@ -1,4 +1,5 @@
 <?php
+
 namespace Uomi\Model;
 
 class Category extends \Illuminate\Database\Eloquent\Model {

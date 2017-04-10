@@ -8,12 +8,13 @@ use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use \Uomi\Model\Loan;
+
 // ROUTES
 $this->group('/loans', function() {
-    $this->get('/{user_id}', '\Uomi\UserController:getUserHandler');
-    $this->post('/', '\Uomi\LoanController:postLoanControllerHandler');
-	$this->get('/{loan_id}', '\Uomi\LoanController:getLoanControllerHandler');
-	$this->put('/{loan_id}', '\Uomi\LoanController:putLoanControllerHandler');
+    $this->post('/', '\Uomi\Controller\LoanController:postLoanControllerHandler');
+	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
+	$this->put('/{loan_id}', '\Uomi\Controler\LoanController:putLoanControllerHandler');
 });
 
 class LoanController {
@@ -52,7 +53,7 @@ class LoanController {
 
 		$category = null;
 		try {
-			$category = \Uomi\Category::where('category', '=', $category)->findOrFail();
+			$category = \Uomi\Model\Category::where('category', '=', $category)->findOrFail();
 
 		}catch (ModelNotFoundException $e) {
 			$category = new \Uomi\Model\Category();
@@ -86,6 +87,7 @@ class LoanController {
         $amount = $form['amount'] ?? null;
         $category = $form['category'] ?? null;
 
+
 		if($to === null) {
 			$stat = new Status();
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include who the loan is to");
@@ -110,14 +112,15 @@ class LoanController {
             return $res->withStatus(400)->withJson($stat);
 		}
 
-        $loan = new \Uomi\Model\Loan();
+
+        /*$loan = new Loan();
         $loan->to = $to;
         $loan->from = $from;
         $loan->amount = $amount;
 
 		$category = null;
 		try {
-			$category = \Uomi\Category::where('category', '=', $category)->findOrFail();
+			$category = \Uomi\Model\Category::where('category', '=', $category)->findOrFail();
 		}catch (ModelNotFoundException $e) {
 			$category = new \Uomi\Model\Category();
 			$category->name = $category;
@@ -127,9 +130,10 @@ class LoanController {
 
 
         $loan->category_id = $category->category_id;
-        $loan->save();
+        $loan->save();*/
 
-        $stat = new \Uomi\Status($loan);
+
+        $stat = new \Uomi\Status();
 		$stat = $stat->message('Loan successfully created.');
 		return $res->withStatus(201)->withJson($stat);
     }
