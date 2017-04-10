@@ -5,7 +5,6 @@ require 'lib/autoload.php';
 
 $settings = require 'slim/settings.php';
 $app = new \Slim\App($settings);
-
 require 'slim/dependencies.php';
 require 'slim/middleware.php';
 require 'slim/errors.php';
