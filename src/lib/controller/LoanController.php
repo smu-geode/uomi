@@ -22,19 +22,22 @@ class LoanController {
         $this->container = $c;
     }
 
-    public function postLoanHandler(Request $req, Response $res): Response {
+    public function postLoanControllerHandler(Request $req, Response $res): Response {
         $form = $req->getParsedBody();
 
         $to = $form['to'] ?? null;
         $from = $form['from'] ?? null;
         $amount = $form['amount'] ?? null;
-        $category_id = $form['category_id'] ?? null;
+        $category = $form['category'] ?? null;
 
         $loan = new \Uomi\Model\Loan();
-        $loan->$to = $to;
-        $loan->$from = $from;
-        $loan->$amount = $amount;
-        $loan->$category_id = $category_id;
+        $loan->to = $to;
+        $loan->from = $from;
+        $loan->amount = $amount;
+
+        $category = \Uomi\Category::where('category', '=', $category)->findOrFial();
+
+        $loan->category_id = $category->category_id;
         $loan->save();
 
         $stat = new \Uomi\Status($loan);
