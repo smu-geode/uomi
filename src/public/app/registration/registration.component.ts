@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
+import { UsersService } from './services/users-service';
 
 @Component({
 	selector: 'registration',
 	templateUrl: './registration.component.html'
+	providers: [ UsersService ]
 })
 
 export class RegistrationComponent { 
 	user: any;
 
-	constructor() {
+	constructor(private UsersService: UsersService) {
 		this.user = {
 			email: '',
 			password: '',
@@ -18,5 +20,6 @@ export class RegistrationComponent {
 
 	createUser() {
 		// call to users service
+		this.UsersService.postUserToDB(this.user);
 	}
 }
