@@ -15,7 +15,6 @@ use \Uomi\HashedPassword;
 class UserFactory {
 
 	private $container;
-
 	private $errors;
 
 	function __construct(Container $c) {
@@ -31,7 +30,7 @@ class UserFactory {
 		try {
 			$formResult = $form->submit($data);
 		} catch(\RuntimeException $e) {
-			$this->errors = array_merge($this->errors, $form->getErrors());
+			$this->errors += $form->getErrors();
 			throw $e;
 		}
 
@@ -46,7 +45,7 @@ class UserFactory {
 		// CONFLICT CHECKS
 		if($exists = \Uomi\Model\User::where('email',$email)->first()) {
 			$esc = htmlspecialchars($email);
-			$this->errors = ["The email $esc is already in use."];
+			$this->errors += ["The email $esc is already in use."];
 			throw new \RuntimeException();
 		}
 
