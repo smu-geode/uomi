@@ -25,10 +25,11 @@ class LoanController {
         $this->container = $c;
     }
 
-	public function getLoanControllerHandler(Request $req, Response $res, $args): Response {
+	public function getLoanControllerHandler(Request $req, Response $res): Response {
 
 		try {
-			$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
+			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+			//$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
 			$stat = new Status();
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
@@ -39,7 +40,7 @@ class LoanController {
 		}
 	}
 
-	public function putLoanControllerHandler(Request $req, Response $res, $args): Response {
+	public function putLoanControllerHandler(Request $req, Response $res): Response {
 		$form = $req->getParsedBody();
 
 		$amount = $form['amount'] ?? null;
@@ -63,7 +64,8 @@ class LoanController {
 		}
 
 		try {
-			$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
+			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+			//$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
 			$loan->amount = $amount;
 			$loan->category_id = $category->category_id;
 			$loan->save();
