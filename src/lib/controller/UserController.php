@@ -7,10 +7,18 @@ use \Slim\Http\Response;
 use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use \RuntimeException;
+
+use \Uomi\Status;
+use \Uomi\Model\User;
+use \Uomi\Factory\UserFactory;
 
 // ROUTES
 $this->group('/users', function() {
-    $this->get('/{user_id}', '\Uomi\Controller\UserController:getUserHandler');
+    $this->group('/{user_id}', function() {
+        $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
+        $this->get('/friends', '\Uomi\Controller\UserController:getUserFriendCollectionHandler');
+    });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
 
@@ -24,13 +32,10 @@ class UserController {
 
     public function getUserHandler(Request $req, Response $res): Response {
         try {
-            $user = Model\User::findOrFail( $req->getAttribute('user_id') );
-            $stat = new Status($user);
-            return $res->withJson($stat);
+            $user = User::findOrFail( $req->getAttribute('user_id') );
+            return $res->withJson(new Status($user));
         } catch(ModelNotFoundException $e) { // user not found
-            $stat = new Status();
-            $stat = $stat->error("InvalidUser")->message("Please make sure user is valid");
-            return $res->withStatus(404)->withJson($stat);
+            return self::invalidUserResponse($res);
         }
     }
 
@@ -39,51 +44,36 @@ class UserController {
         $data = $req->getParsedBody();
 
 		// Create the user
-		$factory = new \Uomi\Factory\UserFactory($this->container);
+		$factory = new UserFactory($this->container);
 
 		try {
 			$user = $factory->submitUserRegistrationForm($data);
-		} catch(\RuntimeException $e) {
+		} catch(RuntimeException $e) {
 			return self::badUserRegistrationResponse($res, $factory->getErrors());
 		}
 
-		$stat = new \Uomi\Status($user);
+		$stat = new Status($user);
 		$stat = $stat->message('User successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created
     }
 
-    /*
-    public function verbModelHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a single model, like
-        // `/api/models/1`
-
+    public function getUserFriendCollectionHandler(Request $req, Response $res): Response {
         try {
-            $modelName = Model\ModelName::findOrFail( $req->getAttribute('model_id') );
-            $stat = new Status($modelName);
-            return $res->withJson($stat);
+            $user = User::findOrFail( $req->getAttribute('user_id') );
         } catch(ModelNotFoundException $e) { // user not found
-            $stat = new Status();
-            $stat = $stat->error("InvalidModelName")->message("Please make sure ModelName is valid");
-            return $res->withStatus(404)->withJson($stat);
+            return self::invalidUserResponse($res);
         }
+
+        return $res->withJson($user->friends()->get());
     }
-    */
 
-    /*
-    public function verbModelCollectionHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a collection, like
-        // `/api/models`
-
-        // You probably don't want to get **all** of a model - narrow it down!
-        // https://laravel.com/docs/5.4/eloquent
-        $modelNames = Model\ModelName::all();
-        $stat = new Status($modelNames);
-        return $res->withJson($stat);
-
+    protected static function invalidUserResponse(Response $res): Response {
+        $stat = new Status();
+        $stat = $stat->error("InvalidUser")->message("Please make sure user is valid");
+        return $res->withStatus(404)->withJson($stat);
     }
-    */
 
-    public static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
+    protected static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
         $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
         $stat = $stat->error('BadUserRegistration')->message('There was an error in registering the user.');
 

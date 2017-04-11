@@ -25,7 +25,7 @@ function genericErrorHandler(string $header, \Slim\Container $c) {
 		$stat = new \Uomi\Status($data);
 		$stat = $stat->error("ObfuscatedInternalServerError")
 					 ->message("Something went wrong on our side!");
-		return $response->withStatus(500)->withJson($info);
+		return $response->withStatus(500)->withJson($stat);
 	};
 }
 

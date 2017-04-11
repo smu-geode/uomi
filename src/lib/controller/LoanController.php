@@ -8,7 +8,7 @@ use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use \Uomi\Model\Loan;
+use \Uomi\Status;
 
 // ROUTES
 $this->group('/loans', function() {
@@ -29,7 +29,6 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-			//$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
 			$stat = new Status();
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
