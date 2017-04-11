@@ -64,7 +64,6 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-			//$loan = \Uomi\Model\Loan::where('id', '=', $args['loan_id'])->findOrFail();
 			$loan->amount = $amount;
 			$loan->category_id = $category->category_id;
 			$loan->save();
@@ -114,7 +113,7 @@ class LoanController {
 		}
 
 
-        /*$loan = new Loan();
+        $loan = new Loan();
         $loan->to = $to;
         $loan->from = $from;
         $loan->amount = $amount;
@@ -131,7 +130,7 @@ class LoanController {
 
 
         $loan->category_id = $category->category_id;
-        $loan->save();*/
+        $loan->save();
 
 
         $stat = new \Uomi\Status();
