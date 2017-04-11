@@ -1,7 +1,7 @@
 <?php
 namespace Uomi\Model;
 
-use \Uomi\HashedPassword;
+use Uomi\HashedPassword;
 
 class User extends \Illuminate\Database\Eloquent\Model {
 
@@ -16,6 +16,23 @@ class User extends \Illuminate\Database\Eloquent\Model {
 		$this->attributes['salt'] = $value->getSalt();
 	}
 
+	// friends the User has added
+	protected function myFriends() {
+		return $this->belongsToMany('Uomi\Model\User', 'friends', 'user_id', 'friend_id');
+	}
+
+	// users who have added this User as a friend
+	protected function friendOf() {
+		return $this->belongsToMany('Uomi\Model\User', 'friends', 'friend_id', 'user_id');
+	}
+
+	// all friends, bidirectional
+	public function friends() {
+		// return $this->myFriends()->get();//->merge($this->friendOf()->all());
+		// return $this->
+		return null;
+	}
+
     // public function models() {
     //     return $this->hasMany('Uomi\Model','foreign_key_in_user');
     // }
@@ -24,6 +41,9 @@ class User extends \Illuminate\Database\Eloquent\Model {
     // protected $casts = [
     //     'validated' => 'boolean',
     // ];
+
+    // This is a whitelist for mass-assignable properties
+    protected $fillable = ['id', 'created_at', 'updated_at'];
 
 	// Hide this information from the API
     protected $hidden = ['password','salt'];
