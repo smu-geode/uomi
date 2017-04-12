@@ -1,5 +1,7 @@
 <?php
+
 namespace Uomi;
+
 class HashedPassword {
     private $salt;
     private $hash;
@@ -34,7 +36,7 @@ class HashedPassword {
 
     // generateSalt() -> string
     private function generateSalt(): string {
-        $salt = openssl_random_pseudo_bytes(32);
+        $salt = random_bytes(32);
         $salt = bin2hex($salt);
         return $salt;
     }
