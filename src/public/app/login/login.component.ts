@@ -3,32 +3,35 @@ import { UsersService } from '../services/users-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
 @Component({
-	selector: 'registration',
-	templateUrl: './registration.component.html',
+	selector: 'login',
+	templateUrl: './login.component.html',
 	providers: [ UsersService ]
 })
 
-export class RegistrationComponent { 
+export class LoginComponent { 
 	user: any;
+	incorrect: boolean;
 
 	constructor(private usersService: UsersService,
 				private router: Router,
 				private route: ActivatedRoute ) {
 		this.user = {
 			email: '',
-			password: '',
-			passwordVerify: ''
+			password: ''
 		};
+		this.incorrect = false;
 	}
 
-	createUser() {
+	authenticateUser() {
 		// call to users service
-		console.log('create user');
-		delete this.user.passwordVerify;
-		this.usersService.postUserToDB(this.user);
+		console.log('auth user');
+		// this.usersService.verifyUserAccount(this.user);
 		if (true) { // change condition to verify user
 			document.cookie = "isAuthenticated=true";
 			this.router.navigate(['/dashboard']);
 		}
+		// else {
+		// 	this.incorrect = true;
+		// }
 	}
 }

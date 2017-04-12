@@ -1,9 +1,4 @@
 <div class="row">
-	<button class="btn btn-primary pull-right"
-			routerLink="/login"
-			routerLinkActive="active">
-		Login
-	</button>
 	<div class="input-group">
 		<input 	type="text"
 				id="user_email"
@@ -16,20 +11,13 @@
 				class="form-control"
 				placeholder="Password"
 				[(ngModel)]="user.password" />
-		<br />
-		<input 	type="password"
-				id="user_password_verify"
-				class="form-control"
-				placeholder="Verify password"
-				[(ngModel)]="user.passwordVerify" />
 		<span class="input-group-btn">
-			<button (click)="createUser()"
-					[disabled]="(!user.password || !user.email) || 
-								user.password != user.passwordVerify"
+			<button (click)="authenticateUser()"
+					[disabled]="!user.password || !user.email"
 					class="btn btn-default"
 					type="button">
 				<!--<span class="glyphicon glyphicon-chevron-right"></span> -->
-				Create Account
+				Login
 			</button>
 		</span>
 	</div>
