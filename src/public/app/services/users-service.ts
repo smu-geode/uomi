@@ -12,19 +12,14 @@ export class UsersService implements OnInit {
 
 	}
 
-	// ngOnInit() {
-	// 	this.http.post(`${this.baseUrl}/${this.resource}`).map();
-	// }
-
-	postUserToDB(newUser: any) {
-		this.http.post(`${this.baseUrl}/${this.resource}`, JSON.stringify(newUser));
+	ngOnInit() {
+		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
 	}
 
-	// getItems() : MovieItem[] {
-	// 	return [
-    //         new MovieItem('I am Legend', 2007, './images/i_am_legend.jpg'),
-    //         new MovieItem('Independence Day', 1996, './images/independence_day.jpg'),
-    //         new MovieItem('Hancock', 2008, './images/hancock.jpg')
-    //     ];
-	// }
+	postUserToDB(newUser: any) {
+		console.log(JSON.stringify(newUser));
+		// this.http.post(`${this.baseUrl}/${this.resource}`, JSON.stringify(newUser));
+		this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
+	}
+
 }

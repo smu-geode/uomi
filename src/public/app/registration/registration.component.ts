@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UsersService } from './services/users-service';
+import { UsersService } from '../services/users-service';
 
 @Component({
 	selector: 'registration',
-	templateUrl: './registration.component.html'
+	templateUrl: './registration.component.html',
 	providers: [ UsersService ]
 })
 
@@ -20,6 +20,8 @@ export class RegistrationComponent {
 
 	createUser() {
 		// call to users service
+		console.log('create user');
+		delete this.user.passwordVerify;
 		this.UsersService.postUserToDB(this.user);
 	}
 }
