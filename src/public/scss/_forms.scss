@@ -1,0 +1,123 @@
+$form-border-radius: 0.3rem;
+$input-focus-color: rgb(96, 157, 255);
+$text-input-border-size: 4px;
+$text-input-padding: 13px;
+
+.form {
+	margin-top: 1rem;
+	padding: 0 1rem;
+	margin-bottom: 1rem;
+}
+
+.form-block {
+	.form-item, .text-input, .button {
+		width: 100%;
+	}
+}
+
+.form-item {
+	margin-bottom: 1rem;
+	position: relative;
+}
+
+.form-label {
+	font-size: 0.9rem;
+	font-weight: bold;
+	.form-block & {
+		display: block;
+	}
+}
+
+.form-magic-label {
+	font-size: 0.8rem;
+	font-weight: bold;
+	position: absolute;
+	top: 0.3rem;
+	left: $text-input-padding + $text-input-border-size;
+	z-index: 10;
+}
+
+.form-magic-item {
+	.text-input {
+		padding-top: $text-input-padding + 5px;
+		padding-bottom: $text-input-padding - 5px;
+	}
+}
+
+.button {
+	display: block;
+	border: none;
+	font: inherit;
+	padding: 0.5rem 0.8rem;
+	border-radius: $form-border-radius;
+}
+
+.button:disabled {
+	opacity: 0.6;
+	text-decoration: line-through;
+}
+
+.button-default {
+	background: white;
+	border: 1px solid rgba(0,0,0,0.3);
+	color: black;
+}
+
+.button-main {
+	background: $uomi-green;
+	color: white;
+}
+
+.text-input {
+	background: white;
+	font: inherit;
+	padding: $text-input-padding;
+	border: $text-input-border-size solid rgba(0,0,0,0.1);
+	border-radius: $form-border-radius;
+
+	&:focus {
+		outline: none;
+		border-color: $input-focus-color;
+	}
+}
+
+.text-input::placeholder {
+	color: rgba(0,0,0,0.3);
+}
+
+
+.form-vertical-item-group {
+	margin-bottom: 1rem;
+
+	.form-item {
+		margin-bottom: 0;
+	}
+
+	.form-group-first-item {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	*:not(.form-group-first-item):not(.form-group-last-item) {
+		border-radius: none;
+	}
+	.form-group-last-item {
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+	
+	.text-input {
+		position: relative; // fixes border overlap
+
+		&:focus {
+			z-index: 2;
+		}
+
+		&:not(.form-group-last-item) {
+			border-bottom: none;
+			&:focus {
+				border-bottom: $text-input-border-size solid $input-focus-color;
+				margin-bottom: -$text-input-border-size;
+			}
+		}
+	}
+}
