@@ -1,57 +1,62 @@
 <div class="login-container">
-	<section class="login-card">
-		<!-- <a routerLink="/login" routerLinkActive="active">Login</a> -->
-		<div class="form form-block">
+	<section class="login-card-and-header">
+		<h1 class="login-header">Sign Up</h1>
+		<div class="login-card">
+			<!-- <a routerLink="/login" routerLinkActive="active">Login</a> -->
+			<div class="form form-block">
 
-			<div class="form-item form-magic-item">
-				<label for="user_email" class="form-magic-label">
-					Email
-				</label>
-				<input 
-				 autofocus="true" 
-				 type="text"
-				 id="user_email"
-				 class="form-item text-input"
-				 placeholder="email@example.com"
-				 [(ngModel)]="user.email"
+				<div class="form-item" magicFormItem>
+					<label for="user_email">
+						Email
+					</label>
+					<input 
+					 autofocus="true" 
+					 type="text"
+					 id="user_email"
+					 class="text-input"
+					 placeholder="email@example.com"
+					 [(ngModel)]="user.email"
+					>
+				</div><!-- .form-item -->
+
+				<div class="form-vertical-item-group">
+
+					<div class="form-item form-group-first-item" magicFormItem>
+						<label for="user_password">
+							Password
+						</label>
+						<input 
+						 type="password"
+						 id="user_password"
+						 class="text-input"
+						 placeholder="Password"
+						 [(ngModel)]="user.password"
+						>
+					</div><!-- .form-item -->
+					
+					<div class="form-item form-group-last-item" magicFormItem>
+						<label for="user_password_verify">
+							Confirm Password
+						</label>
+						<input 
+						 type="password"
+						 id="user_password_verify"
+						 class="text-input"
+						 placeholder="Confirm Password"
+						 [(ngModel)]="user.passwordVerify"
+						>
+					</div><!-- .form-item -->
+
+				</div><!-- .form-vertical-item-group -->
+
+				<button 
+				 (click)="createUser()" [disabled]="(!user.password || !user.email) || user.password != user.passwordVerify"
+				 class="form-item button button-main"
+				 type="button"
 				>
-			</div><!-- .form-item -->
-
-			<div class="form-vertical-item-group">
-
-				<div class="form-item form-magic-item">
-					<label for="user_password" class="form-magic-label">
-						Password
-					</label>
-					<input 
-					 type="password"
-					 id="user_password"
-					 class="text-input form-group-first-item"
-					 [(ngModel)]="user.password"
-					>
-				</div><!-- .form-item -->
-				
-				<div class="form-item form-magic-item">
-					<label for="user_password_verify" class="form-magic-label">
-						Confirm Password
-					</label>
-					<input 
-					 type="password"
-					 id="user_password_verify"
-					 class="form-item text-input form-group-last-item"
-					 [(ngModel)]="user.passwordVerify"
-					>
-				</div><!-- .form-item -->
-
-			</div><!-- .form-vertical-item-group -->
-
-			<button 
-			 (click)="createUser()" [disabled]="(!user.password || !user.email) || user.password != user.passwordVerify"
-			 class="form-item button button-main"
-			 type="button"
-			>
-				Create Account
-			</button>
-		</div><!-- .form -->
-	</section><!-- .login-card -->
+					Create Account
+				</button>
+			</div><!-- .form -->
+		</div><!-- .login-card -->
+	</section><!-- .login-card-and-header -->
 </div><!-- .login-container -->
