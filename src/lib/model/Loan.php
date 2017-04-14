@@ -21,7 +21,8 @@ class Loan extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function payments() {
-		return $this->hasMany('Uomi\Model\Payment','loan_id');
+		
+		return $this->hasMany('Uomi\Model\Payment','loan_id');;
 	}
 
 	protected $dates = ['created_at', 'confirmed_at', 'completed_at'];

@@ -8,7 +8,3 @@ $app->group('/api', function() {
 	require 'lib/controller/UserController.php';
 	require 'lib/controller/LoanController.php';
 });
-
-$app->any('/test', function(Request $req, Response $res) {
-	echo "Test successful!";
-});

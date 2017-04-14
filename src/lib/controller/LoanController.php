@@ -15,6 +15,10 @@ $this->group('/loans', function() {
     $this->post('/', '\Uomi\Controller\LoanController:postLoanControllerHandler');
 	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
 	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
+
+	$this->group('/{loan_id}/payments', function() {
+		require "PaymentController.php";
+	});
 });
 
 class LoanController {
