@@ -4,10 +4,10 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class UsersService implements OnInit { 
+export class AuthenticationService implements OnInit { 
 
 	private baseUrl = 'http://uomi.dev';
-	private resource = 'api/users';
+	private resource = 'api/sessions';
 
 	constructor(private http: Http,
 				private router: Router) {
@@ -18,21 +18,19 @@ export class UsersService implements OnInit {
 		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
 	}
 
-	postUserToDB(newUser: any) {
-		console.log(JSON.stringify(newUser));
+	verifyUserAccount(user: any) {
+		console.log(JSON.stringify(user));
 		let headers = new Headers({'Content-Type': 'application/json'});
 		let options = new RequestOptions({headers: headers});
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(newUser), options)
+		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
 				.map(this.extractData)
                 .catch(this.handleError)
                 .subscribe(r => {
-                    document.cookie = "username=" + newUser.email;
+                    document.cookie = "username=" + user.email;
                     document.cookie = "isAuthenticated=true";
                     this.router.navigate(['/dashboard']);
         });
-		
-		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
 	}
 
 	extractData(response: Response) {
@@ -58,4 +56,4 @@ export class UsersService implements OnInit {
         return Observable.throw(errorMessage);
 	}
 
-}
+}	

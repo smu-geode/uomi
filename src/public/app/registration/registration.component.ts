@@ -26,9 +26,9 @@ export class RegistrationComponent {
 		console.log('create user');
 		delete this.user.passwordVerify;
 		this.usersService.postUserToDB(this.user);
-		if (true) { // change condition to verify user
-			document.cookie = "isAuthenticated=true";
-			this.router.navigate(['/dashboard']);
-		}
+		// if (true) { // change condition to verify user
+		// 	document.cookie = "isAuthenticated=true";
+		// 	this.router.navigate(['/dashboard']);
+		// }
 	}
 }
