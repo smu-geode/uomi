@@ -5,10 +5,20 @@
 		<base href="/">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
 	</head>
-	<body>
-		<app>Loading</app>
+	<body class="page-layout has-fixed-header">
+		<header class="page-header">
+			<div class="page-header-contents">
+				<div class="page-header-brand">
+					<img src="img/uomi-green.png">
+				</div>
+			</div>
+		</header>
+		<main class="page">
+			<app><div class="placeholder-message">Loading</div></app>
+		</main>
 
 		<script src="node_modules/core-js/client/shim.min.js"></script>
 		<script src="node_modules/zone.js/dist/zone.js"></script>

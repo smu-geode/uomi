@@ -1,0 +1,57 @@
+$header-background: white;
+$header-height: 50px;
+
+// the principal container, usually <body>
+.page-layout {
+	width: 100%;
+	height: 100%;
+	position: relative;
+
+	&.has-fixed-header {
+		margin-top: $header-height;
+	}
+}
+
+.page-header {
+	width: 100%;
+	height: $header-height;
+	padding: 5px 0;
+	background: $header-background;
+	
+
+	.has-fixed-header & {
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+}
+
+.page-header-contents {
+	@extend .feature--max-width-xl;
+	@extend .feature--horizontally-centered;
+	height: 100%;
+}
+
+.page-header-brand {
+	text-align: center;
+	height: 100%;
+	
+	img {
+		max-height: 100%;
+	}
+}
+
+// the main body
+.page {
+
+}
+
+// in this case, the loading text.
+.placeholder-message {
+	color: rgba(0,0,0,0.5);
+	font-size: 2rem;
+	font-style: italic;
+	text-align: center;
+	display: block;
+	padding: 1rem;
+}

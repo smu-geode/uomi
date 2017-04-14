@@ -10,6 +10,8 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 // import { SubComponent } from './sub/sub.component';
 
+import { MagicFormItemDirective } from './magic-form-item.directive'
+
 var routes = [
 	{
 		path: '',
@@ -33,7 +35,8 @@ var routes = [
 	declarations: [ AppComponent,
 					RegistrationComponent,
 					LoginComponent,
-					DashboardComponent ],
+					DashboardComponent,
+					MagicFormItemDirective ],
 	bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
