@@ -15,6 +15,7 @@ $this->group('/loans', function() {
     $this->post('/', '\Uomi\Controller\LoanController:postLoanControllerHandler');
 	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
 	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
+	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanControllerHandler');
 
 	$this->group('/{loan_id}/payments', function() {
 		require "PaymentController.php";
@@ -111,7 +112,6 @@ class LoanController {
 
 		$catModel = null;
 		try {
-			//$category = \Uomi\Model\Category::findOrFail(1);
 			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
 		}catch (ModelNotFoundException $e) {
 			$category = new \Uomi\Model\Category();
@@ -119,7 +119,6 @@ class LoanController {
 			$category->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
 			$category->save();
 		}
-
 
         $loan->category_id = $catModel->id;
         $loan->save();
@@ -129,36 +128,5 @@ class LoanController {
 		$stat = $stat->message('Loan successfully created.');
 		return $res->withStatus(201)->withJson($stat);
     }
-
-    /*
-    public function verbModelHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a single model, like
-        // `/api/models/1`
-
-        try {
-            $modelName = Model\ModelName::findOrFail( $req->getAttribute('model_id') );
-            $stat = new Status($modelName);
-            return $res->withJson($stat);
-        } catch(ModelNotFoundException $e) { // user not found
-            $stat = new Status();
-            $stat = $stat->error("InvalidModelName")->message("Please make sure ModelName is valid");
-            return $res->withStatus(404)->withJson($stat);
-        }
-    }
-    */
-
-    /*
-    public function verbModelCollectionHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a collection, like
-        // `/api/models`
-
-        // You probably don't want to get **all** of a model - narrow it down!
-        // https://laravel.com/docs/5.4/eloquent
-        $modelNames = Model\ModelName::all();
-        $stat = new Status($modelNames);
-        return $res->withJson($stat);
-
-    }
-    */
 
 }
