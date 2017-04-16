@@ -12,6 +12,7 @@ use \RuntimeException;
 use \Uomi\Status;
 use \Uomi\Model\User;
 use \Uomi\Factory\UserFactory;
+use \Uomi\HashedPassword;
 
 // ROUTES
 $this->group('/users', function() {
@@ -56,6 +57,32 @@ class UserController {
 		$stat = $stat->message('User successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created
     }
+
+	public function putUserCollectionHandler(Request $req, Response $res): Response {
+		$data = $req->getParsedBody();
+
+		$oldPassword = $data['oldPassword'] ?? null;
+		$newPassword = $data['newPassword'] ?? null;
+
+		if($oldPassword === null || $newPassword === null) {
+			$stat = new Status();
+			$stat = $stat->error("BadUserUpdate")->message("There was an error updating the user. Password(s) blank.");
+			return $res->withStatus(400)->withJson($stat);
+		}
+		//never check whether a user has proper access to modify; will implement later i suppose
+		try {
+			$user = \Uomi\Model\User::findOrFail($req->getAttribute('user_id'));
+			$user->password = HashedPassword::makeFromPlainText($newPassword);  //where does the hashing occur again? i think we'll replace this with better implementation later
+			$user.save();
+
+			$stat = new Status();
+			$stat = $stat->message("User updated");
+			return $res->withStatus(201)->withJson($stat); // Updated
+		} catch(ModelNotFoundException $e) { //user not found
+			return self::invalidUserResponse($res);
+		}
+	}
+
 
     public function getUserFriendCollectionHandler(Request $req, Response $res): Response {
         try {
