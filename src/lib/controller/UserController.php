@@ -19,6 +19,13 @@ $this->group('/users', function() {
     $this->group('/{user_id}', function() {
         $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
         $this->get('/friends', '\Uomi\Controller\UserController:getUserFriendCollectionHandler');
+		$this->get('/friends/{friend_id}', '\Uomi\Controller\UserController:getFriendHandler'); //to implement
+		$this->delete('/friends/{friend_id}', '\Uomi\Controller\UserController:deleteFriendHandler'); //to implement
+		$this->post('/friends', '\Uomi\Controller\UserController:postUserFriendCollectionHandler'); //to implement
+		$this->put('/', '\Uomi\Controller\UserController:putUserCollectionHandler');
+		$this->get('/loans', '\Uomi\Controller\UserController:getUserLoans'); //to implement
+		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettings'); //to implement
+		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettings'); //to implement
     });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
@@ -41,7 +48,7 @@ class UserController {
     }
 
     public function postUserCollectionHandler(Request $req, Response $res): Response {
-
+		//again no authorization errors
         $data = $req->getParsedBody();
 
 		// Create the user
