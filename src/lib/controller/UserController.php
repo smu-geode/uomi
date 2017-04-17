@@ -57,6 +57,13 @@ class UserController {
 
 		try {
 			$user = $factory->submitUserRegistrationForm($data);
+
+			return $res->withStatus(200)->withJson($settings); //diagnostic
+		} catch(RuntimeException $e) {
+			return self::badUserRegistrationResponse($res, $factory->getErrors());
+		}
+
+		try {
 			$settings = new \Uomi\Model\Settings();  //creating new settings when user is created
 			$settings->user_id = $user->id;
 			$settings->allow_notif = 1;
@@ -64,10 +71,10 @@ class UserController {
 			$settings->payback_reminders = 1;
 			$settings->view_email = 1;
 			$settings->save();
-			return $res->withStatus(200)->withJson($settings); //diagnostic
-		} catch(RuntimeException $e) {
-			return self::badUserRegistrationResponse($res, $factory->getErrors());
-		}
+		} catch(\Exception $e) {
+			$stat = new Status($e);
+			return $res->withJson($stat);
+		}			
 
 		$stat = new Status($user);
 		$stat = $stat->message('User successfully created.');
