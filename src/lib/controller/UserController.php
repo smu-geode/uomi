@@ -59,7 +59,7 @@ class UserController {
 			$user = $factory->submitUserRegistrationForm($data);
 			$settings = new \Uomi\Model\Settings();  //creating new settings when user is created
 			$settings->user_id = $user->id;  
-			$settings->save; //saving to settings model
+			$settings->save(); //saving to settings model
 		} catch(RuntimeException $e) {
 			return self::badUserRegistrationResponse($res, $factory->getErrors());
 		}

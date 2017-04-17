@@ -33,6 +33,10 @@ class User extends \Illuminate\Database\Eloquent\Model {
 		return null;
 	}
 
+	/*public function settings() {
+		return $this->hasOne('Uomi\Model\Settings', 'user_id');
+	}*/
+
     // public function models() {
     //     return $this->hasMany('Uomi\Model','foreign_key_in_user');
     // }
