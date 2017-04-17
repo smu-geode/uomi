@@ -16,6 +16,13 @@ $this->group('/loans', function() {
 	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
 	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
 	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanControllerHandler');
+<<<<<<< HEAD
+
+	$this->group('/{loan_id}/payments', function() {
+		require "PaymentController.php";
+	});
+=======
+>>>>>>> 5c42daa03d17c1c24b63f85394a57520ee426af4
 });
 
 class LoanController {
@@ -30,7 +37,7 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-			$stat = new Status();
+			$stat = new Status($loan);
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
 		} catch (ModelNotFoundException $e) {
@@ -43,33 +50,26 @@ class LoanController {
 	public function putLoanControllerHandler(Request $req, Response $res): Response {
 		$form = $req->getParsedBody();
 
-		$amount = $form['amount'] ?? null;
+		$details = $form['details'] ?? null;
 		$category = $form['category'] ?? null;
 
-		if($amount === null) {
-			$stat = new Status();
-            $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include the amount of the loan");
-            return $res->withStatus(400)->withJson($stat);
-		}
-
-		$category = null;
+		$catModel = null;
 		try {
-			$category = \Uomi\Model\Category::where('category', '=', $category)->findOrFail();
-
+			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
 		}catch (ModelNotFoundException $e) {
-			$category = new \Uomi\Model\Category();
-			$category->name = $category;
-			$category->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
-			$category->save();
+			$catModel = new \Uomi\Model\Category();
+			$catModel->name = $category;
+			$catModel->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
+			$catModel->save();
 		}
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-			$loan->amount = $amount;
-			$loan->category_id = $category->category_id;
+			$loan->details = $details;
+			$loan->category_id = $catModel->id;
 			$loan->save();
 
-			$stat = new Status();
+			$stat = new Status($loan);
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
 
@@ -83,45 +83,39 @@ class LoanController {
     public function postLoanControllerHandler(Request $req, Response $res): Response {
         $form = $req->getParsedBody();
 
-        $to = $form['to'] ?? null;
-        $from = $form['from'] ?? null;
-        $amount = $form['amount'] ?? null;
+        $to_user = $form['to_user'] ?? null;
+        $from_user = $form['from_user'] ?? null;
+        $amount_cents = $form['amount_cents'] ?? null;
         $category = $form['category'] ?? null;
 
 
-		if($to === null) {
-			$stat = new Status();
+		if($to_user === null) {
+			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include who the loan is to");
             return $res->withStatus(400)->withJson($stat);
-		}
-
-		if($from === null) {
-			$stat = new Status();
+		} elseif($from_user === null) {
+			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include who the loan is from");
             return $res->withStatus(400)->withJson($stat);
-		}
-
-		if($amount === null) {
-			$stat = new Status();
+		} elseif ($amount_cents === null) {
+			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include the amount of the loan");
             return $res->withStatus(400)->withJson($stat);
-		}
-
-		if($category === null) {
-			$stat = new Status();
+		} elseif($category === null) {
+			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include a category for the loan");
             return $res->withStatus(400)->withJson($stat);
 		}
 
 
-        $loan = new Loan();
-        $loan->to = $to;
-        $loan->from = $from;
-        $loan->amount = $amount;
+        $loan = new \Uomi\Model\Loan();
+        $loan->to_user = $to_user;
+        $loan->from_user = $from_user;
+        $loan->amount_cents = $amount_cents;
 
-		$category = null;
+		$catModel = null;
 		try {
-			$category = \Uomi\Model\Category::where('category', '=', $category)->findOrFail();
+			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
 		}catch (ModelNotFoundException $e) {
 			$category = new \Uomi\Model\Category();
 			$category->name = $category;
@@ -129,16 +123,17 @@ class LoanController {
 			$category->save();
 		}
 
-
-        $loan->category_id = $category->category_id;
+        $loan->category_id = $catModel->id;
         $loan->save();
 
 
-        $stat = new \Uomi\Status();
+        $stat = new \Uomi\Status($loan);
 		$stat = $stat->message('Loan successfully created.');
 		return $res->withStatus(201)->withJson($stat);
     }
 
+<<<<<<< HEAD
+=======
 	public function deleteLoanControllerHandler(Request $req, Response $res): Response {
 
 		try {
@@ -185,4 +180,5 @@ class LoanController {
     }
     */
 
+>>>>>>> 5c42daa03d17c1c24b63f85394a57520ee426af4
 }
