@@ -14,7 +14,8 @@ use \Uomi\Status;
 $this->group('/loans', function() {
     $this->post('/', '\Uomi\Controller\LoanController:postLoanControllerHandler');
 	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
-	$this->put('/{loan_id}', '\Uomi\Controler\LoanController:putLoanControllerHandler');
+	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
+	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanControllerHandler');
 });
 
 class LoanController {
@@ -137,6 +138,21 @@ class LoanController {
 		$stat = $stat->message('Loan successfully created.');
 		return $res->withStatus(201)->withJson($stat);
     }
+
+	public function deleteLoanControllerHandler(Request $req, Response $res): Response {
+
+		try {
+			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+			$loan->delete();
+			$stat = new Status();
+			$stat = $stat->message("Loan deleted");
+			return $res->withStatus(200)->withJson($stat);
+		} catch (ModelNotFoundException $e) {
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
+			return $res->withStatus(404)->withJson($stat);
+		}
+	}
 
     /*
     public function verbModelHandler(Request $req, Response $res): Response {
