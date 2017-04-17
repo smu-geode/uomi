@@ -11,16 +11,11 @@
 	margin: 0 auto;
 }
 
-.feature--center-children-x-y {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 .feature--page-center-children {
 	// only centers children vertically when there's enough room
 	display: flex;
 	justify-content: center;
+	align-items: flex-start;
 	
 	@include breakpoint-up(md) {
 		align-items: center;

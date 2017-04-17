@@ -1,0 +1,22 @@
+// original code by Paul Herz
+
+@each $name, $_ in $breakpoints {
+	.row-#{$name} {
+		width: 100%;
+		display: flex;
+
+		justify-content: flex-start; // on axis
+		align-items: flex-start; // perpendicular to axis
+
+		flex-direction: column; // axis is Y (downward)
+
+		@include breakpoint-up($name) {
+			flex-direction: row; // axis is X (rightward)
+		}
+	}
+}
+
+.column {
+	width: 100%;
+	display: block;
+}

@@ -13,7 +13,9 @@
 
 @import 'general';      // rules that apply to all elements or the page.
 
-@import 'layout';		// affect the layout of the body, some grid/column styles
+@import 'columns';
+
+@import 'layout';		// affect the layout of the body
 
 @import 'forms';        // opt-in rules for form elements.
 
