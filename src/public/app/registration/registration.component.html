@@ -1,8 +1,17 @@
 <div class="login-container">
 	<section class="login-card-and-header">
-		<h1 class="login-header">Sign Up</h1>
-		<div class="login-card">
-			<!-- <a routerLink="/login" routerLinkActive="active">Login</a> -->
+		<div class="card-header">
+			<h1 class="card-header-text">Sign up</h1>
+			<ul class="nav card-header-nav">
+				<a routerLink="/login">
+					<li class="nav-item card-header-nav-item">
+						<span>Log in </span><i class="fa fa-chevron-right" aria-hidden="true"></i>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<div class="card">
+			
 			<div class="form form-block">
 
 				<div class="form-item" magicFormItem>
@@ -10,12 +19,12 @@
 						Email
 					</label>
 					<input 
-					 autofocus="true" 
 					 type="text"
 					 id="user_email"
 					 class="text-input"
 					 placeholder="email@example.com"
 					 [(ngModel)]="user.email"
+					 focusOnLoad
 					>
 				</div><!-- .form-item -->
 

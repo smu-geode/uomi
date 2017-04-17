@@ -10,7 +10,8 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 // import { SubComponent } from './sub/sub.component';
 
-import { MagicFormItemDirective } from './magic-form-item.directive'
+import { MagicFormItemDirective } from './magic-form-item.directive';
+import { FocusOnLoadDirective } from './focus-on-load.directive';
 
 var routes = [
 	{
@@ -36,7 +37,8 @@ var routes = [
 					RegistrationComponent,
 					LoginComponent,
 					DashboardComponent,
-					MagicFormItemDirective ],
+					MagicFormItemDirective,
+					FocusOnLoadDirective ],
 	bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
