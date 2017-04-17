@@ -11,6 +11,7 @@ use \RuntimeException;
 
 use \Uomi\Status;
 use \Uomi\Model\User;
+use \Uomi\Model\Settings;
 use \Uomi\Factory\UserFactory;
 use \Uomi\HashedPassword;
 
@@ -56,6 +57,9 @@ class UserController {
 
 		try {
 			$user = $factory->submitUserRegistrationForm($data);
+			$settings = new \Uomi\Model\Settings;  //creating new settings when user is created
+			$settings->user_id = $user->id;  
+			$settings->save; //saving to settings model
 		} catch(RuntimeException $e) {
 			return self::badUserRegistrationResponse($res, $factory->getErrors());
 		}
