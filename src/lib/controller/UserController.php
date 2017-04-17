@@ -78,7 +78,7 @@ class UserController {
 	//where do I get the settings from? isn't it the same thing as getUserHandler function?
 	public function getUserSettings(Request $req, Response $res): Response {
 		try {
-			$settings = User::findOrFail($req->getAttribute('user_id'))->settings;
+			$settings = Settings::where("user_id", $req->getAttribute('user_id'));
 			$stat = new Status($settings);
 			$stat = $stat->message('Got settings.');
 			return $res->withStatus(200)->withJson($stat); // Get
