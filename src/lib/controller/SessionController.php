@@ -21,34 +21,33 @@ class SessionController {
         $this->container = $c;
     }
 
-    /*
-    public function verbModelHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a single model, like
-        // `/api/models/1`
+	public function postSessionCollectionHandler(Request $req, Response $rep){
+		$data = req->getParsedBody();
 
-        try {
-            $modelName = Model\ModelName::findOrFail( $req->getAttribute('model_id') );
-            $stat = new Status($modelName);
-            return $res->withJson($stat);
-        } catch(ModelNotFoundException $e) { // user not found
-            $stat = new Status();
-            $stat = $stat->error("InvalidModelName")->message("Please make sure ModelName is valid");
-            return $res->withStatus(404)->withJson($stat);
-        }
+		$factory = new SessionFactory($this->container);
+
+		try {
+			$session = $factory->submitSessionForm($data);
+		} catch(RuntimeException $e) {
+			return self::badSessionResponse($res, $factory->getErrors());
+		}
+
+		$stat = new Status($user);
+		$stat = $stat->message('Session successfully created.');
+		return $res->withStatus(201)->withJson($stat); // Created
+	}
+
+
+
+
+
+	protected static function badSessionResponse(Response $res, array $errorStrings): Response {
+        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
+        $stat = $stat->error('badSessionResponse')->message('There was an error in creating the session.');
+
+        return $res->withStatus(400)->withJson($stat); // Bad Request
     }
-    */
 
-    /*
-    public function verbModelCollectionHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a collection, like
-        // `/api/models`
 
-        // You probably don't want to get **all** of a model - narrow it down!
-        // https://laravel.com/docs/5.4/eloquent
-        $modelNames = Model\ModelName::all();
-        $stat = new Status($modelNames);
-        return $res->withJson($stat);
 
-    }
-    */
-}
+?>
