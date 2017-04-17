@@ -5,8 +5,9 @@
 		<base href="/">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-		<link rel="stylesheet" href="css/style.css">
+		<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
 	</head>
 	<body class="page-layout has-fixed-header">
 		<header class="page-header">
@@ -17,7 +18,11 @@
 			</div>
 		</header>
 		<main class="page">
-			<app><div class="placeholder-message">Loading</div></app>
+			<app>
+				<div class="page-center">
+					<div class="page-loader"><i class="fa fa-3x fa-spinner fa-spin" aria-label="Loading"></i></div>
+				</div>
+			</app>
 		</main>
 
 		<script src="node_modules/core-js/client/shim.min.js"></script>
