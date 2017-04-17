@@ -68,9 +68,11 @@ class UserController {
 	//where do I get the settings from? isn't it the same thing as getUserHandler function?
 	public function getUserSettings(Request $req, Response $res): Response {
 		try {
-			$user = User::findOrFail($req->getAttribute('user_id'));
-			return $res->withJson(new Status($user));
-		} catch(ModelNotFoundException $e) { //user not found
+			$settings = User::findOrFail($req->getAttribute('user_id'))->settings;
+			$stat = new Status($settings);
+			$stat = $stat->message('Got settings.');
+			return $res->withStatus(200)->withJson($stat); // Get
+		} catch(ModelNotFoundException $e) { //user/settings not found
 			return self::invalidUserResponse($res);
 		}
 	}
