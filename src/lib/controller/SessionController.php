@@ -11,6 +11,7 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 // ROUTES
 $this->group('/sessions', function() {
 	$this->post('/', '\Uomi\SessionController:postSessionCollectionHandler');
+	$this->delete('/', '\Uomi\SessionController:deleteSessionCollectionHandler');
 });
 
 class SessionController {
@@ -21,8 +22,8 @@ class SessionController {
         $this->container = $c;
     }
 
-	public function postSessionCollectionHandler(Request $req, Response $rep){
-		$data = req->getParsedBody();
+	public function postSessionCollectionHandler(Request $req, Response $rep): Response{
+		$data = $req->getParsedBody();
 
 		$factory = new SessionFactory($this->container);
 
@@ -37,9 +38,20 @@ class SessionController {
 		return $res->withStatus(201)->withJson($stat); // Created
 	}
 
+	public function deleteSessionCollectionHandler(Request $req, Response $rep): Response{
 
-
-
+		try{
+			//not sure if using proper way to get current session, but rest of delete should be fine
+			$sessiontodelete = \Uomi\Model\Session::firstOrFail( $req->getAttribute('session') );
+			$sessiontodelete->delete();
+			$stat = new Status();
+			$stat = $stat->message("Session deleted");
+		} catch (ModelNotFoundException $e){
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Session with id: " . $session . " not found");
+			return $res->withStatus(404)->withJson($stat);
+		}
+	}
 
 	protected static function badSessionResponse(Response $res, array $errorStrings): Response {
         $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
@@ -47,7 +59,4 @@ class SessionController {
 
         return $res->withStatus(400)->withJson($stat); // Bad Request
     }
-
-
-
-?>
+}
