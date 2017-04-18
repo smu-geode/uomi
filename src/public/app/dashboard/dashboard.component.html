@@ -1,36 +1,82 @@
 <div class="page-center">
-	<section id="dashboard" class="card-md">
+	<div class="card-md">
+		<section id="dashboard" class="card-content">
 
-		<div class="row">
-			<div class="column-xs">
+			<div class="row">
+				<div class="column-xs">
 
-				<div class="currency-view big-currency-view currency-main">
-					<span class="currency-symbol">$</span><span class="currency-integer">10</span><span class="currency-decimal-mark">.</span><span class="currency-fraction">62</span>
-				</div>
+					<div class="currency-view big-currency-view currency-main">
+						<span class="currency-symbol">$</span><span class="currency-integer">10</span><span class="currency-decimal-mark">.</span><span class="currency-fraction">62</span>
+					</div>
 
-				<div class="currency-caption">
-					Lent
-				</div>
+					<div class="currency-caption">
+						Lent
+					</div>
 
-			</div><!-- .column-sm -->
-			<div class="column-xs">
+				</div><!-- .column-sm -->
+				<div class="column-xs">
 
-				<div class="currency-view big-currency-view currency-main">
-					<span class="currency-symbol">$</span><span class="currency-integer">83</span><span class="currency-decimal-mark">.</span><span class="currency-fraction">27</span>
-				</div>
+					<div class="currency-view big-currency-view currency-main">
+						<span class="currency-symbol">$</span><span class="currency-integer">83</span><span class="currency-decimal-mark">.</span><span class="currency-fraction">27</span>
+					</div>
 
-				<div class="currency-caption">
-					Borrowed
-				</div>
+					<div class="currency-caption">
+						Borrowed
+					</div>
 
-			</div><!-- .column-sm -->
-		</div><!-- .row -->
+				</div><!-- .column-sm -->
+			</div><!-- .row -->
 
-		<table class="table">
-			<tr>
-				<td>Profile</td><td>Name</td><td>Category</td><td>Owes $20</td><td>Dropdown</td>
-			</tr>
-		</table>
+			<div class="table-container loan-table">
+				<table class="table">
+					<!-- ENTRY -->
+					<tr>
+						<td class="fit-content hide-xs-down">
+							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+						</td>
+						<td>Lorene Simon</td>
+						<td class="category-food">
+							<i class="fa fa-cutlery loan-category-icon" aria-label="Category: Food"></i>
+							<span class="loan-category-name hide-xs-down" aria-hidden="true">Food</span>
+						</td>
+						<td>Owes $20</td>
+						<td class="fit-content table-center">
+							<i class="fa fa-chevron-down loan-table-dropdown-button"></i>
+						</td>
+					</tr>
+					<!-- ENTRY -->
+					<tr>
+						<td class="fit-content hide-xs-down">
+							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+						</td>
+						<td>Leland Mack</td>
+						<td class="category-bills">
+							<i class="fa fa-envelope loan-category-icon" aria-label="Category: Bills"></i>
+							<span class="loan-category-name hide-xs-down" aria-hidden="true">Bills</span>
+						</td>
+						<td>You owe $10.32</td>
+						<td class="fit-content table-center">
+							<i class="fa fa-chevron-down loan-table-dropdown-button"></i>
+						</td>
+					</tr>
+					<!-- ENTRY -->
+					<tr>
+						<td class="fit-content hide-xs-down">
+							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+						</td>
+						<td>Leland Mack</td>
+						<td class="category-movies">
+							<i class="fa fa-ticket loan-category-icon" aria-label="Category: Movies"></i>
+							<span class="loan-category-name hide-xs-down" aria-hidden="true">Movies</span>
+						</td>
+						<td>You owe $11</td>
+						<td class="fit-content table-center">
+							<i class="fa fa-chevron-down loan-table-dropdown-button"></i>
+						</td>
+					</tr>
+				</table>
+			</div><!-- .table-container -->
 
-	</section><!-- .dashboard -->
-</div><!-- .dashboard-container -->
+		</section><!-- .dashboard -->
+	</div><!-- .card-md -->
+</div><!-- .page-center -->
