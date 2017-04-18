@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { UsersService } from '../services/users-service';
 
 @Component({
-	selector: 'dashbaord',
+	selector: 'dashboard',
 	templateUrl: './dashboard.component.html',
 	providers: [ UsersService ]
 })
