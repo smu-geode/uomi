@@ -13,12 +13,12 @@
 
 @import 'general';      // rules that apply to all elements or the page.
 
-@import 'columns';
+@import 'table';		// opt-in table styles
+
+@import 'columns';		// minimal flexbox based column system
 
 @import 'layout';		// affect the layout of the body
 
 @import 'forms';        // opt-in rules for form elements.
-
-@import 'login';        // styles applying to login and registration.
 
 @import 'dashboard';

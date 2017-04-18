@@ -21,3 +21,7 @@ mark {
 	background: hsla(60,100,50,0.5);
 	border-bottom: 1px solid hsla(60,100,48,1);
 }
+
+.screen-reader {
+	@extend .feature--expose-to-screen-reader;
+}

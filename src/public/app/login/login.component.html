@@ -1,57 +1,60 @@
-<div class="login-container">
-	<section class="login-card-and-header">
-		<div class="card-header">
-			<h1 class="card-header-text">Log in</h1>
-			<ul class="nav card-header-nav">
-				<a routerLink="/">
-					<li class="nav-item card-header-nav-item">
-						<span>Sign up </span><i class="fa fa-chevron-right" aria-hidden="true"></i>
-					</li>
-				</a>
-			</ul>
-		</div>
-		<div class="card">
-			<div class="form form-block">
+<div class="page-center">
 
-				<div class="form-item" magicFormItem>
-					<label for="user_email">
-						Email
-					</label>
-					<input  
-					 type="text"
-					 id="user_email"
-					 class="text-input"
-					 placeholder="email@example.com"
-					 [(ngModel)]="user.email"
-					 focusOnLoad
+		<div class="card-sm">
+
+			<header class="card-header">
+				<h1 class="card-header-text">Log in</h1>
+				<ul class="nav card-header-nav" role="navigation">
+					<a routerLink="/">
+						<li class="nav-item card-header-nav-item">
+							<span>Sign up </span><i class="fa fa-chevron-right" aria-hidden="true"></i>
+						</li>
+					</a>
+				</ul>
+			</header><!-- .card-header -->
+
+			<section class="card-content">
+				<div class="form form-block">
+
+					<div class="form-vertical-item-group">
+						<div class="form-item form-group-first-item" magicFormItem>
+							<label for="user_email">
+								Email
+							</label>
+							<input  
+							 type="text"
+							 id="user_email"
+							 class="text-input"
+							 placeholder="email@example.com"
+							 [(ngModel)]="user.email"
+							 focusOnLoad
+							>
+						</div><!-- .form-item -->
+
+						<div class="form-item form-group-last-item" magicFormItem>
+							<label for="user_password">
+								Password
+							</label>
+							<input 
+							 type="password"
+							 id="user_password"
+							 class="text-input"
+							 placeholder="Password"
+							 [(ngModel)]="user.password"
+							>
+						</div><!-- .form-item -->
+					</div><!-- .form-vertical-item-group -->
+
+					<button 
+					 (click)="authenticateUser()" [disabled]="!user.password || !user.email"
+					 class="form-item button button-main"
+					 type="button"
 					>
-				</div><!-- .form-item -->
+						Log in
+					</button>
 
-				<div class="form-vertical-item-group">
+				</div><!-- .form -->
+			</section><!-- .card-content -->
+		</div><!-- .card-sm -->
 
-					<div class="form-item form-group-first-item" magicFormItem>
-						<label for="user_password">
-							Password
-						</label>
-						<input 
-						 type="password"
-						 id="user_password"
-						 class="text-input"
-						 placeholder="Password"
-						 [(ngModel)]="user.password"
-						>
-					</div><!-- .form-item -->
-
-				</div><!-- .form-vertical-item-group -->
-
-				<button 
-				 (click)="authenticateUser()" [disabled]="!user.password || !user.email"
-				 class="form-item button button-main"
-				 type="button"
-				>
-					Log in
-				</button>
-			</div><!-- .form -->
-		</div><!-- .login-card -->
-	</section><!-- .login-card-and-header -->
 </div><!-- .login-container -->
