@@ -6,12 +6,15 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
+use \Uomi\HashedPassword;
+use \Uomi\Status;
+
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // ROUTES
 $this->group('/sessions', function() {
-	$this->post('/', '\Uomi\SessionController:postSessionCollectionHandler');
-	$this->delete('/', '\Uomi\SessionController:deleteSessionCollectionHandler');
+	$this->post('', '\Uomi\Controller\SessionController:postSessionCollectionHandler');
+	$this->delete('', '\Uomi\Controller\SessionController:deleteSessionCollectionHandler');
 });
 
 class SessionController {
@@ -22,41 +25,70 @@ class SessionController {
         $this->container = $c;
     }
 
-	public function postSessionCollectionHandler(Request $req, Response $rep): Response{
-		$data = $req->getParsedBody();
+	public function postSessionCollectionHandler(Request $req, Response $res): Response{
+		$form = $req->getParsedBody();
 
-		$factory = new SessionFactory($this->container);
+		$email = $form['email'] ?? null;
+		$password = $form['password'] ?? null;
 
-		try {
-			$session = $factory->submitSessionForm($data);
-		} catch(RuntimeException $e) {
-			return self::badSessionResponse($res, $factory->getErrors());
+		if($email === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include an email attribute");
+			return $res->withStatus(400)->withJson($stat);
+		}elseif($password === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
+			return $res->withStatus(400)->withJson($stat);
 		}
 
-		$stat = new Status($user);
-		$stat = $stat->message('Session successfully created.');
-		return $res->withStatus(201)->withJson($stat); // Created
+		$user;
+		try {
+			$user = \Uomi\Model\User::where('email' , $email)->first();
+		}catch(ModelNotFound $e) {
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
+			return $res->withStatus(404)->withJson($stat);
+		}
+
+		$challenge = HashedPassword::makeFromPlainTextWithSalt($password, $user->salt);
+
+		if(HashedPassword::compare($challenge, $user->password)) {
+			$session = new \Uomi\Model\Session();
+			$session->user_id = $user->id;
+			$session->session_key = hash("sha512", $user->id . microtime());
+			$session->save();
+			$stat = new Status($session);
+			$stat = $stat->message("Session created");
+			return $res->withStatus(201)->withJson($stat);
+		} else {
+			$stat = new Status();
+			$stat = $stat->error("Unauthorized")->message("Incorrect email or password");
+			return $res->withStatus(401)->withJson($stat);
+		}
+		
 	}
 
-	public function deleteSessionCollectionHandler(Request $req, Response $rep): Response{
+	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
+		$form = $req->getParsedBody();
 
-		try{
-			//not sure if using proper way to get current session, but rest of delete should be fine
-			$sessiontodelete = \Uomi\Model\Session::firstOrFail( $req->getAttribute('session') );
-			$sessiontodelete->delete();
+		$session_key = $form['session_key'] ?? null;
+
+		if($session_key === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
+			return $res->withStatus(400)->withJson($stat);
+		}
+
+		try {
+			$sessModel = \Uomi\Model\Session::where('session_key', $session_key)->first();
+			$sessModel->delete();
 			$stat = new Status();
-			$stat = $stat->message("Session deleted");
-		} catch (ModelNotFoundException $e){
+			$stat = $stat->message("Session delete. User is now logged out.");
+			return $res->withStatus(200)->withJson($stat);
+		}catch(ModelNotFound $e) {
 			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Session with id: " . $session . " not found");
+			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}
-
-	protected static function badSessionResponse(Response $res, array $errorStrings): Response {
-        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
-        $stat = $stat->error('badSessionResponse')->message('There was an error in creating the session.');
-
-        return $res->withStatus(400)->withJson($stat); // Bad Request
-    }
 }

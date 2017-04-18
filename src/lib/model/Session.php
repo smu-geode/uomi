@@ -3,12 +3,8 @@ namespace Uomi\Model;
 
 class Session extends \Illuminate\Database\Eloquent\Model {
 
-	public function session(){
-		return $this->hasOne('Uomi\Model\User', 'session');
-	}
+	protected $hidden = ['id'];
 
-	public function created_at(){
-		return $this->hasOne('Uomi\Model\User', 'created_at');
-	}
-
+	// Cast these fields to dates
+	protected $dates = ['created_at','updated_at'];
 }
