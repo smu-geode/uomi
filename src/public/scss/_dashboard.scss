@@ -1,0 +1,22 @@
+
+.big-currency-view {
+
+	font-size: 2.5rem;
+
+	.currency-symbol, .currency-fraction {
+		vertical-align: super;
+	}
+
+	.currency-symbol {
+		font-size: 60%;
+	}
+
+	.currency-fraction {
+		font-size: 50%;
+		padding-left: 0.15em;
+	}
+
+	.currency-decimal-mark {
+		display: none;
+	}
+}
