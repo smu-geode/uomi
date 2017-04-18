@@ -8,10 +8,8 @@ import { AppComponent }  from './app.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-// import { SubComponent } from './sub/sub.component';
 
-import { MagicFormItemDirective } from './magic-form-item.directive';
-import { FocusOnLoadDirective } from './focus-on-load.directive';
+import { SharedModule } from './shared/shared.module';
 
 var routes = [
 	{
@@ -32,13 +30,12 @@ var routes = [
 	imports:      [ BrowserModule,
 					FormsModule,
 					HttpModule,
-					RouterModule.forRoot(routes) ],
+					RouterModule.forRoot(routes),
+					SharedModule ],
 	declarations: [ AppComponent,
 					RegistrationComponent,
 					LoginComponent,
-					DashboardComponent,
-					MagicFormItemDirective,
-					FocusOnLoadDirective ],
+					DashboardComponent ],
 	bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
