@@ -83,7 +83,7 @@ class SessionController {
 			$sessModel = \Uomi\Model\Session::where('session_key', $session_key)->first();
 			$sessModel->delete();
 			$stat = new Status();
-			$stat = $stat->message("Session delete. User is now logged out.");
+			$stat = $stat->message("Session deleted. User is now logged out.");
 			return $res->withStatus(200)->withJson($stat);
 		}catch(ModelNotFound $e) {
 			$stat = new Status();
