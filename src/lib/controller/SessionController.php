@@ -6,11 +6,15 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
+use \Uomi\HashedPassword;
+use \Uomi\Status;
+
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // ROUTES
 $this->group('/sessions', function() {
-	$this->post('/', '\Uomi\SessionController:postSessionCollectionHandler');
+	$this->post('', '\Uomi\Controller\SessionController:postSessionCollectionHandler');
+	$this->delete('', '\Uomi\Controller\SessionController:deleteSessionCollectionHandler');
 });
 
 class SessionController {
@@ -21,34 +25,70 @@ class SessionController {
         $this->container = $c;
     }
 
-    /*
-    public function verbModelHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a single model, like
-        // `/api/models/1`
+	public function postSessionCollectionHandler(Request $req, Response $res): Response{
+		$form = $req->getParsedBody();
 
-        try {
-            $modelName = Model\ModelName::findOrFail( $req->getAttribute('model_id') );
-            $stat = new Status($modelName);
-            return $res->withJson($stat);
-        } catch(ModelNotFoundException $e) { // user not found
-            $stat = new Status();
-            $stat = $stat->error("InvalidModelName")->message("Please make sure ModelName is valid");
-            return $res->withStatus(404)->withJson($stat);
-        }
-    }
-    */
+		$email = $form['email'] ?? null;
+		$password = $form['password'] ?? null;
 
-    /*
-    public function verbModelCollectionHandler(Request $req, Response $res): Response {
-        // use this format for any endpoint that represents a collection, like
-        // `/api/models`
+		if($email === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include an email attribute");
+			return $res->withStatus(400)->withJson($stat);
+		}elseif($password === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
+			return $res->withStatus(400)->withJson($stat);
+		}
 
-        // You probably don't want to get **all** of a model - narrow it down!
-        // https://laravel.com/docs/5.4/eloquent
-        $modelNames = Model\ModelName::all();
-        $stat = new Status($modelNames);
-        return $res->withJson($stat);
+		$user;
+		try {
+			$user = \Uomi\Model\User::where('email' , $email)->first();
+		}catch(ModelNotFound $e) {
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
+			return $res->withStatus(404)->withJson($stat);
+		}
 
-    }
-    */
+		$challenge = HashedPassword::makeFromPlainTextWithSalt($password, $user->salt);
+
+		if(HashedPassword::compare($challenge, $user->password)) {
+			$session = new \Uomi\Model\Session();
+			$session->user_id = $user->id;
+			$session->session_key = hash("sha512", $user->id . microtime());
+			$session->save();
+			$stat = new Status($session);
+			$stat = $stat->message("Session created");
+			return $res->withStatus(201)->withJson($stat);
+		} else {
+			$stat = new Status();
+			$stat = $stat->error("Unauthorized")->message("Incorrect email or password");
+			return $res->withStatus(401)->withJson($stat);
+		}
+		
+	}
+
+	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
+		$form = $req->getParsedBody();
+
+		$session_key = $form['session_key'] ?? null;
+
+		if($session_key === null) {
+			$stat = new Status($req);
+			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
+			return $res->withStatus(400)->withJson($stat);
+		}
+
+		try {
+			$sessModel = \Uomi\Model\Session::where('session_key', $session_key)->first();
+			$sessModel->delete();
+			$stat = new Status();
+			$stat = $stat->message("Session delete. User is now logged out.");
+			return $res->withStatus(200)->withJson($stat);
+		}catch(ModelNotFound $e) {
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
+			return $res->withStatus(404)->withJson($stat);
+		}
+	}
 }
