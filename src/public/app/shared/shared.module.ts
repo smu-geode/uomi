@@ -5,7 +5,8 @@ import { FocusOnLoadDirective } from './focus-on-load.directive';
 
 @NgModule({
 	imports:      [  ],
-	declarations: [ MagicFormItemDirective, FocusOnLoadDirective ]
+	declarations: [ MagicFormItemDirective, FocusOnLoadDirective ],
+	exports: [ MagicFormItemDirective, FocusOnLoadDirective ]
 })
 
 export class SharedModule { }
