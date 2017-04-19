@@ -48,7 +48,7 @@ class LoanController {
 		// TODO
 		$stat = new Status([]);
 		$stat->message("Warning: GET /api/users/{user_id}/loans/ not yet implemented");
-		return $stat;
+		return $res->withJson($stat);
 	}
 
 	public function putLoanHandler(Request $req, Response $res): Response {
