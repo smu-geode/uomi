@@ -67,7 +67,7 @@ class UserController {
     //     return $res->withJson($user->friends()->get());
     // }
 
-    protected static function invalidUserResponse(Response $res): Response {
+    public static function invalidUserResponse(Response $res): Response {
         $stat = new Status();
         $stat = $stat->error("InvalidUser")->message("Please make sure user is valid");
         return $res->withStatus(404)->withJson($stat);
