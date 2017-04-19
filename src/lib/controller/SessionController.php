@@ -6,6 +6,7 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
+use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
 
@@ -26,46 +27,20 @@ class SessionController {
     }
 
 	public function postSessionCollectionHandler(Request $req, Response $res): Response{
-		$form = $req->getParsedBody();
+		$data = $req->getParsedBody();
 
-		$email = $form['email'] ?? null;
-		$password = $form['password'] ?? null;
+        // Create the user
+        $factory = new SessionFactory($this->container);
 
-		if($email === null) {
-			$stat = new Status($req);
-			$stat = $stat->error("InvalidRequestFormat")->message("Please include an email attribute");
-			return $res->withStatus(400)->withJson($stat);
-		}elseif($password === null) {
-			$stat = new Status($req);
-			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
-			return $res->withStatus(400)->withJson($stat);
-		}
+        try {
+            $session = $factory->submitLogInForm($data);
+        } catch(\RuntimeException $e) {
+            return self::badLogInResponse($res, $factory->getErrors());
+        }
 
-		$user;
-		try {
-			$user = \Uomi\Model\User::where('email' , $email)->first();
-		}catch(ModelNotFound $e) {
-			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
-			return $res->withStatus(404)->withJson($stat);
-		}
-
-		$challenge = HashedPassword::makeFromPlainTextWithSalt($password, $user->salt);
-
-		if(HashedPassword::compare($challenge, $user->password)) {
-			$session = new \Uomi\Model\Session();
-			$session->user_id = $user->id;
-			$session->session_key = hash("sha512", $user->id . microtime());
-			$session->save();
-			$stat = new Status($session);
-			$stat = $stat->message("Session created");
-			return $res->withStatus(201)->withJson($stat);
-		} else {
-			$stat = new Status();
-			$stat = $stat->error("Unauthorized")->message("Incorrect email or password");
-			return $res->withStatus(401)->withJson($stat);
-		}
-		
+        $stat = new Status($session);
+        $stat = $stat->message('Session successfully created.');
+        return $res->withStatus(201)->withJson($stat); // Created
 	}
 
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
@@ -91,4 +66,11 @@ class SessionController {
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}
+
+    protected static function badLogInResponse(Response $res, array $errorStrings): Response {
+        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
+        $stat = $stat->error('BadLogIn')->message('There was an error while logging in.');
+
+        return $res->withStatus(400)->withJson($stat); // Bad Request
+    }
 }
