@@ -17,7 +17,6 @@ use \Uomi\Factory\UserFactory;
 $this->group('/users', function() {
     $this->group('/{user_id}', function() {
         $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
-        // $this->get('/friends', '\Uomi\Controller\UserController:getUserFriendCollectionHandler');
     });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
@@ -56,16 +55,6 @@ class UserController {
 		$stat = $stat->message('User successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created
     }
-
-    // public function getUserFriendCollectionHandler(Request $req, Response $res): Response {
-    //     try {
-    //         $user = User::findOrFail( $req->getAttribute('user_id') );
-    //     } catch(ModelNotFoundException $e) { // user not found
-    //         return self::invalidUserResponse($res);
-    //     }
-
-    //     return $res->withJson($user->friends()->get());
-    // }
 
     public static function invalidUserResponse(Response $res): Response {
         $stat = new Status();

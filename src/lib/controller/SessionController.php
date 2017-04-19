@@ -14,8 +14,8 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // ROUTES
 $this->group('/sessions', function() {
-	$this->post('', '\Uomi\Controller\SessionController:postSessionCollectionHandler');
-	$this->delete('', '\Uomi\Controller\SessionController:deleteSessionCollectionHandler');
+	$this->post('/', '\Uomi\Controller\SessionController:postSessionCollectionHandler');
+	$this->delete('/', '\Uomi\Controller\SessionController:deleteSessionCollectionHandler');
 });
 
 class SessionController {

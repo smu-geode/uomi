@@ -11,11 +11,11 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Uomi\Status;
 
 // ROUTES
-$this->group('/', function() {
-    $this->post('', '\Uomi\Controller\PaymentController:postPaymentControllerHandler');
-	$this->get('', '\Uomi\Controller\PaymentController:getPaymentControllerHandler');
-	$this->get('{payment_id}', '\Uomi\Controller\PaymentController:getPaymentControllerHandlerWithId');
-	$this->delete('{payment_id}', '\Uomi\Controller\PaymentController:deletePaymentControllerHandler');
+$this->group('/loans/{load_id}/payments', function() {
+    $this->post('/', '\Uomi\Controller\PaymentController:postPaymentCollectionHandler');
+	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentCollectionHandler');
+	$this->get('/{payment_id}', '\Uomi\Controller\PaymentController:getPaymentHandler');
+	$this->delete('/{payment_id}', '\Uomi\Controller\PaymentController:deletePaymentHandler');
 });
 
 class PaymentController {
@@ -26,7 +26,7 @@ class PaymentController {
         $this->container = $c;
     }
 
-	public function postPaymentControllerHandler(Request $req, Response $res): Response {
+	public function postPaymentCollectionHandler(Request $req, Response $res): Response {
 		$form = $req->getParsedBody();
 		$loan;
 
@@ -58,7 +58,7 @@ class PaymentController {
 		return $res->withStatus(201)->withJson($stat);
 	}
 
-	public function getPaymentControllerHandler(Request $req, Response $res): Response {
+	public function getPaymentHandler(Request $req, Response $res): Response {
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
 			$payments = $loan->payments;
@@ -97,7 +97,7 @@ class PaymentController {
 		return $res->withStatus(200)->withJson($stat);
 	}
 
-	public function deletePaymentControllerHandler(Request $req, Response $res): Response {	
+	public function deletePaymentHandler(Request $req, Response $res): Response {	
 
 		try {
 			\Uomi\Model\Payment::destroy($req->getAttribute('payment_id'));
