@@ -25,13 +25,6 @@ export class LoginComponent {
 	authenticateUser() {
 		// call to users service
 		console.log('auth user');
-		this.authService.verifyUserAccount(this.user);
-		// if (true) { // change condition to verify user
-		// 	document.cookie = "isAuthenticated=true";
-		// 	this.router.navigate(['/dashboard']);
-		// }
-		// else {
-		// 	this.incorrect = true;
-		// }
+		this.authService.logIn(this.user);
 	}
 }
