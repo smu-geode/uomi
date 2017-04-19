@@ -27,13 +27,19 @@ export class AuthenticationService implements OnInit {
 				.map(this.extractData)
                 .catch(this.handleError)
                 .subscribe(r => {
+					console.log("user auth: ")
+					console.log(r);
 					// place data payload in sessionStorage
 					sessionStorage.setItem('userId', r.id);
 					sessionStorage.setItem('token', r.session);
                     // document.cookie = "username=" + user.email;
                     // document.cookie = "isAuthenticated=true";
-                    this.router.navigate(['/dashboard']);
+                    // this.router.navigate(['/dashboard']);
         });
+	}
+
+	isUserAuthenticated(): boolean {
+		return sessionStorage.getItem('token') === null;
 	}
 
 	extractData(response: Response) {

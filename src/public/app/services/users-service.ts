@@ -27,6 +27,8 @@ export class UsersService implements OnInit {
 				.map(this.extractData)
                 .catch(this.handleError)
                 .subscribe(r => {
+					console.log("user created:\n")
+					console.log(r);
 					// sessionStorage.setItem('userId', r.id);
 					// sessionStorage.setItem('token', '');
                     // document.cookie = "username=" + newUser.email;

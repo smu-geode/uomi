@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -14,6 +15,10 @@ import { SharedModule } from './shared/shared.module';
 var routes = [
 	{
 		path: '',
+		component: FrontPageComponent
+	},
+	{
+		path: 'registration',
 		component: RegistrationComponent
 	},
 	{
@@ -35,7 +40,8 @@ var routes = [
 	declarations: [ AppComponent,
 					RegistrationComponent,
 					LoginComponent,
-					DashboardComponent ],
+					DashboardComponent,
+					FrontPageComponent ],
 	bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

@@ -35,7 +35,7 @@ export class UsersService implements OnInit {
     //     });
 		
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
-	}
+	// }
 
 	extractData(response: Response) {
 		let body = response.json();
