@@ -38,10 +38,10 @@ export class UsersService implements OnInit {
 	// }
 
 	extractData(response: Response) {
-		let body = response.json();
-        console.log("Response body: ");
-        console.log(body);
-        return body.data || { }
+		// let body = response.json();
+        // console.log("Response body: ");
+        // console.log(body);
+        return response.json() || { }
 	}
 
 	handleError(error: Response | any) {

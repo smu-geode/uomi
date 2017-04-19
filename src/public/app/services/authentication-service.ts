@@ -18,35 +18,46 @@ export class AuthenticationService implements OnInit {
 		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
 	}
 
-	verifyUserAccount(user: any) {
+	logIn(user: any) {
 		console.log(JSON.stringify(user));
-		let headers = new Headers({'Content-Type': 'application/json'});
-		let options = new RequestOptions({headers: headers});
+		let options = this.getRequestOptions();
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
+		this.http.post(`${this.baseUrl}/${this.resource}`, JSON.stringify(user), options)
 				.map(this.extractData)
                 .catch(this.handleError)
                 .subscribe(r => {
 					console.log("user auth: ")
 					console.log(r);
 					// place data payload in sessionStorage
-					sessionStorage.setItem('userId', r.id);
-					sessionStorage.setItem('token', r.session);
+					sessionStorage.setItem('userId', r.data.id);
+					sessionStorage.setItem('token', r.data.session);
                     // document.cookie = "username=" + user.email;
                     // document.cookie = "isAuthenticated=true";
-                    // this.router.navigate(['/dashboard']);
+                    this.router.navigate(['/dashboard']);
         });
 	}
 
 	isUserAuthenticated(): boolean {
-		return sessionStorage.getItem('token') === null;
+		console.log(sessionStorage.getItem('token'));
+		return sessionStorage.getItem('token') !== null;
+	}
+
+	rerouteIfNotAuthenticated(route: string): void {
+		if (!this.isUserAuthenticated()) {
+			this.router.navigate([route]);
+		}
+	}
+
+	getRequestOptions(): RequestOptions {
+		let headers = new Headers({'Content-Type': 'application/json'});
+		return new RequestOptions({headers: headers});
 	}
 
 	extractData(response: Response) {
-		let body = response.json();
-        console.log("Response body: ");
-        console.log(body);
-        return body.data || { }
+		// let body = response.json();
+        // console.log("Response body: ");
+        // console.log(body);
+        return response.json() || { }
 	}
 
 	handleError(error: Response | any) {
