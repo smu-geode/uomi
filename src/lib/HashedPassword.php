@@ -15,6 +15,14 @@ class HashedPassword {
 		return $c;
 	}
 
+    // makeFromPlainText($plain: string) -> HashedPassword
+	public static function makeFromPlainTextWithSalt(string $plain, string $salt): HashedPassword {
+		$c = new self();
+		$c->setSalt( $salt );
+		$c->setHash( $c->computeHash($plain) );
+		return $c;
+	}
+
     // withHash($hash: string, $salt: string) -> HashedPassword
     public static function withHash(string $hash, string $salt): HashedPassword {
         $c = new self();
