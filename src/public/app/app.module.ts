@@ -6,14 +6,21 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { UsersService } from './services/users-service';
+import { AuthenticationService } from './services/authentication-service';
 
 import { SharedModule } from './shared/shared.module';
 
 var routes = [
 	{
 		path: '',
+		component: FrontPageComponent
+	},
+	{
+		path: 'registration',
 		component: RegistrationComponent
 	},
 	{
@@ -35,7 +42,9 @@ var routes = [
 	declarations: [ AppComponent,
 					RegistrationComponent,
 					LoginComponent,
-					DashboardComponent ],
-	bootstrap:    [ AppComponent ]
+					DashboardComponent,
+					FrontPageComponent ],
+	bootstrap:    [ AppComponent ],
+	providers:	  [ AuthenticationService, UsersService ]
 })
 export class AppModule { }
