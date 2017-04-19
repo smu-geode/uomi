@@ -4,10 +4,10 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class AuthenticationService implements OnInit { 
+export class UsersService implements OnInit { 
 
 	private baseUrl = 'http://uomi.dev';
-	private resource = 'api/sessions';
+	private resource = 'api/loan';
 
 	constructor(private http: Http,
 				private router: Router) {
@@ -18,22 +18,23 @@ export class AuthenticationService implements OnInit {
 		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
 	}
 
-	verifyUserAccount(user: any) {
-		console.log(JSON.stringify(user));
-		let headers = new Headers({'Content-Type': 'application/json'});
-		let options = new RequestOptions({headers: headers});
+	// postUserToDB(newUser: any) {
+	// 	console.log(JSON.stringify(newUser));
+	// 	let headers = new Headers({'Content-Type': 'application/json'});
+	// 	let options = new RequestOptions({headers: headers});
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
-				.map(this.extractData)
-                .catch(this.handleError)
-                .subscribe(r => {
-					// place data payload in sessionStorage
-					sessionStorage.setItem('userId', r.id);
-					sessionStorage.setItem('token', r.session);
-                    // document.cookie = "username=" + user.email;
-                    // document.cookie = "isAuthenticated=true";
-                    this.router.navigate(['/dashboard']);
-        });
+	// 	this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(newUser), options)
+	// 			.map(this.extractData)
+    //             .catch(this.handleError)
+    //             .subscribe(r => {
+	// 				// sessionStorage.setItem('userId', r.id);
+	// 				// sessionStorage.setItem('token', '');
+    //                 // document.cookie = "username=" + newUser.email;
+    //                 // document.cookie = "isAuthenticated=true";
+    //                 // this.router.navigate(['/dashboard']);
+    //     });
+		
+		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
 	}
 
 	extractData(response: Response) {
@@ -59,4 +60,4 @@ export class AuthenticationService implements OnInit {
         return Observable.throw(errorMessage);
 	}
 
-}	
+}
