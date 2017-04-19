@@ -24,7 +24,6 @@ export class LoginComponent {
 
 	authenticateUser() {
 		// call to users service
-		console.log('auth user');
 		this.authService.logIn(this.user);
 	}
 }

@@ -14,9 +14,7 @@ export class AuthenticationService implements OnInit {
 
 	}
 
-	ngOnInit() {
-		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
-	}
+	ngOnInit() {}
 
 	logIn(user: any) {
 		console.log(JSON.stringify(user));
@@ -49,15 +47,15 @@ export class AuthenticationService implements OnInit {
 	}
 
 	getRequestOptions(): RequestOptions {
-		let headers = new Headers({'Content-Type': 'application/json'});
-		return new RequestOptions({headers: headers});
+		let headers = {'Content-Type': 'application/json'};
+		if(this.isUserAuthenticated()) {
+			headers['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
+		}
+		return new RequestOptions({headers: new Headers(headers)});
 	}
 
 	extractData(response: Response) {
-		// let body = response.json();
-		// console.log("Response body: ");
-		// console.log(body);
-		return response.json() || { }
+		return response.json() || {}
 	}
 
 	handleError(error: Response | any) {
