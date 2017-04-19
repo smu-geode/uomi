@@ -27,9 +27,11 @@ export class UsersService implements OnInit {
 				.map(this.extractData)
                 .catch(this.handleError)
                 .subscribe(r => {
-                    document.cookie = "username=" + newUser.email;
-                    document.cookie = "isAuthenticated=true";
-                    this.router.navigate(['/dashboard']);
+					// sessionStorage.setItem('userId', r.id);
+					// sessionStorage.setItem('token', '');
+                    // document.cookie = "username=" + newUser.email;
+                    // document.cookie = "isAuthenticated=true";
+                    // this.router.navigate(['/dashboard']);
         });
 		
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
