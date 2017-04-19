@@ -50,14 +50,19 @@ class LoanController {
 		$details = $form['details'] ?? null;
 		$category = $form['category'] ?? null;
 
-		$catModel = null;
+		$catModel;
 		try {
 			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
 		}catch (ModelNotFoundException $e) {
 			$catModel = new \Uomi\Model\Category();
 			$catModel->name = $category;
-			$catModel->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
-			$catModel->save();
+			$stat = new Status($catModel);
+			$stat = $stat->message("Category created");
+			return $res->withJson($stat);
+		}catch (\Exception $e) {
+			$stat = new Status($catModel);
+			$stat = $stat->message("Category created");
+			return $res->withJson($stat);
 		}
 
 		try {
