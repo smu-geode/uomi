@@ -22,24 +22,24 @@ export class AuthenticationService implements OnInit {
 		console.log(JSON.stringify(user));
 		let options = this.getRequestOptions();
 
-		this.http.post(`${this.baseUrl}/${this.resource}`, JSON.stringify(user), options)
-				.map(this.extractData)
-                .catch(this.handleError)
-                .subscribe(r => {
-					console.log("user auth: ")
-					console.log(r);
-					// place data payload in sessionStorage
-					sessionStorage.setItem('userId', r.data.id);
-					sessionStorage.setItem('token', r.data.session);
-                    // document.cookie = "username=" + user.email;
-                    // document.cookie = "isAuthenticated=true";
-                    this.router.navigate(['/dashboard']);
-        });
+		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
+			.map(this.extractData)
+			.catch(this.handleError)
+			.subscribe(res => {
+				// place data payload in sessionStorage
+				sessionStorage.setItem('user_id', res.data.user_id);
+				sessionStorage.setItem('token', res.data.token);
+				this.router.navigate(['/dashboard']);
+			}
+		);
 	}
 
 	isUserAuthenticated(): boolean {
-		console.log(sessionStorage.getItem('token'));
 		return sessionStorage.getItem('token') !== null;
+	}
+
+	getCurrentUserId(): number {
+		return +sessionStorage.getItem('user_id');
 	}
 
 	rerouteIfNotAuthenticated(route: string): void {
@@ -55,25 +55,23 @@ export class AuthenticationService implements OnInit {
 
 	extractData(response: Response) {
 		// let body = response.json();
-        // console.log("Response body: ");
-        // console.log(body);
-        return response.json() || { }
+		// console.log("Response body: ");
+		// console.log(body);
+		return response.json() || { }
 	}
 
 	handleError(error: Response | any) {
 		let errorMessage: string;
-		if (error instanceof Response) 
-        {
-            let body = error.json() || '';
-            let err = body.error || JSON.stringify(body);
-            errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
-        } 
-        else 
-        {
-            errorMessage = error._body.message ? error._body.message : error.toString();
-        }
-        console.error(errorMessage);
-        return Observable.throw(errorMessage);
+		if (error instanceof Response) {
+			let body = error.json() || '';
+			let err = body.error || JSON.stringify(body);
+			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
+		} 
+		else {
+			errorMessage = error._body.message ? error._body.message : error.toString();
+		}
+		console.error(errorMessage);
+		return Observable.throw(errorMessage);
 	}
 
 }	

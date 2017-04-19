@@ -33,11 +33,6 @@ export class UsersService implements OnInit {
 					console.log("user created: ")
 					console.log(r);
 					this.authService.logIn(newUser);
-					// sessionStorage.setItem('userId', r.id);
-					// sessionStorage.setItem('token', '');
-                    // document.cookie = "username=" + newUser.email;
-                    // document.cookie = "isAuthenticated=true";
-                    // this.router.navigate(['/dashboard']);
         });
 		
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();

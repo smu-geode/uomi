@@ -7,7 +7,7 @@ class Session extends \Illuminate\Database\Eloquent\Model {
 		return $this->belongsTo('\Uomi\Model\User');
 	}
 
-	protected $hidden = ['id', 'user_id'];
+	protected $hidden = ['id', 'user'];
 
 	// Cast these fields to dates
 	protected $dates = ['created_at','updated_at'];
