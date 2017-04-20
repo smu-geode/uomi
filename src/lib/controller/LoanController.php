@@ -55,16 +55,15 @@ class LoanController {
 		$form = $req->getParsedBody();
 
 		$details = $form['details'] ?? null;
-		$category = $form['category'] ?? null;
+		$category_id = $form['category_id'] ?? null;
 
 		$catModel = null;
 		try {
-			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
+			$catModel = \Uomi\Model\Category::findOrFail($category_id);
 		}catch (ModelNotFoundException $e) {
-			$catModel = new \Uomi\Model\Category();
-			$catModel->name = $category;
-			$catModel->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
-			$catModel->save();
+			$stat = new \Uomi\Status();
+			$stat = $stat->error("CategoryNotFound")->message("Category is not found");
+			return $res->withStatus(404)->withJson($stat);
 		}
 
 		try {
@@ -90,7 +89,7 @@ class LoanController {
         $to_user = $form['to_user'] ?? null;
         $from_user = $form['from_user'] ?? null;
         $amount_cents = $form['amount_cents'] ?? null;
-        $category = $form['category'] ?? null;
+        $category_id = $form['category_id'] ?? null;
 
 
 		if($to_user === null) {
@@ -105,7 +104,7 @@ class LoanController {
 			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include the amount of the loan");
             return $res->withStatus(400)->withJson($stat);
-		} elseif($category === null) {
+		} elseif($category_id === null) {
 			$stat = new Status($form);
             $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include a category for the loan");
             return $res->withStatus(400)->withJson($stat);
@@ -117,14 +116,13 @@ class LoanController {
         $loan->from_user = $from_user;
         $loan->amount_cents = $amount_cents;
 
-		$catModel = null;
+		$catModel;
 		try {
-			$catModel = \Uomi\Model\Category::where('name', $category)->findOrFail(1);
+			$catModel = \Uomi\Model\Category::findOrFail($category_id);
 		}catch (ModelNotFoundException $e) {
-			$category = new \Uomi\Model\Category();
-			$category->name = $category;
-			$category->icon = "https://maxcdn.icons8.com/Share/icon/User_Interface//ios_application_placeholder1600.png";
-			$category->save();
+			$stat = new \Uomi\Status();
+			$stat = $stat->error("CategoryNotFound")->message("Category is not found");
+			return $res->withStatus(404)->withJson($stat);
 		}
 
         $loan->category_id = $catModel->id;
