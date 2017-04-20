@@ -5,6 +5,8 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication-service';
 
+import { Loan } from './loan';
+
 @Injectable()
 export class LoansService { 
 
@@ -12,7 +14,7 @@ export class LoansService {
 				private router: Router,
 				private authService: AuthenticationService) {}
 
-	getLoansForUser(id: number): Observable<object[]> {
+	getLoansForUser(id: number): Observable<object> {
 		let options = this.authService.getRequestOptions();
 
 		return this.http.get(`api/users/${id}/loans/`, options)
@@ -21,8 +23,16 @@ export class LoansService {
 	}
 
 	extractData(res: Response) {
-		let body = res.json();
-		return body.data || [];
+		let loan = new Loan();
+		let data = res.json().data;
+		let result: object = {'from_me':[], 'to_me':[]};
+		for(let loanObject of data['from_me'] || {}) {
+			result['from_me'].push(loan.deserialize(loanObject));
+		}
+		for(let loanObject of data['to_me'] || {}) {
+			result['to_me'].push(loan.deserialize(loanObject));
+		}
+		return result;
 	}
 
 	handleError(error: Response | any) {

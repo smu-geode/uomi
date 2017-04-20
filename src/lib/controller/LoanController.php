@@ -55,7 +55,7 @@ class LoanController {
 			return \Uomi\Controller\UserController::invalidUserResponse($res);
 		}
 
-		$stat = new Status($user->loans->get());
+		$stat = new Status(['from_me' => $user->loansFrom()->get(), 'to_me' => $user->loansTo()->get()]);
 		return $res->withJson($stat);
 	}
 
