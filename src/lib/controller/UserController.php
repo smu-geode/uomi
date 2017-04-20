@@ -85,21 +85,22 @@ class UserController {
 
 	public function putUserSettings(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
-	
-		$allNotifications = $data['allNotifications'] ?? false;
-		$borrowingRequests = $data['borrowingRequests'] ?? false;
-		$payBackReminders = $data['payBackReminders'] ?? false;
-		$viewEmail = $data['viewEmail'] ?? false;
+
 
 		try {
-			$user = \Uomi\Model\User::findOrFail($req->getAttribute('user_id'));
-			$user->allNotifications = $allNotifications;
-			$user->borrowingRequests = $borrowingRequests;
-			$user->payBackReminders = $payBackReminders;
-			$user->viewEmail = $viewEmail;
-			$user.save();
+			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first()
+			$allNotifications = $data['allNotifications'] ?? $settings->allow_notif;
+			$borrowingRequests = $data['borrowingRequests'] ?? $settings->borrow_requests;
+			$payBackReminders = $data['payBackReminders'] ?? $settings->payback_reminders;
+			$viewEmail = $data['viewEmail'] ?? $settings->view_email;
 
-			$stat = new Status();
+			$settings->allNotifications = $allNotifications;
+			$settings->borrowingRequests = $borrowingRequests;
+			$settings->payBackReminders = $payBackReminders;
+			$settings->viewEmail = $viewEmail;
+			$settings->save();
+
+			$stat = new Status($settings);
 			$stat = $stat->message("User updated");
 			return $res->withStatus(201)->withJson($stat); // Updated	
 		} catch(ModelNotFoundException $e) { //user not found
