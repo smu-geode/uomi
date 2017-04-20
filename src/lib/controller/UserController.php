@@ -44,7 +44,7 @@ class UserController {
         }
     }
 
-    public function postUserHandler(Request $req, Response $res): Response {
+    public function postUserCollectionHandler(Request $req, Response $res): Response {
 		//again no authorization errors
         $data = $req->getParsedBody();
 
