@@ -39,7 +39,9 @@
 						</td>
 						<td>{{ loan.fromMe ? 'Owes ' : 'You owe ' }} <currency-view [amountCents]="loan.amountCents"></currency-view></td>
 						<td class="fit-content table-center">
-							<i class="fa fa-chevron-down loan-table-dropdown-button"></i>
+							<button class="button loan-table-dropdown-button">
+								<i class="fa fa-chevron-down"></i>
+							</button>
 						</td>
 					</tr><!-- [loan] -->
 				</table>
