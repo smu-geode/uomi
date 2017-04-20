@@ -19,7 +19,7 @@ $this->group('/loans', function() {
 });
 
 $this->group('/users/{user_id}/loans', function() {
-	$this->get('/', '\Uomi\Controller\LoanController:getLoanCollectionForUser');
+	$this->get('/', '\Uomi\Controller\LoanController:getUserLoanCollection');
 });
 
 class LoanController {
@@ -44,7 +44,7 @@ class LoanController {
 		}
 	}
 
-	public function getLoanCollectionForUser(Request $req, Response $res): Response {
+	public function getUserLoanCollection(Request $req, Response $res): Response {
 		// TODO
 		$stat = new Status([]);
 		$stat->message("Warning: GET /api/users/{user_id}/loans/ not yet implemented");
