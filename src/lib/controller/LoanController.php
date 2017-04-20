@@ -16,7 +16,7 @@ $this->group('/loans', function() {
 	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
 	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
 	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanControllerHandler');
-
+	
 	$this->group('/{loan_id}/payments', function() {
 		require "PaymentController.php";
 	});
@@ -129,4 +129,18 @@ class LoanController {
 		return $res->withStatus(201)->withJson($stat);
     }
 
+	public function deleteLoanControllerHandler(Request $req, Response $res): Response {
+
+		try {
+			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+			$loan->delete();
+			$stat = new Status();
+			$stat = $stat->message("Loan deleted");
+			return $res->withStatus(200)->withJson($stat);
+		} catch (ModelNotFoundException $e) {
+			$stat = new Status();
+			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
+			return $res->withStatus(404)->withJson($stat);
+		}
+	}
 }

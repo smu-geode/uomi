@@ -1,0 +1,15 @@
+// original code by Paul Herz
+
+@each $name, $breakpoint in $breakpoints {
+	@include breakpoint-up($name) {
+		.hide-#{$name}-up {
+			display: none;
+		}
+	}
+
+	@include breakpoint-down($name) {
+		.hide-#{$name}-down {
+			display: none;
+		}
+	}
+}

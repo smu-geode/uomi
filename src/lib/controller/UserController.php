@@ -19,10 +19,10 @@ use \Uomi\HashedPassword;
 $this->group('/users', function() {
     $this->group('/{user_id}', function() {
         $this->get('/', '\Uomi\Controller\UserController:getUserHandler'); //implemented
-		$this->put('/', '\Uomi\Controller\UserController:putUserCollectionHandler'); //implemented
+		$this->put('/', '\Uomi\Controller\UserController:putUserHandler'); //implemented
 		$this->get('/loans', '\Uomi\Controller\UserController:getUserLoans'); //to implement
-		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettings'); //implemented but needs work maybe
-		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettings'); //implemented but see above
+		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettingsHandler'); //implemented but needs work maybe
+		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettingsHandler'); //implemented but see above
     });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
@@ -44,7 +44,7 @@ class UserController {
         }
     }
 
-    public function postUserCollectionHandler(Request $req, Response $res): Response {
+    public function postUserHandler(Request $req, Response $res): Response {
 		//again no authorization errors
         $data = $req->getParsedBody();
 
@@ -71,8 +71,7 @@ class UserController {
 		return $res->withStatus(201)->withJson($stat); // Created
     }
 
-	//where do I get the settings from? isn't it the same thing as getUserHandler function?
-	public function getUserSettings(Request $req, Response $res): Response {
+	public function getUserSettingsHandler(Request $req, Response $res): Response {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
 			$stat = new Status($settings);
@@ -83,12 +82,13 @@ class UserController {
 		}
 	}
 
-	public function putUserSettings(Request $req, Response $res): Response {
+	public function putUserSettingsHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
 
 
 		try {
-			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first()
+			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
+
 			$allNotifications = $data['allNotifications'] ?? $settings->allow_notif;
 			$borrowingRequests = $data['borrowingRequests'] ?? $settings->borrow_requests;
 			$payBackReminders = $data['payBackReminders'] ?? $settings->payback_reminders;
@@ -108,7 +108,7 @@ class UserController {
 		}
 	}		
 
-	public function putUserCollectionHandler(Request $req, Response $res): Response {
+	public function putUserHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
 
 		$oldPassword = $data['oldPassword'] ?? null;
@@ -132,17 +132,6 @@ class UserController {
 			return self::invalidUserResponse($res);
 		}
 	}
-
-
-    public function getUserFriendCollectionHandler(Request $req, Response $res): Response {
-        try {
-            $user = User::findOrFail( $req->getAttribute('user_id') );
-        } catch(ModelNotFoundException $e) { // user not found
-            return self::invalidUserResponse($res);
-        }
-
-        return $res->withJson($user->friends()->get());
-    }
 
     protected static function invalidUserResponse(Response $res): Response {
         $stat = new Status();
