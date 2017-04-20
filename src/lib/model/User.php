@@ -15,10 +15,6 @@ class User extends \Illuminate\Database\Eloquent\Model {
 		$this->attributes['password'] = $value->getHash();
 		$this->attributes['salt'] = $value->getSalt();
 	}
-	
-	// public function models() {
-	//     return $this->hasMany('Uomi\Model','foreign_key_in_user');
-	// }
 
 	// Cast these columns before sending to the API
 	// protected $casts = [
