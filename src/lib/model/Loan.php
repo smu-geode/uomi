@@ -26,4 +26,12 @@ class Loan extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	protected $dates = ['created_at', 'confirmed_at', 'completed_at'];
+
+	protected $casts = [
+		'confirmed' => 'boolean',
+		'from_user' => 'int',
+		'to_user' => 'int',
+		'category_id' => 'int',
+		'amount_cents' => 'int'
+	];
 }

@@ -46,12 +46,12 @@ class SessionFactory {
 	public function create(string $email, string $givenPassword): Session {
 		// GETTING THE USER
 		try {
-            $user = User::where('email', $email)->firstOrFail();
-        } catch(ModelNotFoundException $e) { // user not found
-            $esc = htmlspecialchars($email);
+			$user = User::where('email', $email)->firstOrFail();
+		} catch(ModelNotFoundException $e) { // user not found
+			$esc = htmlspecialchars($email);
 			$this->errors += ["The user $esc does not exist."];
 			throw new \RuntimeException();
-        }
+		}
 
 		// CREATION
 		$session = new Session();

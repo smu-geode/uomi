@@ -21,6 +21,18 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	//     'validated' => 'boolean',
 	// ];
 
+	public function loansFrom() {
+		return $this->hasMany('\Uomi\Model\Loan', 'from_user');
+	}
+
+	public function loansTo() {
+		return $this->hasMany('\Uomi\Model\Loan', 'to_user');
+	}
+
+	public function getLoansAttribute() {
+		return $this->loansFrom()->union($this->loansTo()->toBase());
+	}
+
 	// This is a whitelist for mass-assignable properties
 	protected $fillable = ['id', 'created_at', 'updated_at'];
 
@@ -30,8 +42,5 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	// Cast these fields to dates
 	protected $dates = ['created_at','updated_at'];
 
-	// public function getCustomAttributeName() {
-	//     return $this->attributes['type'] == 'something';
-	// }
-	// protected $appends = ['custom_attribute_name'];
+	protected $appends = ['loans'];
 }
