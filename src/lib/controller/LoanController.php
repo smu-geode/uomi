@@ -12,14 +12,14 @@ use \Uomi\Status;
 
 // ROUTES
 $this->group('/loans', function() {
-    $this->post('/', '\Uomi\Controller\LoanController:postLoanControllerHandler');
-	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanControllerHandler');
-	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanControllerHandler');
-	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanControllerHandler');
-	
-	$this->group('/{loan_id}/payments', function() {
-		require "PaymentController.php";
-	});
+    $this->post('/', '\Uomi\Controller\LoanController:postLoanCollectionHandler');
+	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanHandler');
+	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanHandler');
+	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanHandler');
+});
+
+$this->group('/users/{user_id}/loans', function() {
+	$this->get('/', '\Uomi\Controller\LoanController:getLoanCollectionForUser');
 });
 
 class LoanController {
@@ -30,7 +30,7 @@ class LoanController {
         $this->container = $c;
     }
 
-	public function getLoanControllerHandler(Request $req, Response $res): Response {
+	public function getLoanHandler(Request $req, Response $res): Response {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
@@ -44,7 +44,14 @@ class LoanController {
 		}
 	}
 
-	public function putLoanControllerHandler(Request $req, Response $res): Response {
+	public function getLoanCollectionForUser(Request $req, Response $res): Response {
+		// TODO
+		$stat = new Status([]);
+		$stat->message("Warning: GET /api/users/{user_id}/loans/ not yet implemented");
+		return $res->withJson($stat);
+	}
+
+	public function putLoanHandler(Request $req, Response $res): Response {
 		$form = $req->getParsedBody();
 
 		$details = $form['details'] ?? null;
@@ -77,7 +84,7 @@ class LoanController {
 		}
 	}
 
-    public function postLoanControllerHandler(Request $req, Response $res): Response {
+    public function postLoanCollectionHandler(Request $req, Response $res): Response {
         $form = $req->getParsedBody();
 
         $to_user = $form['to_user'] ?? null;
@@ -129,7 +136,7 @@ class LoanController {
 		return $res->withStatus(201)->withJson($stat);
     }
 
-	public function deleteLoanControllerHandler(Request $req, Response $res): Response {
+	public function deleteLoanHandler(Request $req, Response $res): Response {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );

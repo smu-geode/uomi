@@ -120,10 +120,10 @@ CREATE TABLE IF NOT EXISTS `payments` (
 CREATE TABLE IF NOT EXISTS `sessions` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(11) unsigned NOT NULL,
-    `session_key` char(128) NOT NULL,
+    `token` char(128) NOT NULL,
 
     `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
-    `update_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
 
     PRIMARY KEY(`id`),
 
