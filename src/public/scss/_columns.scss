@@ -1,0 +1,31 @@
+// original code by Paul Herz
+
+.row {
+	width: 100%;
+	display: flex;
+
+	justify-content: flex-start; // on axis
+	align-items: stretch; // perpendicular to axis, all columns same height
+
+	flex-direction: row; // axis is X (rightward)
+	flex-wrap: wrap; // allow for columns to block when under their breakpoint.
+}
+
+// .column-xs, .column-sm ....
+// A column will block (full width) below the breakpoint in their name,
+// and share the row equally with its non-blocking siblings when above its
+// breakpoint.
+
+@each $name, $_ in $breakpoints {
+	.column-#{$name} {
+		width: 100%;
+		display: block;
+		flex: 0 2 0; // a flex basis of zero distributes space evenly
+
+		@include breakpoint-up($name) {
+			flex: 1 1 8%; // ~1/12, a reasonable max # of columns
+		}
+	}
+}
+
+

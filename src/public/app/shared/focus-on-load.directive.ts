@@ -1,7 +1,7 @@
 import { Directive, ElementRef, AfterContentChecked } from '@angular/core';
 
 @Directive({ selector: '[focusOnLoad]' })
-export class FocusOnLoadDirective implements AfterViewChecked { 
+export class FocusOnLoadDirective implements AfterContentChecked { 
 
 	private isFocused: boolean;
 
@@ -9,7 +9,7 @@ export class FocusOnLoadDirective implements AfterViewChecked {
 		this.isFocused = false;
 	}
 
-	ngAfterViewChecked() {
+	ngAfterContentChecked() {
 		this.doFocus();
 	}
 

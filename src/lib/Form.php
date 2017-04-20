@@ -44,7 +44,7 @@ class Form {
 			} elseif(!isset($data[$field->name]) && $field->isRequired) {
 				// The field is unset and is required.
 				$isGood = false;
-				array_push($this->errors, "$field->name is a required field.");
+				array_push($this->errors, "$field->humanName is a required field.");
 			} else {
 				// unset, and optional. Do nothing.
 			}
