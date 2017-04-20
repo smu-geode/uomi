@@ -7,15 +7,16 @@ fi
 if docker-compose -p uomi_dev exec database echo "Hello" >/dev/null 2>&1; then
     DB_UP=true
 fi
+printf "[x] = running\n\n";
 if $WEB_UP; then
-    printf "🔴  Web";
+    printf "[x]  Web";
 else
-    printf "⚫️  Web";
+    printf "[ ]  Web";
 fi
 printf "\n";
 if $DB_UP; then
-    printf "🔴  Database";
+    printf "[x]  Database";
 else
-    printf "⚫️  Database";
+    printf "[ ]  Database";
 fi
 printf "\n";
