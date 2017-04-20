@@ -27,9 +27,9 @@ command_exists () {
 check_command_exists () {
     if command_exists $1
     then
-        : #echo "✅  '$1' is installed"
+        : #echo "[O]  '$1' is installed"
     else
-        echo "⛔️  '$1' is not installed"
+        echo "[X]  '$1' is not installed"
         exit 1
     fi
 }
@@ -58,9 +58,9 @@ check_version_greater_than () {
     local minimum_version=$3
     if version_greater_than $given_version $minimum_version;
     then
-        echo "✅  '$program' is running version $given_version"
+        echo "[O]  '$program' is running version $given_version"
     else
-        echo "⛔️  '$program' is running version $given_version"
+        echo "[X]  '$program' is running version $given_version"
         exit 1
     fi
 }
