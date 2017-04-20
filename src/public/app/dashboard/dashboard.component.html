@@ -60,14 +60,14 @@
 						</td>
 					</tr>
 					<!-- ENTRY -->
-					<tr>
+					<tr *ngFor="let loan of loans">
 						<td class="fit-content hide-xs-down">
 							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
 						</td>
-						<td>Leland Mack</td>
-						<td class="category-movies">
-							<i class="fa fa-ticket loan-category-icon" aria-label="Category: Movies"></i>
-							<span class="loan-category-name hide-xs-down" aria-hidden="true">Movies</span>
+						<td>{{ 'TODO NAME' }}</td>
+						<td [class]="loan.category.identifier">
+							<i [class]="'fa loan-category-icon '+loan.category.icon" aria-label="Category: Movies"></i>
+							<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category.name}}</span>
 						</td>
 						<td>You owe $11</td>
 						<td class="fit-content table-center">

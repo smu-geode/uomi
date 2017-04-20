@@ -41,6 +41,4 @@ class User extends \Illuminate\Database\Eloquent\Model {
 
 	// Cast these fields to dates
 	protected $dates = ['created_at','updated_at'];
-
-	protected $appends = ['loans'];
 }

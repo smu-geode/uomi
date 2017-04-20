@@ -9,9 +9,6 @@ import { AuthenticationService } from './authentication-service';
 )
 export class UsersService implements OnInit { 
 
-	private baseUrl = 'http://uomi.dev';
-	private resource = 'api/users';
-
 	constructor(private http: Http,
 				private router: Router,
 				private authService: AuthenticationService) {
@@ -26,54 +23,36 @@ export class UsersService implements OnInit {
 		console.log(JSON.stringify(newUser));
 		let options = this.authService.getRequestOptions();
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(newUser), options)
+		this.http.post(`api/users/`, JSON.stringify(newUser), options)
 				.map(this.extractData)
-                .catch(this.handleError)
-                .subscribe(r => {
+				.catch(this.handleError)
+				.subscribe(r => {
 					console.log("user created: ")
 					console.log(r);
 					this.authService.logIn(newUser);
-        });
+		});
 		
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
 	}
 
-	getLoans(userId: number): any {
-		console.log("get loans for " + userId);
-		let options = this.authService.getRequestOptions();
-		let returnData = {};
-
-		this.http.get(`${this.baseUrl}/${this.resource}/${userId}/loans/`, options)
-				.map(this.extractData)
-				.catch(this.handleError)
-				.subscribe(r => {
-					console.log("got loans");
-					returnData = r.data;
-		});
-		return returnData;
-	}
-
 	extractData(response: Response) {
 		// let body = response.json();
-        // console.log("Response body: ");
-        // console.log(body);
-        return response.json() || { }
+		// console.log("Response body: ");
+		// console.log(body);
+		return response.json() || { }
 	}
 
 	handleError(error: Response | any) {
 		let errorMessage: string;
-		if (error instanceof Response) 
-        {
-            let body = error.json() || '';
-            let err = body.error || JSON.stringify(body);
-            errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
-        } 
-        else 
-        {
-            errorMessage = error._body.message ? error._body.message : error.toString();
-        }
-        console.error(errorMessage);
-        return Observable.throw(errorMessage);
+		if (error instanceof Response) {
+			let body = error.json() || '';
+			let err = body.error || JSON.stringify(body);
+			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
+		} else {
+			errorMessage = error._body.message ? error._body.message : error.toString();
+		}
+		console.error(errorMessage);
+		return Observable.throw(errorMessage);
 	}
 
 }

@@ -8,16 +8,16 @@ class Loan extends \Illuminate\Database\Eloquent\Model {
 		'confirmed' => 'boolean',
 	];
 
-	public function loaner() {
-		return $this->hasOne('Uomi\Model\User', 'to');
+	public function from() {
+		return $this->belongsTo('Uomi\Model\User', 'from_user');
 	}
 
-	public function borrower() {
-		return $this->hasOne('Uomi\Model\User', 'from');
+	public function to() {
+		return $this->belongsTo('Uomi\Model\User', 'to_user');
 	}
 
 	public function category() {
-		return $this->hasOne('Uomi\Model\Category','category_id');
+		return $this->belongsTo('Uomi\Model\Category','category_id');
 	}
 
 	public function payments() {
@@ -29,9 +29,9 @@ class Loan extends \Illuminate\Database\Eloquent\Model {
 
 	protected $casts = [
 		'confirmed' => 'boolean',
-		'from_user' => 'int',
-		'to_user' => 'int',
-		'category_id' => 'int',
 		'amount_cents' => 'int'
 	];
+
+	protected $with = ['from', 'to', 'category'];
+	protected $hidden = ['from_user', 'to_user', 'category_id'];
 }
