@@ -3,7 +3,13 @@
 
 CREATE DATABASE IF NOT EXISTS uomi;
 
-CREATE TABLE IF NOT EXISTS `users` (
+USE uomi;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `users`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `users` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `email` varchar(256) NOT NULL,
     `name` varchar(128) DEFAULT NULL,
@@ -18,26 +24,11 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `friends` (
-    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) unsigned NOT NULL,
-    `friend_id` int(11) unsigned NOT NULL,
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `settings`;
+SET FOREIGN_KEY_CHECKS = 1;
 
-    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
-    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
-
-    PRIMARY KEY (`id`),
-
-    KEY `user` (`user_id`),
-    KEY `friend` (`friend_id`),
-
-    CONSTRAINT `user_friends` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-    CONSTRAINT `friend` FOREIGN KEY (`friend_id`) REFERENCES `users` (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-CREATE TABLE IF NOT EXISTS `settings` (
+CREATE TABLE `settings` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(11) unsigned NOT NULL,
 
@@ -58,9 +49,14 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `categories` (
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `categories`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `categories` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(254) NOT NULL,
+    `identifier` varchar(254) NOT NULL,
     `icon` varchar(254) NOT NULL,
 
     `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
@@ -71,7 +67,11 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `loans` (
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `loans`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `loans` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 
     `to_user` int(11) unsigned NOT NULL,
@@ -100,7 +100,11 @@ CREATE TABLE IF NOT EXISTS `loans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `payments` (
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `payments`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `payments` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `loan_id` int(11) unsigned NOT NULL,
     `details` text DEFAULT NULL,
@@ -117,7 +121,12 @@ CREATE TABLE IF NOT EXISTS `payments` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `sessions` (
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `sessions`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `sessions` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(11) unsigned NOT NULL,
     `token` char(128) NOT NULL,
