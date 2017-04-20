@@ -19,10 +19,6 @@ use \Uomi\HashedPassword;
 $this->group('/users', function() {
     $this->group('/{user_id}', function() {
         $this->get('/', '\Uomi\Controller\UserController:getUserHandler'); //implemented
-        $this->get('/friends', '\Uomi\Controller\UserController:getUserFriendCollectionHandler');//implemented
-		$this->get('/friends/{friend_id}', '\Uomi\Controller\UserController:getFriendHandler'); //to implement
-		$this->delete('/friends/{friend_id}', '\Uomi\Controller\UserController:deleteFriendHandler'); //to implement
-		$this->post('/friends', '\Uomi\Controller\UserController:postUserFriendCollectionHandler'); //to implement
 		$this->put('/', '\Uomi\Controller\UserController:putUserCollectionHandler'); //implemented
 		$this->get('/loans', '\Uomi\Controller\UserController:getUserLoans'); //to implement
 		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettings'); //implemented but needs work maybe
