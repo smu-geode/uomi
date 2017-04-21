@@ -20,27 +20,27 @@ $this->group('/sessions', function() {
 
 class SessionController {
 
-    private $container;
+	private $container;
 
-    function __construct(Container $c) {
-        $this->container = $c;
-    }
+	function __construct(Container $c) {
+		$this->container = $c;
+	}
 
 	public function postSessionCollectionHandler(Request $req, Response $res): Response{
 		$data = $req->getParsedBody();
 
-        // Create the user
-        $factory = new SessionFactory($this->container);
+		// Create the user
+		$factory = new SessionFactory($this->container);
 
-        try {
-            $session = $factory->submitLogInForm($data);
-        } catch(\RuntimeException $e) {
-            return self::badLogInResponse($res, $factory->getErrors());
-        }
+		try {
+			$session = $factory->submitLogInForm($data);
+		} catch(\RuntimeException $e) {
+			return self::badLogInResponse($res, $factory->getErrors());
+		}
 
-        $stat = new Status($session);
-        $stat = $stat->message('Session successfully created.');
-        return $res->withStatus(201)->withJson($stat); // Created
+		$stat = new Status($session);
+		$stat = $stat->message('Session successfully created.');
+		return $res->withStatus(201)->withJson($stat); // Created
 	}
 
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
@@ -67,10 +67,10 @@ class SessionController {
 		}
 	}
 
-    protected static function badLogInResponse(Response $res, array $errorStrings): Response {
-        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
-        $stat = $stat->error('BadLogIn')->message('There was an error while logging in.');
+	protected static function badLogInResponse(Response $res, array $errorStrings): Response {
+		$stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
+		$stat = $stat->error('BadLogIn')->message('There was an error while logging in.');
 
-        return $res->withStatus(400)->withJson($stat); // Bad Request
-    }
+		return $res->withStatus(400)->withJson($stat); // Bad Request
+	}
 }

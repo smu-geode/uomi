@@ -18,11 +18,11 @@ use \Uomi\HashedPassword;
 // ROUTES
 $this->group('/users', function() {
     $this->group('/{user_id}', function() {
-        $this->get('/', '\Uomi\Controller\UserController:getUserHandler'); //implemented
-		$this->put('/', '\Uomi\Controller\UserController:putUserHandler'); //implemented
-		$this->get('/loans', '\Uomi\Controller\UserController:getUserLoans'); //to implement
-		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettingsHandler'); //implemented but needs work maybe
-		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettingsHandler'); //implemented but see above
+        $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
+		$this->put('/', '\Uomi\Controller\UserController:putUserHandler');
+
+		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettingsHandler');
+		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettingsHandler');
     });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
