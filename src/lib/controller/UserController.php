@@ -123,9 +123,9 @@ class UserController {
 		try {
 			$user = \Uomi\Model\User::findOrFail($req->getAttribute('user_id'));
 			$user->password = HashedPassword::makeFromPlainText($newPassword);  //where does the hashing occur again? i think we'll replace this with better implementation later
-			$user.save();
+			$user->save();
 
-			$stat = new Status();
+			$stat = new Status($user);
 			$stat = $stat->message("User updated");
 			return $res->withStatus(201)->withJson($stat); // Updated
 		} catch(ModelNotFoundException $e) { //user not found
