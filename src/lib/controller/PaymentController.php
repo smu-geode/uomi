@@ -11,10 +11,10 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Uomi\Status;
 
 // ROUTES
-$this->group('/loans/{load_id}/payments', function() {
+$this->group('/loans/{loan_id}/payments', function() {
     $this->post('/', '\Uomi\Controller\PaymentController:postPaymentCollectionHandler');
-	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentCollectionHandler');
-	$this->get('/{payment_id}', '\Uomi\Controller\PaymentController:getPaymentHandler');
+	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentHandler');
+	$this->get('/{payment_id}', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
 	$this->delete('/{payment_id}', '\Uomi\Controller\PaymentController:deletePaymentHandler');
 });
 
@@ -72,7 +72,7 @@ class PaymentController {
 		}
 	}
 
-	public function getPaymentControllerHandlerWithId(Request $req, Response $res): Response {		
+	public function getPaymentHandlerWithId(Request $req, Response $res): Response {		
 		$loan;
 		$payment;
 		
