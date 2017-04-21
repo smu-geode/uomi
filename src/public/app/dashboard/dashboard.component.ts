@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoanModalComponent } from '../loan-modal/loan-modal.component';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
@@ -9,7 +10,8 @@ import { Loan } from '../services/loan';
 	templateUrl: './dashboard.component.html',
 	providers: [ UsersService,
 				 AuthenticationService,
-				 LoansService ],
+				 LoansService,
+				 LoanModalComponent ],
 	// changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -22,6 +24,9 @@ export class DashboardComponent implements OnInit {
 
 	lentTotal: number;
 	borrowedTotal: number;
+
+	private loanModalActive = false;
+	private loanModalActionText = 'Lend';
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
@@ -55,6 +60,14 @@ export class DashboardComponent implements OnInit {
 		console.warn('DashboardComponent.loansTotal only sums initial loan amountCents. (TODO)');
 		let sum = loans.map(l => l.amountCents).reduce((S, s) => S+s, 0);
 		return sum;
+	}
+
+	openModal(actionText: string) {
+		console.log("open modal: " + actionText);
+		this.loanModalActive = true;
+
+		// this.loanModalComponent.setActionText(actionText);
+		// this.loanModalComponent.openModal();
 	}
 
 }

@@ -46,7 +46,18 @@
 					</tr><!-- [loan] -->
 				</table>
 			</div><!-- .table-container -->
-
+			<button class="button lend-loan-modal-open"
+					(click)="openModal('Lend')">
+				Lend
+			</button>
+			<button class="button borrow-loan-modal-open"
+					(click)="openModal('Borrow')">
+				Borrow
+			</button>
 		</section><!-- .dashboard -->
+		<loan-modal *ngIf="loanModalActive"
+					[(actionText)]="loanModalActionText"
+					[(isActive)]="loanModalActive">
+		</loan-modal>
 	</div><!-- .card-md -->
 </div><!-- .page-center -->

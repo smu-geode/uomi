@@ -9,6 +9,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoanModalComponent } from './loan-modal/loan-modal.component';
 import { UsersService } from './services/users-service';
 import { AuthenticationService } from './services/authentication-service';
 
@@ -30,7 +31,15 @@ var routes = [
 	{
 		path: 'dashboard',
 		component: DashboardComponent
-	}
+	},
+	{
+		path: 'lend',
+		component: LoanModalComponent
+	}//,
+	// {
+	// 	path: 'borrow/:userId',
+	// 	component: LoanModalComponent
+	// }
 ];
 
 @NgModule({
@@ -43,7 +52,8 @@ var routes = [
 					RegistrationComponent,
 					LoginComponent,
 					DashboardComponent,
-					FrontPageComponent ],
+					FrontPageComponent,
+					LoanModalComponent ],
 	bootstrap:    [ AppComponent ],
 	providers:	  [ AuthenticationService, UsersService ]
 })
