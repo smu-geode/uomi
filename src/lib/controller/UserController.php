@@ -74,8 +74,11 @@ class UserController {
 	public function getUserSettingsHandler(Request $req, Response $res): Response {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
+			//$settings = Settings::findOrFail($req->getAttribute('user_id'));
 			$stat = new Status($settings);
 			$stat = $stat->message('Got settings.');
+			if($settings == [])
+				throw new ModelNotFoundException;
 			return $res->withStatus(200)->withJson($stat); // Get
 		} catch(ModelNotFoundException $e) { //user/settings not found
 			return self::invalidUserResponse($res);
