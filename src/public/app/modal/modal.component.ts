@@ -15,7 +15,7 @@ export class ModalComponent implements OnInit {
 
 	@Input() isActive = false;
 	@Input() id: string;
-	private classes: string;
+	private classes: string = "modal-close";
 	// @Input() modalContent: string;
 	
 	constructor(private modalService: ModalService,
