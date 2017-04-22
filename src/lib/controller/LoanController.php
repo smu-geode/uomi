@@ -9,6 +9,7 @@ use \Slim\Container;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
+use \Uomi\Authentication;
 
 use \Uomi\Model\Loan;
 use \Uomi\Model\User;
@@ -48,7 +49,10 @@ class LoanController {
 	}
 
 	public function getUserLoanCollection(Request $req, Response $res): Response {
-
+		$auth = new Authentication();
+		if(!$auth->isRequestAuthorized($req, $req->getAttribute('user_id'))) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
 		try {
 			$user = User::findOrFail( $req->getAttribute('user_id') );
 		} catch(ModelNotFoundException $e) { // user not found
