@@ -89,15 +89,15 @@ class UserController {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
 
-			$allNotifications = $data['allNotifications'] ?? $settings->allow_notif;
-			$borrowingRequests = $data['borrowingRequests'] ?? $settings->borrow_requests;
-			$payBackReminders = $data['payBackReminders'] ?? $settings->payback_reminders;
-			$viewEmail = $data['viewEmail'] ?? $settings->view_email;
+			$allNotifications = $data['allow_notifications'] ?? $settings->allow_notifications;
+			$borrowingRequests = $data['borrow_requests'] ?? $settings->borrow_requests;
+			$payBackReminders = $data['payback_reminders'] ?? $settings->payback_reminders;
+			$viewEmail = $data['view_email'] ?? $settings->view_email;
 
-			$settings->allNotifications = $allNotifications;
-			$settings->borrowingRequests = $borrowingRequests;
-			$settings->payBackReminders = $payBackReminders;
-			$settings->viewEmail = $viewEmail;
+			$settings->allow_notifications = $allNotifications;
+			$settings->borrow_requests = $borrowingRequests;
+			$settings->payback_reminders = $payBackReminders;
+			$settings->view_email = $viewEmail;
 			$settings->save();
 
 			$stat = new Status($settings);
