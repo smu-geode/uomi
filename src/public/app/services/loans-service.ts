@@ -9,6 +9,8 @@ import { Loan } from './loan';
 
 @Injectable()
 export class LoansService { 
+	private baseUrl = 'http://uomi.dev';
+	private resource = 'api/loans';
 
 	constructor(private http: Http,
 				private router: Router,
@@ -18,6 +20,56 @@ export class LoansService {
 		let options = this.authService.getRequestOptions();
 
 		return this.http.get(`api/users/${id}/loans/`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	postNewLoan(fromUser: number, toUser: number, amountCents: number, category: string) {
+		let newLoan: object = {
+			'from_user': fromUser,
+			'to_user': toUser,
+			'amount_cents': amountCents,
+			'category': category
+		};
+
+		let options = this.authService.getRequestOptions();
+
+		this.http.post(`api/loans`, JSON.stringify(newLoan), options)
+			.map(this.extractData)
+			.catch(this.handleError)
+			.subscribe(r => {
+				console.log("loan created: ")
+				console.log(r);
+				
+		});
+	}
+
+	getLoanById(loanId: number) {
+		let options = this.authService.getRequestOptions();
+
+		return this.http.get(`api/loans/${loanId}/`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	updateLoanData(loanId: number, fromUser: number, amountCents: number, categoryId: number) {
+		let updateData = {
+			'from_user': fromUser,
+			'amount_cents': amountCents,
+			'category_id': categoryId
+		};
+
+		let options = this.authService.getRequestOptions();
+
+		this.http.put(`api/loans/${loanId}/`, JSON.stringify(updateData), options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	deleteLoan(loanId: number) {
+		let options = this.authService.getRequestOptions();
+
+		this.http.delete(`api/loans/${loanId}/`, options)
 			.map(this.extractData)
 			.catch(this.handleError);
 	}
