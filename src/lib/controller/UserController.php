@@ -21,8 +21,8 @@ $this->group('/users', function() {
         $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
 		$this->put('/', '\Uomi\Controller\UserController:putUserHandler');
 
-		$this->get('/settings', '\Uomi\Controller\UserController:getUserSettingsHandler');
-		$this->put('/settings', '\Uomi\Controller\UserController:putUserSettingsHandler');
+		$this->get('/settings/', '\Uomi\Controller\UserController:getUserSettingsHandler');
+		$this->put('/settings/', '\Uomi\Controller\UserController:putUserSettingsHandler');
     });
     $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
@@ -64,7 +64,7 @@ class UserController {
 		} catch(ModelNotFoundException $e) {
 			$stat = new Status($e);
 			return $res->withJson($stat);
-		}			
+		}
 
 		$stat = new Status($user);
 		$stat = $stat->message('User successfully created.');
@@ -102,11 +102,11 @@ class UserController {
 
 			$stat = new Status($settings);
 			$stat = $stat->message("User updated");
-			return $res->withStatus(201)->withJson($stat); // Updated	
+			return $res->withStatus(201)->withJson($stat); // Updated
 		} catch(ModelNotFoundException $e) { //user not found
 			return self::invalidUserResponse($res);
 		}
-	}		
+	}
 
 	public function putUserHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();

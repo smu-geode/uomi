@@ -14,8 +14,8 @@ use \Uomi\Status;
 $this->group('/loans/{loan_id}/payments', function() {
     $this->post('/', '\Uomi\Controller\PaymentController:postPaymentCollectionHandler');
 	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentHandler');
-	$this->get('/{payment_id}', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
-	$this->delete('/{payment_id}', '\Uomi\Controller\PaymentController:deletePaymentHandler');
+	$this->get('/{payment_id}/', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
+	$this->delete('/{payment_id}/', '\Uomi\Controller\PaymentController:deletePaymentHandler');
 });
 
 class PaymentController {
@@ -72,10 +72,10 @@ class PaymentController {
 		}
 	}
 
-	public function getPaymentHandlerWithId(Request $req, Response $res): Response {		
+	public function getPaymentHandlerWithId(Request $req, Response $res): Response {
 		$loan;
 		$payment;
-		
+
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
 		} catch (ModelNotFound $e) {
@@ -97,7 +97,7 @@ class PaymentController {
 		return $res->withStatus(200)->withJson($stat);
 	}
 
-	public function deletePaymentHandler(Request $req, Response $res): Response {	
+	public function deletePaymentHandler(Request $req, Response $res): Response {
 
 		try {
 			\Uomi\Model\Payment::destroy($req->getAttribute('payment_id'));
