@@ -107,6 +107,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `payments` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `loan_id` int(11) unsigned NOT NULL,
+
+    `to_user` int(11) unsigned NOT NULL,
+    `from_user` int(11) unsigned NOT NULL,
     `details` text DEFAULT NULL,
     `amount_cents` int(16) unsigned NOT NULL,
 
