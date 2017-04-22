@@ -30,11 +30,32 @@ export class UsersService implements OnInit {
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
 	}
 
+	getUserInfo(userId: number): Observable<object> {
+		let options = this.authService.getRequestOptions();
+
+		return this.http.get(`api/users/${userId}/`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	updatePassword(userId: number, email: string, oldPassword: string, newPassword: string): Observable<object> {
+		let accountUpdate = {
+			'email': email,
+			'oldPassword': oldPassword,
+			'newPassword': newPassword
+		};
+
+		let options = this.authService.getRequestOptions();
+		return this.http.put(`api/users/${userId}/`, JSON.stringify(accountUpdate), options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	extractData(response: Response) {
 		// let body = response.json();
 		// console.log("Response body: ");
 		// console.log(body);
-		return response.json() || { }
+		return response.json().data || { }
 	}
 
 	handleError(error: Response | any) {
