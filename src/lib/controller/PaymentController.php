@@ -41,6 +41,17 @@ class PaymentController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+
+			$auth = new Authentication();
+			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 		} catch (ModelNotFound $e) {
 			$stat = new Status($req);
 			$stat = $stat->error("LoanNotFound")->message("Loan not found for " . $req->getAttribute('loan_id') . ".");
@@ -61,6 +72,18 @@ class PaymentController {
 	public function getPaymentHandler(Request $req, Response $res): Response {
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+
+			$auth = new Authentication();
+			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
+
 			$payments = $loan->payments;
 			$stat = new Status($payments);
 			$stat = $stat->message("Payments found for loan " . $req->getAttribute('loan_id') . ".");
@@ -78,6 +101,18 @@ class PaymentController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+
+			$auth = new Authentication();
+			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
+
 		} catch (ModelNotFound $e) {
 			$stat = new Status($req);
 			$stat = $stat->error("LoanNotFound")->message("Loan not found for " . $req->getAttribute('loan_id') . ".");
@@ -100,7 +135,18 @@ class PaymentController {
 	public function deletePaymentHandler(Request $req, Response $res): Response {
 
 		try {
-			\Uomi\Model\Payment::destroy($req->getAttribute('payment_id'));
+			$payment = \Uomi\Model\Payment::findOrFail($req->getAttribute('payment_id'));
+
+
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $payment->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
+
+			$payment->delete();
 		} catch (ModelNotFound $e) {
 			$stat = new Status($req);
 			$stat = $stat->error("PaymnetNotFound")->message("Payment not found for " . $req->getAttribute('payment_id') . ".");

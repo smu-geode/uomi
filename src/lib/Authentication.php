@@ -69,7 +69,7 @@ class Authentication {
 			array_push($this->errors, 'Token is not of type Bearer');
 		} else {
 			if (sizeof($this->errors) == 0) {
-				return $token[1];
+				return $token[1] ?? "";
 			}	
 		}
 		return "";

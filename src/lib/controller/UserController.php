@@ -36,6 +36,13 @@ class UserController {
     }
 
     public function getUserHandler(Request $req, Response $res): Response {
+		$auth = new Authentication();
+		$isAuth = $auth->isRequestAuthorized($req);
+
+		if(!($isAuth)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
+
         try {
             $user = User::findOrFail( $req->getAttribute('user_id') );
             return $res->withJson(new Status($user));
@@ -72,6 +79,13 @@ class UserController {
     }
 
 	public function getUserSettingsHandler(Request $req, Response $res): Response {
+		$auth = new Authentication();
+		$isAuth = $auth->isRequestAuthorized($req, $req->getAttribute('user_id'));
+
+		if(!($isAuth)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
+
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
 			$stat = new Status($settings);
@@ -83,8 +97,14 @@ class UserController {
 	}
 
 	public function putUserSettingsHandler(Request $req, Response $res): Response {
-		$data = $req->getParsedBody();
+		$auth = new Authentication();
+		$isAuth = $auth->isRequestAuthorized($req, $req->getAttribute('user_id'));
 
+		if(!($isAuth)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
+
+		$data = $req->getParsedBody();
 
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
@@ -109,6 +129,13 @@ class UserController {
 	}
 
 	public function putUserHandler(Request $req, Response $res): Response {
+		$auth = new Authentication();
+		$isAuth = $auth->isRequestAuthorized($req, $req->getAttribute('user_id'));
+
+		if(!($isAuth)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
+
 		$data = $req->getParsedBody();
 
 		$oldPassword = $data['oldPassword'] ?? null;
