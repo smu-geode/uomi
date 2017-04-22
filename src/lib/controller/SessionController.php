@@ -29,7 +29,6 @@ class SessionController {
 	}
 
 	public function postSessionCollectionHandler(Request $req, Response $res): Response{
-
 		$data = $req->getParsedBody();
 
 		// Create the user

@@ -22,7 +22,7 @@ class AnalyticsController {
 		$header = $req->getHeaders();
 
 		$host = null;
-		$ip = $req->getAttribute('ip_address');
+		$ip = $_SERVER['REMOTE_ADDR'];
 		$user_agent = null;
 		$language = null;
 
