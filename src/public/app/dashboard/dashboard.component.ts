@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { LoanModalComponent } from '../loan-modal/loan-modal.component';
+// import { LoanModalComponent } from '../loan-modal/loan-modal.component';
+// import { ModalComponent } from '../modal/modal.component';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
+import { ModalService } from '../services/modal-service';
 import { Loan } from '../services/loan';
 
 @Component({
@@ -11,7 +13,8 @@ import { Loan } from '../services/loan';
 	providers: [ UsersService,
 				 AuthenticationService,
 				 LoansService,
-				 LoanModalComponent ],
+				 ModalService/*,
+				 LoanModalComponent*/ ],
 	// changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -25,12 +28,10 @@ export class DashboardComponent implements OnInit {
 	lentTotal: number;
 	borrowedTotal: number;
 
-	private loanModalActive = false;
-	private loanModalActionText = 'Lend';
-
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
-				private loansService: LoansService) {}
+				private loansService: LoansService,
+				private modalService: ModalService) {}
 
 	ngOnInit() {
 		this.authService.rerouteIfNotAuthenticated('/registration');
@@ -62,12 +63,9 @@ export class DashboardComponent implements OnInit {
 		return sum;
 	}
 
-	openModal(actionText: string) {
-		console.log("open modal: " + actionText);
-		this.loanModalActive = true;
-
-		// this.loanModalComponent.setActionText(actionText);
-		// this.loanModalComponent.openModal();
+	openModal(id: string) {
+		console.log("open modal: " + id);
+		this.modalService.openModal(id);
 	}
 
 }

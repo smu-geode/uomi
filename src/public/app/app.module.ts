@@ -9,7 +9,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoanModalComponent } from './loan-modal/loan-modal.component';
+import { ModalComponent } from './modal/modal.component';
 import { UsersService } from './services/users-service';
 import { AuthenticationService } from './services/authentication-service';
 
@@ -31,11 +31,11 @@ var routes = [
 	{
 		path: 'dashboard',
 		component: DashboardComponent
-	},
-	{
-		path: 'lend',
-		component: LoanModalComponent
 	}//,
+	// {
+	// 	path: 'lend',
+	// 	component: LoanModalComponent
+	// },
 	// {
 	// 	path: 'borrow/:userId',
 	// 	component: LoanModalComponent
@@ -53,7 +53,7 @@ var routes = [
 					LoginComponent,
 					DashboardComponent,
 					FrontPageComponent,
-					LoanModalComponent ],
+					ModalComponent ],
 	bootstrap:    [ AppComponent ],
 	providers:	  [ AuthenticationService, UsersService ]
 })
