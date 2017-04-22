@@ -11,6 +11,7 @@ use \Uomi\Controller\AnalyticsController;
 use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
+use \Uomi\Analytics;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
