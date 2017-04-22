@@ -1,0 +1,124 @@
+$header-background: white;
+$header-height: 50px;
+
+.nav {
+	display: block;
+}
+
+.nav-item {
+	display: inline-block;
+}
+
+// the principal container, usually <body>
+.page-layout {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.page-header {
+	width: 100%;
+	height: $header-height;
+	padding: 5px 0;
+	background: $header-background;
+	
+
+	.has-fixed-header & {
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+}
+
+.page-header-contents {
+	@extend .feature--max-width-xl;
+	@extend .feature--horizontally-centered;
+	height: 100%;
+}
+
+.page-header-brand {
+	text-align: center;
+	height: 100%;
+	
+	img {
+		max-height: 100%;
+	}
+}
+
+// the main body
+.page {
+	width: 100%;
+	height: 100%;
+
+	.has-fixed-header & {
+		padding-top: $header-height;
+	}
+}
+
+.page-center {
+	width: 100%;
+	height: 100%;
+	@extend .feature--page-center-children;
+	position: relative;
+}
+
+.page-loader {
+	padding: 1rem;
+}
+
+// in this case, the loading text.
+.placeholder-message {
+	color: rgba(0,0,0,0.5);
+	font-size: 2rem;
+	font-style: italic;
+	font-weight: 300;
+	text-align: center;
+	display: block;
+	padding: 1rem;
+}
+
+.card-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.card-header-text {
+	font-size: 2rem;
+	font-weight: 300;
+	padding: 1rem;
+}
+
+.card-header-nav {
+	@include links-no-underline();
+	@include links-same-color(rgba(0,0,0,0.5));
+}
+
+.card-header-nav-item {
+	padding: 1rem;
+	height: 100%;
+}
+
+@each $name, $_ in $breakpoints {
+	.card-#{$name} {
+		@extend .feature--max-width-#{$name} !optional;
+		width: 100%;
+
+		.card-content {
+			background: white;
+			padding: 1px 0;
+			border-top: 1px solid $global-divider-color;
+			border-bottom: 1px solid $global-divider-color;
+		}
+
+		@include breakpoint-up($name) {
+			margin: 1rem;
+			.card-content {
+				border-radius: 0.5rem;
+				box-shadow: 0px 2px 8px rgba(black, 0.3);
+				border: none;
+			}
+		}
+	}
+}

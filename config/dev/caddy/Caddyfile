@@ -1,0 +1,22 @@
+uomi.dev:80
+
+root /var/www/uomi/public
+tls off
+gzip
+log /var/log/caddy/access.log
+errors /var/log/caddy/error.log
+
+rewrite /api {
+	regexp .*
+	to ../api.php?url={uri}
+}
+
+rewrite / {
+	regexp .*
+	to {path} {path}/ /index.html
+}
+
+
+
+fastcgi ../api.php 0.0.0.0:9000 php
+startup php-fpm7
