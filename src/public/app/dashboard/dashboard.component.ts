@@ -28,7 +28,10 @@ export class DashboardComponent implements OnInit {
 				private loansService: LoansService) {}
 
 	ngOnInit() {
-		this.authService.rerouteIfNotAuthenticated('/registration');
+		if (!this.authService.isUserAuthenticated()) {
+			this.authService.rerouteIfNotAuthenticated('/registration');
+			return;		
+		}
 
 		let userId = this.authService.getCurrentUserId();
 		this.loansService.getLoansForUser(userId).subscribe(

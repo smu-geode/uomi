@@ -19,18 +19,13 @@ export class UsersService implements OnInit {
 		// this.http.post(`${this.baseUrl}/${this.resource}`).map();
 	}
 
-	signUp(newUser: any) {
+	signUp(newUser: any): Observable<object> {
 		console.log(JSON.stringify(newUser));
 		let options = this.authService.getRequestOptions();
 
-		this.http.post(`api/users/`, JSON.stringify(newUser), options)
+		return this.http.post(`api/users/`, JSON.stringify(newUser), options)
 				.map(this.extractData)
-				.catch(this.handleError)
-				.subscribe(r => {
-					console.log("user created: ")
-					console.log(r);
-					this.authService.logIn(newUser);
-		});
+				.catch(this.handleError);
 		
 		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
 	}

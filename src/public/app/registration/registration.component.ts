@@ -27,6 +27,8 @@ export class RegistrationComponent {
 	createUser() {
 		// call to users service
 		delete this.user.passwordVerify;
-		this.usersService.signUp(this.user);
+		this.usersService.signUp(this.user)
+			.subscribe(valid => this.authService.logIn(this.user),
+				error => this.router.navigate(['/registration']));
 	}
 }
