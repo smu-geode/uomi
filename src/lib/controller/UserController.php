@@ -74,8 +74,11 @@ class UserController {
 	public function getUserSettingsHandler(Request $req, Response $res): Response {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
+			//$settings = Settings::findOrFail($req->getAttribute('user_id'));
 			$stat = new Status($settings);
 			$stat = $stat->message('Got settings.');
+			if($settings == [])
+				throw new ModelNotFoundException;
 			return $res->withStatus(200)->withJson($stat); // Get
 		} catch(ModelNotFoundException $e) { //user/settings not found
 			return self::invalidUserResponse($res);
@@ -89,15 +92,15 @@ class UserController {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
 
-			$allNotifications = $data['allNotifications'] ?? $settings->allow_notif;
-			$borrowingRequests = $data['borrowingRequests'] ?? $settings->borrow_requests;
-			$payBackReminders = $data['payBackReminders'] ?? $settings->payback_reminders;
-			$viewEmail = $data['viewEmail'] ?? $settings->view_email;
+			$allNotifications = $data['allow_notifications'] ?? $settings->allow_notifications;
+			$borrowingRequests = $data['borrow_requests'] ?? $settings->borrow_requests;
+			$payBackReminders = $data['payback_reminders'] ?? $settings->payback_reminders;
+			$viewEmail = $data['view_email'] ?? $settings->view_email;
 
-			$settings->allNotifications = $allNotifications;
-			$settings->borrowingRequests = $borrowingRequests;
-			$settings->payBackReminders = $payBackReminders;
-			$settings->viewEmail = $viewEmail;
+			$settings->allow_notifications = $allNotifications;
+			$settings->borrow_requests = $borrowingRequests;
+			$settings->payback_reminders = $payBackReminders;
+			$settings->view_email = $viewEmail;
 			$settings->save();
 
 			$stat = new Status($settings);
