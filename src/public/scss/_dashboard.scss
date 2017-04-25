@@ -1,0 +1,86 @@
+
+$caption-color: rgba(0,0,0,0.7);
+
+.big-currency-view {
+
+	font-size: 2.5rem;
+
+	@include breakpoint-up(sm) {
+		font-size: 3.5rem;
+	}
+
+	@include breakpoint-up(md) {
+		font-size: 4rem;
+	}
+
+	.currency-symbol, .currency-fraction {
+		font-size: 40%;
+		vertical-align: super;
+	}
+
+	.currency-fraction {
+		padding-left: 0.15em;
+	}
+
+	.currency-decimal-mark {
+		@extend .feature--expose-to-screen-reader;
+	}
+}
+
+.currency-main {
+	padding: 0 1rem;
+	margin: 1rem 0 0.5rem;
+
+	text-align: center;
+	color: $uomi-dark-green;
+
+	.currency-integer {
+		font-weight: 300;
+	}
+}
+
+.currency-caption {
+	padding: 0 1rem;
+	margin: 0.5rem 0 1rem;
+
+	font-size: 1.2rem;
+	color: $caption-color;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.profile-picture {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 2px solid rgba(0,0,0,0.7);
+	vertical-align: middle;
+}
+
+.loan-table {
+	@include breakpoint-up(md) {
+		padding: 0 2rem;
+	}
+}
+
+.loan-table-dropdown-button {
+	color: rgba(0,0,0,0.5);
+}
+
+.loan-category-icon {
+	@include breakpoint-up(sm) {
+		margin-right: 0.5rem;
+	}
+}
+
+.category-food {
+	color: rgb(216, 127, 19);
+}
+
+.category-bills {
+	color: rgb(34, 110, 232);
+}
+
+.category-entertainment {
+	color: rgb(22, 201, 129);
+}

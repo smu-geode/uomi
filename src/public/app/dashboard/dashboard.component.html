@@ -1,0 +1,52 @@
+<div class="page-center">
+	<div class="card-md">
+		<section id="dashboard" class="card-content">
+
+			<div class="row">
+				<div class="column-xs">
+
+					<div class="currency-view big-currency-view currency-main">
+						<currency-view [amountCents]="lentTotal"></currency-view>
+					</div>
+
+					<div class="currency-caption">
+						Lent
+					</div>
+
+				</div><!-- .column-sm -->
+				<div class="column-xs">
+					<div class="currency-view big-currency-view currency-main">
+						<currency-view [amountCents]="borrowedTotal"></currency-view>
+					</div>
+
+					<div class="currency-caption">
+						Borrowed
+					</div>
+
+				</div><!-- .column-sm -->
+			</div><!-- .row -->
+
+			<div class="table-container loan-table">
+				<table class="table">
+					<tr *ngFor="let loan of loans">
+						<td class="fit-content hide-xs-down">
+							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+						</td>
+						<td>{{ loan.fromMe ? loan.to.name : loan.from.name }}</td>
+						<td [class]="loan.category?.identifier">
+							<i [class]="'fa loan-category-icon ' + loan.category?.icon" [attr.aria-label]="'Category: '+ loan.category?.name"></i>
+							<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
+						</td>
+						<td>{{ loan.fromMe ? 'Owes ' : 'You owe ' }} <currency-view [amountCents]="loan.amountCents"></currency-view></td>
+						<td class="fit-content table-center">
+							<button class="button loan-table-dropdown-button">
+								<i class="fa fa-chevron-down"></i>
+							</button>
+						</td>
+					</tr><!-- [loan] -->
+				</table>
+			</div><!-- .table-container -->
+
+		</section><!-- .dashboard -->
+	</div><!-- .card-md -->
+</div><!-- .page-center -->

@@ -1,0 +1,45 @@
+
+.table-container {
+	height: auto;
+	width: 100%;
+
+	display: block;
+	position: relative;
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+	overflow: scroll;
+
+	tr:last-of-type {
+		border-bottom: none;
+	}
+
+	tr {
+		border-bottom: 1px solid rgba(0,0,0,0.2);
+	}
+
+	td {
+		padding: 0.6rem;
+		text-align: left;
+		vertical-align: middle;
+
+		@include breakpoint-up(sm) {
+			padding: 0.75rem;
+		}
+
+		@include breakpoint-up(md) {
+			padding: 0.9rem;
+		}
+
+		&.fit-content {
+			width: 1px;
+			white-space: nowrap;
+		}
+
+		&.table-center {
+			text-align: center;
+		}
+	}
+}

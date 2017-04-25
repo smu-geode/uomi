@@ -1,0 +1,28 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: $font-stack;
+	background: $site-background;
+	line-height: 1.5;
+	font-size: 12pt;
+	color: #222;
+}
+
+a {
+	text-decoration-skip: ink;
+}
+
+mark {
+	background: hsla(60,100,50,0.5);
+	border-bottom: 1px solid hsla(60,100,48,1);
+}
+
+.screen-reader {
+	@extend .feature--expose-to-screen-reader;
+}
