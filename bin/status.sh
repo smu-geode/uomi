@@ -2,12 +2,16 @@
 WEB_UP=false;
 DB_UP=false;
 
-COMPOSE_FILE="./config/${GULP_TARGET}/docker-compose.yml"
+COMPOSE_FILE="./config/${GULP_TARGET}/docker-compose.yml";
+DOCKER_NAME="uomi_${GULP_TARGET}";
 
-if docker-compose -f $COMPOSE_FILE -p "uomi_${GULP_TARGET}" exec web echo "Hello" >/dev/null 2>&1; then
+printf "\nCompose file: $COMPOSE_FILE\n";
+printf "Compose group: $DOCKER_NAME\n\n";
+
+if docker-compose -f $COMPOSE_FILE -p $DOCKER_NAME exec web echo "Hello" >/dev/null 2>&1; then
     WEB_UP=true
 fi
-if docker-compose -f $COMPOSE_FILE -p "uomi_${GULP_TARGET}" exec database echo "Hello" >/dev/null 2>&1; then
+if docker-compose -f $COMPOSE_FILE -p $DOCKER_NAME exec database echo "Hello" >/dev/null 2>&1; then
     DB_UP=true
 fi
 printf "[x] = running\n\n";
@@ -22,5 +26,5 @@ if $DB_UP; then
 else
     printf "[ ]  Database";
 fi
-printf "\n";
+printf "\n\n";
 exit;

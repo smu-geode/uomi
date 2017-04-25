@@ -183,10 +183,9 @@ gulp.task('watch:php:vendor', () => {
 /*************************************/
 
 function docker(cmdName, done) {
-	let cmd = spawn('sudo', [`bin/${cmdName}.sh`], {
+	let cmd = spawn('sudo', ['-E', `bin/${cmdName}.sh`], {
         env: {
-            // force path
-            PATH: '/usr/local/bin:'+process.env.PATH, 
+            PATH: '/usr/local/bin:'+process.env.PATH,
             GULP_TARGET: TARGET
         }
     });
