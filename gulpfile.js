@@ -187,8 +187,8 @@ function docker(cmdName, done) {
         env: {
             PATH: '/usr/local/bin:'+process.env.PATH,
             GULP_TARGET: TARGET,
-            COMPOSE_FILE: `./config/${GULP_TARGET}/docker-compose.yml`,
-            DOCKER_NAME: `uomi_${GULP_TARGET}`
+            COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
+            DOCKER_NAME: `uomi_${TARGET}`
         }
     });
 	cmd.stdout.on('data', (data) => {
