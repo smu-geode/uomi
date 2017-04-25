@@ -14,8 +14,12 @@ import {
 	selector: 'modal',
 	template: 
 	`
-	<div class="modal-container">
-		<div [ngClass]="{'modal': true, 'modal-open': isOpen, 'modal-closed': !isOpen}">
+	<div class="modal-container" *ngIf="isOpen">
+		<div 
+		 *ngIf="isOpen"
+		 [@isOpenState]
+		 class="modal"
+		>
 			<header class="modal-header">
 				<button class="button button-link modal-header-left-button" (click)="closeModal()">Close</button>
 				<h3 class="modal-title">{{ title || '' }}</h3>
@@ -23,7 +27,14 @@ import {
 			<ng-content></ng-content>
 		</div>
 	</div>
-	`
+	`,
+	animations: [
+		trigger('isOpenState', [
+			state('in', style({transform: 'translateY(0)'})),
+			transition(':enter', [ style({transform: 'translateY(100vh)'}), animate(330) ]),
+			transition(':leave', [ animate(330, style({transform: 'translateY(100vh)'})) ])
+		])
+	]
 })
 
 export class ModalComponent implements OnInit { 
