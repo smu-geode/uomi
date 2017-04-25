@@ -31,8 +31,8 @@ services:
     database:
         image: mysql:latest
         restart: always
-        ports:
-            - 3306:3306
+        expose:
+            - 3306
         volumes:
             - database_data:/var/lib/mysql
             - ../../data/dump.sql:/docker-entrypoint-initdb.d/dump.sql

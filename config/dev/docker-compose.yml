@@ -30,7 +30,7 @@ services:
     database:
         image: mysql:latest
         restart: always
-        expose:
+        ports:
             - 3306:3306
         volumes:
             - database_data:/var/lib/mysql
