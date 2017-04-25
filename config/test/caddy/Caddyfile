@@ -1,7 +1,7 @@
 testing.uomi.cash:443
 
 root /var/www/uomi/public
-tls tls pherz@smu.edu
+tls pherz@smu.edu
 gzip
 log /var/log/caddy/access.log
 errors /var/log/caddy/error.log
