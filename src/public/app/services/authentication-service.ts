@@ -20,7 +20,7 @@ export class AuthenticationService implements OnInit {
 		console.log(JSON.stringify(user));
 		let options = this.getRequestOptions();
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
+		this.http.post(`api/sessions/`, JSON.stringify(user), options)
 			.map(this.extractData)
 			.catch(this.handleError)
 			.subscribe(res => {
@@ -30,6 +30,18 @@ export class AuthenticationService implements OnInit {
 				this.router.navigate(['/dashboard']);
 			}
 		);
+	}
+
+	logOutUser() {
+		let options = this.getRequestOptions();
+
+		this.http.delete(`api/sessions/`, options)
+			.map(this.extractData)
+			.catch(this.handleError)
+			.subscribe(res => {
+				sessionStorage.clear();
+				this.router.navigate(['/registration']);
+			});
 	}
 
 	isUserAuthenticated(): boolean {

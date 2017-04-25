@@ -51,6 +51,32 @@ export class UsersService implements OnInit {
 			.catch(this.handleError);
 	}
 
+	getSettings(userId: number): Observable<object> {
+		let options = this.authService.getRequestOptions();
+
+		return this.http.get(`api/users/${userId}/settings/`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	updateSettings(userId: number, allowNotifications: boolean, 
+		borrowingRequests: boolean, payBackReminders: boolean, 
+		allowEmailUseBySearch: boolean): Observable<object> {
+		
+		let settings = {
+			'allNotifications': allowNotifications,
+			'borrowingRequests': borrowingRequests,
+			'payBackReminders': payBackReminders,
+			'allowEmailUseBySearch': allowEmailUseBySearch
+		};
+
+		let options = this.authService.getRequestOptions();
+
+		return this.http.put(`api/users/${userId}/settings/`, JSON.stringify(settings), options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	extractData(response: Response) {
 		// let body = response.json();
 		// console.log("Response body: ");
