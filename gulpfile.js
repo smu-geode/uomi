@@ -205,7 +205,15 @@ function docker(cmdName, done) {
 }
 
 function dockerSsh() {
-	let ssh = spawn(`bin/ssh.sh`, [], { stdio: [0, 1, 2], env: {GULP_TARGET: TARGET} });
+	let ssh = spawn('sudo', ['-E', `bin/ssh.sh`], { 
+        stdio: [0, 1, 2], 
+        env: {
+            PATH: '/usr/local/bin:'+process.env.PATH,
+            GULP_TARGET: TARGET,
+            COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
+            DOCKER_NAME: `uomi_${TARGET}`
+        }
+    });
 }
 
 ['up', 'halt', 'suspend', 'resume', 'destroy', 'status'].forEach(name => {
