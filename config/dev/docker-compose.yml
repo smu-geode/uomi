@@ -11,13 +11,13 @@ services:
         links:
             - database
         volumes:
-            - ./config/dev/caddy/Caddyfile:/etc/Caddyfile
-            - ./config/dev/php/php.ini:/etc/php7/php.ini
+            - ./caddy/Caddyfile:/etc/Caddyfile
+            - ./php/php.ini:/etc/php7/php.ini
             - caddy_data:/etc/caddycerts
-            - ./build:/var/www/uomi
-            - ./logs/caddy:/var/log/caddy
-            - ./logs/php:/var/log/php7
-            - ./logs/api:/var/log/api
+            - ../../build:/var/www/uomi
+            - ../../logs/caddy:/var/log/caddy
+            - ../../logs/php:/var/log/php7
+            - ../../logs/api:/var/log/api
         environment:
             CADDYPATH: /etc/caddycerts
             UOMI_DEBUG: 1
@@ -30,11 +30,11 @@ services:
     database:
         image: mysql:latest
         restart: always
-        ports:
+        expose:
             - 3306:3306
         volumes:
             - database_data:/var/lib/mysql
-            - ./data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+            - ../../data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
         environment:
             MYSQL_ROOT_PASSWORD: grandma-ill-fray-parch
             MYSQL_DATABASE: uomi

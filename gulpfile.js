@@ -1,22 +1,23 @@
 'use strict';
 
 const gulp          = require('gulp');
-const help          = require('gulp-help-four');
+const util          = require('gulp-util');
+
 const sass          = require('gulp-sass');
 const imagemin      = require('gulp-imagemin');
 const sourcemaps    = require('gulp-sourcemaps');
 const ts            = require('gulp-typescript');
 const uglify        = require('gulp-uglify');
 const concat        = require('gulp-concat');
+
 const spawn         = require('child_process').spawn;
 const del           = require('del');
-// const browserSync   = require('browser-sync').create();
+
+
 const srcBase       = 'src/';
 const buildBase     = 'build/';
 const publicBase    = buildBase + 'public/';
 const vendorBase    = 'vendor/';
-
-help(gulp, {});
 
 const paths = {
     html:           './src/public/**/*.html',
@@ -45,6 +46,27 @@ const buildPaths = {
 
 const buildTasks = ['html','img','sass','js','php','php:vendor','ts','nodeModules'];
 const watchTasks = ['watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor','watch:ts'];
+
+// Handle environment flags '--test' and '--production'.
+// Build environment is 'dev' by default.
+
+let TARGET = '';
+let isProduction = false;
+let isTest = false;
+let isDev = false;
+
+if(util.env.production || false) {
+    TARGET = 'production';
+    isProduction = true;
+} else if(util.env.test || false) {
+    TARGET = 'test';
+    isTest = true;
+} else {
+    TARGET = 'dev';
+    isDev = true;
+}
+
+util.log('TARGET:', util.colors.green(`${TARGET}`));
 
 /*************************************/
 /* HTML                              */
@@ -161,7 +183,7 @@ gulp.task('watch:php:vendor', () => {
 /*************************************/
 
 function docker(cmdName, done) {
-	let cmd = spawn('bin/dev/' + cmdName + '.sh');
+	let cmd = spawn(`bin/${cmdName}.sh`, [], {env: {GULP_TARGET: TARGET}});
 	cmd.stdout.on('data', (data) => {
 		process.stdout.write(data.toString());
 	});
@@ -176,7 +198,7 @@ function docker(cmdName, done) {
 }
 
 function dockerSsh() {
-	let ssh = spawn('bin/dev/ssh.sh', [], { stdio: [0, 1, 2] });
+	let ssh = spawn(`bin/ssh.sh`, [], { stdio: [0, 1, 2], env: {GULP_TARGET: TARGET} });
 }
 
 ['up', 'halt', 'suspend', 'resume', 'destroy', 'status'].forEach(name => {
@@ -202,11 +224,3 @@ gulp.task('clean', () => {
 gulp.task('watch', gulp.parallel(watchTasks));
 gulp.task('build', gulp.parallel(buildTasks));
 gulp.task('default', gulp.parallel('build'));
-
-// gulp.task('sync', gulp.series(
-//     gulp.parallel('docker:up','build'),
-//     gulp.parallel(
-//         'watch',
-//         () => { browserSync.init({ proxy: "uomi.dev" }); }
-//     )
-// ));
