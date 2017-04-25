@@ -1,56 +1,58 @@
 import { Component, OnInit, Input, Output, OnDestroy, ElementRef } from '@angular/core';
 import { ModalService } from '../services/modal-service';
-import { AuthenticationService } from '../services/authentication-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
+
 
 @Component({
 	selector: 'modal',
-	template: `<div [class]="classes">
-				<button (click)="closeModal()">Close</button>
-				<ng-content></ng-content>
-				</div>`
+	template: 
+	`
+	<div class="modal-container">
+		<div [ngClass]="{'modal': true, 'modal-open': isOpen, 'modal-closed': !isOpen}">
+			<header class="modal-header">
+				<button class="button button-link modal-header-left-button" (click)="closeModal()">Close</button>
+				<h3 class="modal-title">{{ title || '' }}</h3>
+			</header>
+			<ng-content></ng-content>
+		</div>
+	</div>
+	`
 })
 
 export class ModalComponent implements OnInit { 
 
-	@Input() isActive = false;
+	@Input() isOpen = false;
 	@Input() id: string;
-	private classes: string = "modal-close";
-	// @Input() modalContent: string;
+	@Input() title: string;
 	
-	constructor(private modalService: ModalService,
-				private authService: AuthenticationService,
-				private router: Router,
-				private route: ActivatedRoute) {
-	
-	}
+	constructor(private modalService: ModalService) {}
 
 	ngOnInit() {
-		if (!this.authService.isUserAuthenticated()) {
-			this.router.navigate(['/registration']);
-		}
-
 		if(!this.id) {
-			console.error("Modal must have id");
+			console.error("An instance of ModalComponent must have an ID ( <modal id=\"your-id\"></modal> )");
 			return;
 		}
-
 		this.modalService.addModal(this);
 	}
 
 	ngOnDestroy() {
 		this.modalService.removeModal(this.id);
-		this.isActive = false;
+		this.isOpen = false;
 	}
 
 	openModal() {
-		this.isActive = true;
-		this.classes = "modal-open"
+		this.isOpen = true;
 	}
 
 	closeModal() {
-		this.isActive = false;
-		this.classes = "modal-close"
+		this.isOpen = false;
 	}
 
 }
