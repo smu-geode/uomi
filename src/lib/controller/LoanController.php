@@ -16,9 +16,9 @@ use \Uomi\Model\User;
 // ROUTES
 $this->group('/loans', function() {
 	$this->post('/', '\Uomi\Controller\LoanController:postLoanCollectionHandler');
-	$this->get('/{loan_id}', '\Uomi\Controller\LoanController:getLoanHandler');
-	$this->put('/{loan_id}', '\Uomi\Controller\LoanController:putLoanHandler');
-	$this->delete('/{loan_id}', '\Uomi\Controller\LoanController:deleteLoanHandler');
+	$this->get('/{loan_id}/', '\Uomi\Controller\LoanController:getLoanHandler');
+	$this->put('/{loan_id}/', '\Uomi\Controller\LoanController:putLoanHandler');
+	$this->delete('/{loan_id}/', '\Uomi\Controller\LoanController:deleteLoanHandler');
 });
 
 $this->group('/users/{user_id}/loans', function() {
@@ -48,7 +48,7 @@ class LoanController {
 	}
 
 	public function getUserLoanCollection(Request $req, Response $res): Response {
-		
+
 		try {
 			$user = User::findOrFail( $req->getAttribute('user_id') );
 		} catch(ModelNotFoundException $e) { // user not found

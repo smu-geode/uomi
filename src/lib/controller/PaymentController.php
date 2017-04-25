@@ -14,8 +14,8 @@ use \Uomi\Status;
 $this->group('/loans/{loan_id}/payments', function() {
     $this->post('/', '\Uomi\Controller\PaymentController:postPaymentCollectionHandler');
 	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentHandler');
-	$this->get('/{payment_id}', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
-	$this->delete('/{payment_id}', '\Uomi\Controller\PaymentController:deletePaymentHandler');
+	$this->get('/{payment_id}/', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
+	$this->delete('/{payment_id}/', '\Uomi\Controller\PaymentController:deletePaymentHandler');
 });
 
 class PaymentController {
@@ -47,6 +47,12 @@ class PaymentController {
 			return $res->withStatus(404)->withJson($stat);
 		}
 
+		if($amount > $loan->balance){
+			$stat = new Status($req);
+			$stat = $stat->error("Overdraw")->message("Withdrawal amount exceeds balance on loan");
+			return $res->withStatus(406)->withJson($stat);
+		}
+
 		$payment = new \Uomi\Model\Payment();
 		$payment->loan_id = $loan->id;
 		$payment->amount_cents = $amount;
@@ -72,10 +78,10 @@ class PaymentController {
 		}
 	}
 
-	public function getPaymentHandlerWithId(Request $req, Response $res): Response {		
+	public function getPaymentHandlerWithId(Request $req, Response $res): Response {
 		$loan;
 		$payment;
-		
+
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
 		} catch (ModelNotFound $e) {
@@ -97,7 +103,7 @@ class PaymentController {
 		return $res->withStatus(200)->withJson($stat);
 	}
 
-	public function deletePaymentHandler(Request $req, Response $res): Response {	
+	public function deletePaymentHandler(Request $req, Response $res): Response {
 
 		try {
 			\Uomi\Model\Payment::destroy($req->getAttribute('payment_id'));
