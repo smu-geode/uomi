@@ -186,7 +186,9 @@ function docker(cmdName, done) {
 	let cmd = spawn('sudo', ['-E', `bin/${cmdName}.sh`], {
         env: {
             PATH: '/usr/local/bin:'+process.env.PATH,
-            GULP_TARGET: TARGET
+            GULP_TARGET: TARGET,
+            COMPOSE_FILE: `./config/${GULP_TARGET}/docker-compose.yml`,
+            DOCKER_NAME: `uomi_${GULP_TARGET}`
         }
     });
 	cmd.stdout.on('data', (data) => {

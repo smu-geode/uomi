@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker-compose -f ./config/dev/docker-compose.yml -p "uomi_${GULP_TARGET}" up -d
+docker-compose -f $COMPOSE_FILE -p $DOCKER_NAME up -d

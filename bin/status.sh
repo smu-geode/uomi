@@ -2,9 +2,6 @@
 WEB_UP=false;
 DB_UP=false;
 
-COMPOSE_FILE="./config/${GULP_TARGET}/docker-compose.yml";
-DOCKER_NAME="uomi_${GULP_TARGET}";
-
 printf "\nCompose file: $COMPOSE_FILE\n";
 printf "Compose group: $DOCKER_NAME\n\n";
 
