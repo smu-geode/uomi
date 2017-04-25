@@ -1,4 +1,4 @@
-uomi.dev:443
+uomi.cash:443
 
 root /var/www/uomi/public
 tls on
