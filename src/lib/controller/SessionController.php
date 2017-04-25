@@ -6,9 +6,12 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
+use \Uomi\Controller\AnalyticsController;
+
 use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
+use \Uomi\Analytics;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -31,13 +34,13 @@ class SessionController {
 
 		// Create the user
 		$factory = new SessionFactory($this->container);
-
 		try {
 			$session = $factory->submitLogInForm($data);
+			AnalyticsController::track($req, $session->user_id);
 		} catch(\RuntimeException $e) {
 			return self::badLogInResponse($res, $factory->getErrors());
 		}
-
+		
 		$stat = new Status($session);
 		$stat = $stat->message('Session successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created

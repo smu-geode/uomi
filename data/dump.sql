@@ -107,6 +107,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE `payments` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `loan_id` int(11) unsigned NOT NULL,
+
+    `to_user` int(11) unsigned NOT NULL,
+    `from_user` int(11) unsigned NOT NULL,
     `details` text DEFAULT NULL,
     `amount_cents` int(16) unsigned NOT NULL,
 
@@ -141,3 +144,26 @@ CREATE TABLE `sessions` (
     CONSTRAINT `user_sess` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `analytics`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `analytics` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) unsigned NOT NULL,
+    `host` varchar(256) DEFAULT NULL,
+    `ip` varchar(256) DEFAULT NULL,
+    `user_agent` varchar(256) DEFAULT NULL,
+    `accept_language` varchar(256) DEFAULT NULL,
+
+    `created_at` timestamp DEFAULT '2000-01-01 00:00:00',
+    `updated_at` timestamp DEFAULT '2000-01-01 00:00:00',
+
+    PRIMARY KEY(`id`),
+
+    KEY `user_ana` (`user_id`),
+
+    CONSTRAINT `user_ana` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4

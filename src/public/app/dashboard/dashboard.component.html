@@ -46,7 +46,20 @@
 					</tr><!-- [loan] -->
 				</table>
 			</div><!-- .table-container -->
-
+			<button class="button lend-loan-modal-open"
+					(click)="openModal('lend-modal')">
+				Lend
+			</button>
+			<button class="button borrow-loan-modal-open"
+					(click)="openModal('borrow-modal')">
+				Borrow
+			</button>
 		</section><!-- .dashboard -->
+		<modal id="lend-modal" title="Lend">
+			TODO Lend
+		</modal>
+		<modal id="borrow-modal" title="Borrow">
+			TODO Borrow
+		</modal>
 	</div><!-- .card-md -->
 </div><!-- .page-center -->

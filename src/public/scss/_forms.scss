@@ -100,6 +100,12 @@ $text-input-padding: 13px;
 	color: black;
 }
 
+.button-link {
+	background: transparent;
+	border: none;
+	color: rgb(66, 152, 244);
+}
+
 .button-main {
 	background: $uomi-green;
 	color: white;
