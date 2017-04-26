@@ -34,8 +34,10 @@
 						</td>
 						<td>{{ loan.fromMe ? loan.to.name : loan.from.name }}</td>
 						<td [class]="loan.category?.identifier">
-							<i [class]="'fa loan-category-icon ' + loan.category?.icon" [attr.aria-label]="'Category: '+ loan.category?.name"></i>
-							<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
+							<span class="loan-category-label">
+								<i [class]="'fa loan-category-icon ' + loan.category?.icon" [attr.aria-label]="'Category: '+ loan.category?.name"></i>
+								<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
+							</span><!-- .loan-category-label -->
 						</td>
 						<td>{{ loan.fromMe ? 'Owes ' : 'You owe ' }} <currency-view [amountCents]="loan.amountCents"></currency-view></td>
 						<td class="fit-content table-center">
@@ -46,20 +48,26 @@
 					</tr><!-- [loan] -->
 				</table>
 			</div><!-- .table-container -->
-			<button class="button lend-loan-modal-open"
-					(click)="openModal('lend-modal')">
-				Lend
-			</button>
-			<button class="button borrow-loan-modal-open"
-					(click)="openModal('borrow-modal')">
-				Borrow
-			</button>
+			<div class="row row-padded">
+				<div class="column-sm column-padded form-block">
+					<button class="button button-main" (click)="openModal('lend-modal')">Lend</button>
+				</div>
+				<div class="column-sm column-padded form-block">
+					<button class="button button-warning" (click)="openModal('borrow-modal')">Borrow</button>
+				</div>
+			</div>
 		</section><!-- .dashboard -->
+
+
 		<modal id="lend-modal" title="Lend">
 			<lend-form (closeModal)="closeModal('lend-modal')"></lend-form>
 		</modal>
+
+
 		<modal id="borrow-modal" title="Borrow">
 			<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
 		</modal>
+
+
 	</div><!-- .card-md -->
 </div><!-- .page-center -->

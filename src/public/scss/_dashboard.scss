@@ -69,18 +69,51 @@ $caption-color: rgba(0,0,0,0.7);
 
 .loan-category-icon {
 	@include breakpoint-up(sm) {
-		margin-right: 0.5rem;
+		margin-right: 0.25rem;
 	}
 }
 
+@mixin category-label-style($color) {
+	.loan-category-label {
+		@include breakpoint-up(sm) { 
+			background: $color;
+		}
+	}
+
+	.loan-category-icon {
+		background: $color;
+		color: white;
+		@include breakpoint-up(sm) {
+			background: white;
+			color: $color;
+		}
+	}
+}
+
+.loan-category-label {
+	color: white;
+	border-radius: 1.2rem;
+
+	@include breakpoint-up(sm) {
+		padding: 0.5rem 0.8rem 0.5rem 0.1rem;
+	}
+}
+
+.loan-category-icon {
+	width: 2rem;
+	border-radius: 1.2rem;
+	padding: 0.5rem;
+	text-align: center;
+}
+
 .category-food {
-	color: rgb(216, 127, 19);
+	@include category-label-style(rgb(216, 127, 19));
 }
 
 .category-bills {
-	color: rgb(34, 110, 232);
+	@include category-label-style(rgb(34, 110, 232));
 }
 
 .category-entertainment {
-	color: rgb(22, 201, 129);
+	@include category-label-style(rgb(22, 201, 129));
 }
