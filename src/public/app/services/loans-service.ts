@@ -29,7 +29,7 @@ export class LoansService {
 			'to_user': toUser,
 			'from_user': fromUser,
 			'amount_cents': amountCents,
-			'category': category
+			'category_id': category
 		};
 
 		let options = this.authService.getRequestOptions();

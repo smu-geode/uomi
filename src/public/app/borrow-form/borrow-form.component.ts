@@ -15,8 +15,14 @@ export class BorrowFormComponent implements OnInit {
 	private newLoan: Loan = new Loan();
 	private amount: string;
 	private fromUser: object;
-	private categories: string[] = ['Food', 'Bills', 'Entertainment', 'Transport', 'Other'];
-
+		private categories: object[] = [
+		{name: 'Food', identifier: 'category-food'}, 
+		{name:'Bills', identifier: 'category-bills'}, 
+		{name:'Entertainment', identifier: 'categroy-entertainment'}, 
+		{name:'Transport', identifier: 'category-transport'}, 
+		{name:'Other', identifier: 'category-other'}
+	];
+	
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
 				private router: Router,
