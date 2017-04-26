@@ -1,0 +1,44 @@
+Lend Form
+<div class="lend-form">
+	<div>
+		<label for="to_user">
+			To user
+		</label>
+		<input type="text"
+			id="to_user"
+			class="lend-to-user"
+			[(ngModel)]="toUser" />
+	</div>
+	<div>
+		<label for="amount">
+			Amount
+		</label>
+		<input type="number"
+			id="amount"
+			class="lend-amount"
+			[(ngModel)]="amount" />
+	</div>
+	<div>
+		<label for="category">
+			Category
+		</label>
+		<select class="lend-category"
+				id="category"
+				[(ngModel)]="newLoan.category">
+			<option></option>
+			<option *ngFor="let category of categories"
+					[value]="category">
+				{{ category }}
+			</option>
+		</select>
+	</div>
+	<br />
+	<button class="btn-lend"
+			(click)="completeLend()">
+		Lend
+	</button>
+	<!--<button class="btn-cancel"
+			(click)="cancel()">
+		Cancel
+	</button>-->
+</div>

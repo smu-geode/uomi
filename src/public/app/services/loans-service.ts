@@ -26,15 +26,15 @@ export class LoansService {
 
 	postNewLoan(fromUser: number, toUser: number, amountCents: number, category: string): Observable<object> {
 		let newLoan: object = {
-			'from_user': fromUser,
 			'to_user': toUser,
+			'from_user': fromUser,
 			'amount_cents': amountCents,
 			'category': category
 		};
 
 		let options = this.authService.getRequestOptions();
 
-		return this.http.post(`api/loans`, JSON.stringify(newLoan), options)
+		return this.http.post(`api/loans/`, JSON.stringify(newLoan), options)
 			.map(this.extractLoanData)
 			.catch(this.handleError);
 	}

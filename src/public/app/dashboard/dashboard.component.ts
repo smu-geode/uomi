@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 // import { LoanModalComponent } from '../loan-modal/loan-modal.component';
 // import { ModalComponent } from '../modal/modal.component';
+// import { LendFormComponent } from '../lend-form/lend-form.component';
+// import { BorrowFormComponent } from '../borrow-form/borrow-form.component';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
@@ -13,8 +15,7 @@ import { Loan } from '../services/loan';
 	providers: [ UsersService,
 				 AuthenticationService,
 				 LoansService,
-				 ModalService/*,
-				 LoanModalComponent*/ ],
+				 ModalService ],
 	// changeDetection: ChangeDetectionStrategy.OnPush
 })
 

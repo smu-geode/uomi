@@ -11,6 +11,8 @@ import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ModalComponent } from './modal/modal.component';
+import { LendFormComponent } from './lend-form/lend-form.component';
+import { BorrowFormComponent } from './borrow-form/borrow-form.component';
 import { UsersService } from './services/users-service';
 import { AuthenticationService } from './services/authentication-service';
 
@@ -55,7 +57,9 @@ var routes = [
 					LoginComponent,
 					DashboardComponent,
 					FrontPageComponent,
-					ModalComponent ],
+					ModalComponent,
+					LendFormComponent,
+					BorrowFormComponent ],
 	bootstrap:    [ AppComponent ],
 	providers:	  [ AuthenticationService, UsersService ]
 })
