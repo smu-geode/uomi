@@ -42,9 +42,14 @@
 							</td>
 							<td [ngClass]="{'loan-amount': true, 'amount-debt': !loan.fromMe, 'amount-credit': loan.fromMe}"><currency-view [amountCents]="loan.amountCents"></currency-view></td>
 							<td class="fit-content table-center">
-								<button class="button loan-table-dropdown-button">
-									<i class="fa fa-chevron-down"></i>
-								</button>
+								<div class="dropdown" dropdown>
+									<button class="button loan-table-dropdown-button" dropdownOpen>
+										<i class="fa fa-chevron-down"></i>
+									</button>
+									<ul class="dropdown-content dropdown-content-left" dropdownContent>
+										<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+									</ul>
+								</div><!-- .dropdown -->
 							</td>
 						</tr><!-- [loan] -->
 					</table>

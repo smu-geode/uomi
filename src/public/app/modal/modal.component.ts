@@ -31,8 +31,8 @@ import {
 	animations: [
 		trigger('isOpenState', [
 			state('in', style({transform: 'translateY(0)'})),
-			transition(':enter', [ style({transform: 'translateY(100vh)'}), animate(330) ]),
-			transition(':leave', [ animate(330, style({transform: 'translateY(100vh)'})) ])
+			transition(':enter', [ style({transform: 'translateY(100vh)'}), animate('300ms ease') ]),
+			transition(':leave', [ animate('300ms ease', style({transform: 'translateY(100vh)'})) ])
 		])
 	]
 })

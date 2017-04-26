@@ -4,6 +4,11 @@ $caption-color: rgba(0,0,0,0.7);
 .big-numbers-section {
 	background: $uomi-green;
 	color: #fff;
+
+	@include breakpoint-up(md) {
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+	}
 }
 
 .big-currency-view {
@@ -78,7 +83,12 @@ $caption-color: rgba(0,0,0,0.7);
 }
 
 .loan-table-dropdown-button {
-	color: rgba(0,0,0,0.5);
+	border-radius: 0;
+	color: rgba(black, .5);
+}
+
+.dropdown-open .loan-table-dropdown-button {
+	background: rgba(black, .05);
 }
 
 .loan-category-label {

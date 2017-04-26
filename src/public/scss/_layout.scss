@@ -1,4 +1,4 @@
-$header-background: $site-background;
+$header-background: transparent;
 $logo-color: $uomi-green;
 $header-height: 60px;
 $card-border-radius: 3px;
@@ -107,7 +107,6 @@ $card-border-radius: 3px;
 
 .card-content {
 	background: white;
-	overflow: hidden;
 }
 
 @each $name, $_ in $breakpoints {
