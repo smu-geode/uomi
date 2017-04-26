@@ -6,8 +6,6 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
-use \Uomi\Controller\AnalyticsController;
-
 use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
