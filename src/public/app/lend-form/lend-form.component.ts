@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -16,6 +16,7 @@ export class LendFormComponent implements OnInit {
 	private newLoan: Loan = new Loan();
 	private amount: string;
 	private toUser: object;
+	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[] = [
 		{name: 'Food', identifier: 'category-food'}, 
 		{name:'Bills', identifier: 'category-bills'}, 
@@ -49,12 +50,13 @@ export class LendFormComponent implements OnInit {
 
 		this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 			this.newLoan.amountCents, ""+this.newLoan.category)
-			.subscribe(x => console.log(x));
+			.subscribe(x => this.cancel(), x => console.log(x));
 		// ugly casting is ugly
 	}
 
-	// cancel() {
-	// 	this.closeModal.emit();
-	// }
+	cancel() {
+		// this.modalService.closeModal(this.enclosingModalId);
+		this.closeModal.emit();
+	}
 
 }

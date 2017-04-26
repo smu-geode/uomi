@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -15,14 +15,15 @@ export class BorrowFormComponent implements OnInit {
 	private newLoan: Loan = new Loan();
 	private amount: string;
 	private fromUser: object;
-		private categories: object[] = [
+	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+	private categories: object[] = [
 		{name: 'Food', identifier: 'category-food'}, 
 		{name:'Bills', identifier: 'category-bills'}, 
 		{name:'Entertainment', identifier: 'categroy-entertainment'}, 
 		{name:'Transport', identifier: 'category-transport'}, 
 		{name:'Other', identifier: 'category-other'}
 	];
-	
+
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
 				private router: Router,
@@ -48,8 +49,12 @@ export class BorrowFormComponent implements OnInit {
 
 		this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 			this.newLoan.amountCents, ""+this.newLoan.category)
-			.subscribe(x => console.log(x));
+			.subscribe(x => this.cancel(), x => console.log(x));
 		// ugly casting is ugly
 	}
 
+	cancel() {
+		// this.modalService.closeModal(this.enclosingModalId);
+		this.closeModal.emit();
+	}
 }

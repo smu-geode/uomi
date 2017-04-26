@@ -56,10 +56,10 @@
 			</button>
 		</section><!-- .dashboard -->
 		<modal id="lend-modal" title="Lend">
-			<lend-form></lend-form>
+			<lend-form (closeModal)="closeModal('lend-modal')"></lend-form>
 		</modal>
 		<modal id="borrow-modal" title="Borrow">
-			<borrow-form></borrow-form>
+			<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
 		</modal>
 	</div><!-- .card-md -->
 </div><!-- .page-center -->
