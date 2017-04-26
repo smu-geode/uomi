@@ -1,4 +1,4 @@
-$form-border-radius: 0.3rem;
+$form-border-radius: 3px;
 $input-blur-color: rgba(0,0,0,0.1);
 $input-focus-color: rgb(96, 157, 255);
 $text-input-border-size: 4px;
@@ -83,10 +83,16 @@ $text-input-padding: 13px;
 .button {
 	display: block;
 	border: none;
+	color: inherit;
 	font: inherit;
 	padding: 0.5rem 0.8rem;
 	border-radius: $form-border-radius;
 	background: transparent;
+	cursor: pointer;
+}
+
+.button:active, .button:focus {
+	outline: none !important;
 }
 
 .button:disabled {
@@ -94,26 +100,40 @@ $text-input-padding: 13px;
 	text-decoration: line-through;
 }
 
+@mixin button-style($color) {
+	border: 1px solid rgba($color, 0.5);
+	color: $color;
+	transition: 0.3s border ease;
+	&:hover, &:focus {
+		border: 1px solid $color;
+	}
+}
+
 .button-default {
-	background: white;
-	border: 1px solid rgba(0,0,0,0.3);
-	color: black;
+	@include button-style($default-color);
 }
 
-.button-link {
-	background: transparent;
-	border: none;
-	color: rgb(66, 152, 244);
-}
-
-.button-main {
-	background: $uomi-green;
-	color: white;
+.button-primary {
+	@include button-style($primary-color);
 }
 
 .button-warning {
-	background: $warning-color;
-	color: white;
+	@include button-style($warning-color);
+}
+
+.button-success {
+	@include button-style($success-color);
+}
+
+.button-danger {
+	@include button-style($danger-color);
+}
+
+.button-borderless {
+	border: none;
+	&:hover, &:focus {
+		border: none;
+	}
 }
 
 .text-input {

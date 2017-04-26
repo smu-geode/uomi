@@ -1,5 +1,7 @@
-$header-background: white;
-$header-height: 50px;
+$header-background: $site-background;
+$logo-color: $uomi-green;
+$header-height: 60px;
+$card-border-radius: 3px;
 
 .nav {
 	display: block;
@@ -8,6 +10,12 @@ $header-height: 50px;
 .nav-item {
 	display: inline-block;
 }
+
+.color-default { color: $default-color; }
+.color-primary { color: $primary-color; }
+.color-warning { color: $warning-color; }
+.color-success { color: $success-color; }
+.color-danger { color: $danger-color; }
 
 // the principal container, usually <body>
 .page-layout {
@@ -19,14 +27,14 @@ $header-height: 50px;
 .page-header {
 	width: 100%;
 	height: $header-height;
-	padding: 5px 0;
+	padding: 15px 20px;
 	background: $header-background;
-	
 
 	.has-fixed-header & {
 		position: fixed;
 		top: 0;
 		left: 0;
+		z-index: 10;
 	}
 }
 
@@ -37,12 +45,9 @@ $header-height: 50px;
 }
 
 .page-header-brand {
-	text-align: center;
-	height: 100%;
-	
-	img {
-		max-height: 100%;
-	}
+	text-align: left;
+	display: flex;
+	fill: $logo-color;
 }
 
 // the main body
@@ -100,24 +105,21 @@ $header-height: 50px;
 	height: 100%;
 }
 
+.card-content {
+	background: white;
+	overflow: hidden;
+}
+
 @each $name, $_ in $breakpoints {
 	.card-#{$name} {
 		@extend .feature--max-width-#{$name} !optional;
 		width: 100%;
 
-		.card-content {
-			background: white;
-			padding: 1px 0;
-			border-top: 1px solid $global-divider-color;
-			border-bottom: 1px solid $global-divider-color;
-		}
-
 		@include breakpoint-up($name) {
 			margin: 1rem;
 			.card-content {
-				border-radius: 0.5rem;
-				box-shadow: 0px 2px 8px rgba(black, 0.3);
-				border: none;
+				border-radius: $card-border-radius;
+				box-shadow: 0 0 3px rgba(black, .1);
 			}
 		}
 	}
