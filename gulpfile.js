@@ -20,26 +20,25 @@ const publicBase    = buildBase + 'public/';
 const vendorBase    = 'vendor/';
 
 const paths = {
-    html:           './src/public/**/*.html',
+	html:           './src/public/**/*.html',
 	img:            './src/public/img/*.*',
-    scss:           './src/public/scss/*.scss',
-    js:             './src/public/*.js',
-    ts:             './src/public/**/*.ts',
-	php:            './src/**/*.php',
-	phpVendor:      './vendor/**/*.*'
+	scss:           './src/public/scss/*.scss',
+	js:             './src/public/*.js',
+	ts:             './src/public/**/*.ts',
+	php:            './src/**/*.php'
 };
 
 const bases = {
-    html:           srcBase + 'html/',
-    ts:             srcBase,
-    phpVendor:      vendorBase
+	html:           srcBase + 'html/',
+	ts:             srcBase,
+	phpVendor:      vendorBase
 };
 
 const buildPaths = {
-    html:           'build/public/',
+	html:           'build/public/',
 	img:            'build/public/img/',
-    css:            'build/public/css/',
-    js:             'build/public/',
+	css:            'build/public/css/',
+	js:             'build/public/',
 	php:            'build/',
 	phpVendor:      'build/vendor/'
 };
@@ -56,14 +55,14 @@ let isTest = false;
 let isDev = false;
 
 if(util.env.production || false) {
-    TARGET = 'production';
-    isProduction = true;
+	TARGET = 'production';
+	isProduction = true;
 } else if(util.env.test || false) {
-    TARGET = 'test';
-    isTest = true;
+	TARGET = 'test';
+	isTest = true;
 } else {
-    TARGET = 'dev';
-    isDev = true;
+	TARGET = 'dev';
+	isDev = true;
 }
 
 util.log('TARGET:', util.colors.green(`${TARGET}`));
@@ -73,13 +72,13 @@ util.log('TARGET:', util.colors.green(`${TARGET}`));
 /*************************************/
 
 gulp.task('html', (done) => {
-    gulp.src(paths.html, { base: bases.html })
-        .pipe(gulp.dest(buildPaths.html));
-	done();
+	gulp.src(paths.html, { base: bases.html })
+		.pipe(gulp.dest(buildPaths.html))
+		.on('end', done);
 });
 
 gulp.task('watch:html', () => {
-    gulp.watch(paths.html, gulp.parallel('html'));
+	gulp.watch(paths.html, gulp.parallel('html'));
 });
 
 /*************************************/
@@ -87,14 +86,14 @@ gulp.task('watch:html', () => {
 /*************************************/
 
 gulp.task('img', (done) => {
-    gulp.src(paths.img)
+	gulp.src(paths.img)
 		.pipe(imagemin())
-        .pipe(gulp.dest(buildPaths.img));
+		.pipe(gulp.dest(buildPaths.img));
 	done();
 });
 
 gulp.task('watch:img', () => {
-    gulp.watch(paths.img, gulp.parallel('img'));
+	gulp.watch(paths.img, gulp.parallel('img'));
 });
 
 /*************************************/
@@ -102,16 +101,16 @@ gulp.task('watch:img', () => {
 /*************************************/
 
 gulp.task('sass', (done) => {
-    return gulp.src(paths.scss)
-        .pipe(sourcemaps.init())
-        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(buildPaths.css));
-	done();
+	gulp.src(paths.scss)
+		.pipe(sourcemaps.init())
+		.pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest(buildPaths.css))
+		.on('end', done);
 });
 
 gulp.task('watch:sass', () => {
-    gulp.watch(paths.scss, gulp.parallel('sass'));
+	gulp.watch(paths.scss, gulp.parallel('sass'));
 });
 
 /*************************************/
@@ -119,13 +118,13 @@ gulp.task('watch:sass', () => {
 /*************************************/
 
 gulp.task('js', (done) => {
-    gulp.src(paths.js)
-        .pipe(gulp.dest(buildPaths.js));
-	done();
+	gulp.src(paths.js)
+		.pipe(gulp.dest(buildPaths.js))
+		.on('end', done);
 });
 
 gulp.task('watch:js', () => {
-    gulp.watch(paths.js, gulp.parallel('js'));
+	gulp.watch(paths.js, gulp.parallel('js'));
 });
 
 /*************************************/
@@ -133,25 +132,26 @@ gulp.task('watch:js', () => {
 /*************************************/
 
 var tsProject = ts.createProject('src/public/tsconfig.json', {
-    typescript: require('typescript')
+	typescript: require('typescript')
 });
 
 gulp.task('nodeModules', (done) => {
-    gulp.src('node_modules/**/*.*').pipe(gulp.dest('build/public/node_modules'));
-    done();
+	gulp.src('node_modules/**/*.*')
+		.pipe(gulp.dest('build/public/node_modules'))
+		.on('end', done);
 });
 
 gulp.task('ts', (done) => {
-    var result = gulp.src(paths.ts, { base: bases.ts })
-        .pipe(sourcemaps.init())
-        .pipe(tsProject())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build/'));
-    done();
+	var result = gulp.src(paths.ts, { base: bases.ts })
+		.pipe(sourcemaps.init())
+		.pipe(tsProject())
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest('build/'))
+		.on('end', done);
 });
 
 gulp.task('watch:ts', () => {
-    gulp.watch(paths.ts, gulp.parallel('ts'));
+	gulp.watch(paths.ts, gulp.parallel('ts'));
 });
 
 /*************************************/
@@ -159,9 +159,9 @@ gulp.task('watch:ts', () => {
 /*************************************/
 
 gulp.task('php', (done) => {
-    gulp.src(paths.php)
-        .pipe(gulp.dest(buildPaths.php));
-	done();
+	gulp.src(paths.php)
+		.pipe(gulp.dest(buildPaths.php))
+		.on('end', done);
 });
 
 gulp.task('watch:php', () => {
@@ -169,9 +169,9 @@ gulp.task('watch:php', () => {
 });
 
 gulp.task('php:vendor', (done) => {
-	gulp.src(paths.phpVendor, { base: bases.phpVendor })
-		.pipe(gulp.dest(buildPaths.phpVendor));
-	done();
+	gulp.src('vendor/**/*.*')
+		.pipe(gulp.dest(buildPaths.phpVendor))
+		.on('end', done);
 })
 
 gulp.task('watch:php:vendor', () => {
@@ -184,13 +184,13 @@ gulp.task('watch:php:vendor', () => {
 
 function docker(cmdName, done) {
 	let cmd = spawn('sudo', ['-E', `bin/${cmdName}.sh`], {
-        env: {
-            PATH: '/usr/local/bin:'+process.env.PATH,
-            GULP_TARGET: TARGET,
-            COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
-            DOCKER_NAME: `uomi_${TARGET}`
-        }
-    });
+		env: {
+			PATH: '/usr/local/bin:'+process.env.PATH,
+			GULP_TARGET: TARGET,
+			COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
+			DOCKER_NAME: `uomi_${TARGET}`
+		}
+	});
 	cmd.stdout.on('data', (data) => {
 		process.stdout.write(data.toString());
 	});
@@ -206,20 +206,20 @@ function docker(cmdName, done) {
 
 function dockerSsh() {
 	let ssh = spawn('sudo', ['-E', `bin/ssh.sh`], { 
-        stdio: [0, 1, 2], 
-        env: {
-            PATH: '/usr/local/bin:'+process.env.PATH,
-            GULP_TARGET: TARGET,
-            COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
-            DOCKER_NAME: `uomi_${TARGET}`
-        }
-    });
+		stdio: [0, 1, 2], 
+		env: {
+			PATH: '/usr/local/bin:'+process.env.PATH,
+			GULP_TARGET: TARGET,
+			COMPOSE_FILE: `./config/${TARGET}/docker-compose.yml`,
+			DOCKER_NAME: `uomi_${TARGET}`
+		}
+	});
 }
 
 ['up', 'halt', 'suspend', 'resume', 'destroy', 'status'].forEach(name => {
-    gulp.task('docker:' + name, (done) => {
-    	docker(name, done);
-    });
+	gulp.task('docker:' + name, (done) => {
+		docker(name, done);
+	});
 });
 
 gulp.task('docker:ssh', (done) => {
@@ -232,7 +232,7 @@ gulp.task('docker:ssh', (done) => {
 /*************************************/
 
 gulp.task('clean', () => {
-    return del(['build/*']);
+	return del(['build/*']);
 });
 
 
