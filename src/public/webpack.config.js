@@ -4,7 +4,7 @@ const path = require('path');
 
 // we're in PROJECT/src/public, we want to be in PROJECT.
 const PROJECT_ROOT = path.join(__dirname, '../..');
-root(p) {
+function root(p) {
 	return path.join(PROJECT_ROOT, p);
 }
 
@@ -33,6 +33,7 @@ module.exports = {
 	},
 
 	module: {
+		exprContextCritical: false,
 		rules: [
 			{
 				test: /\.ts$/,

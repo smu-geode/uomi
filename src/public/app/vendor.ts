@@ -11,6 +11,7 @@ import '@angular/router';
 import '@angular/forms';
 
 import '@angular/animations';
+import '@angular/platform-browser/animations';
 
 // RxJS
 import 'rxjs';
