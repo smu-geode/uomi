@@ -21,7 +21,7 @@ import {
 		 class="modal"
 		>
 			<header class="modal-header">
-				<button class="button button-link modal-header-left-button" (click)="closeModal()">Close</button>
+				<button class="button modal-header-left-button" (click)="closeModal()">Close</button>
 				<h3 class="modal-title">{{ title || '' }}</h3>
 			</header>
 			<ng-content></ng-content>
@@ -31,8 +31,8 @@ import {
 	animations: [
 		trigger('isOpenState', [
 			state('in', style({transform: 'translateY(0)'})),
-			transition(':enter', [ style({transform: 'translateY(100vh)'}), animate(330) ]),
-			transition(':leave', [ animate(330, style({transform: 'translateY(100vh)'})) ])
+			transition(':enter', [ style({transform: 'translateY(100vh)'}), animate('300ms ease') ]),
+			transition(':leave', [ animate('300ms ease', style({transform: 'translateY(100vh)'})) ])
 		])
 	]
 })

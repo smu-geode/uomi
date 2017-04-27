@@ -1,6 +1,16 @@
 
 $caption-color: rgba(0,0,0,0.7);
 
+.big-numbers-section {
+	background: $uomi-green;
+	color: #fff;
+
+	@include breakpoint-up(md) {
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+	}
+}
+
 .big-currency-view {
 
 	font-size: 2.5rem;
@@ -32,7 +42,6 @@ $caption-color: rgba(0,0,0,0.7);
 	margin: 1rem 0 0.5rem;
 
 	text-align: center;
-	color: $uomi-dark-green;
 
 	.currency-integer {
 		font-weight: 300;
@@ -44,7 +53,6 @@ $caption-color: rgba(0,0,0,0.7);
 	margin: 0.5rem 0 1rem;
 
 	font-size: 1.2rem;
-	color: $caption-color;
 	text-transform: uppercase;
 	text-align: center;
 }
@@ -53,7 +61,6 @@ $caption-color: rgba(0,0,0,0.7);
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
-	border: 2px solid rgba(0,0,0,0.7);
 	vertical-align: middle;
 }
 
@@ -63,57 +70,78 @@ $caption-color: rgba(0,0,0,0.7);
 	}
 }
 
+.loan-amount {
+	font-size: 1.1rem;
+}
+
+.amount-credit {
+	color: $success-color;
+}
+
+.amount-debt {
+	color: $danger-color;
+}
+
 .loan-table-dropdown-button {
-	color: rgba(0,0,0,0.5);
+	border-radius: 0;
+	color: rgba(black, .5);
 }
 
-.loan-category-icon {
-	@include breakpoint-up(sm) {
-		margin-right: 0.25rem;
-	}
-}
-
-@mixin category-label-style($color) {
-	.loan-category-label {
-		@include breakpoint-up(sm) { 
-			background: $color;
-		}
-	}
-
-	.loan-category-icon {
-		background: $color;
-		color: white;
-		@include breakpoint-up(sm) {
-			background: white;
-			color: $color;
-		}
-	}
+.dropdown-open .loan-table-dropdown-button {
+	background: rgba(black, .05);
 }
 
 .loan-category-label {
-	color: white;
-	border-radius: 1.2rem;
+	position: relative;
+	white-space: nowrap;
+}
 
-	@include breakpoint-up(sm) {
-		padding: 0.5rem 0.8rem 0.5rem 0.1rem;
+@mixin category-label-style($color) {
+	.loan-category-icon {
+		background: $color;
+	}
+	.loan-category-name {
+		color: $color;
+		text-transform: uppercase;
+		font-size: 0.9rem;
+	}
+}
+
+.loan-category-name {
+	display: inline-block;
+	margin-left: 0.5rem;
+
+	opacity: 0;
+	transform: rotateX(90deg);
+	transform-origin: 0 0 -5px;
+	perspective: 600px;
+
+	transition-duration: 0.3s;
+	transition-property: opacity, transform;
+	transition-timing-function: ease;
+
+	.loan-category-label:hover & {
+		opacity: 1;
+		transform: rotateX(0);
 	}
 }
 
 .loan-category-icon {
-	width: 2rem;
+	width: 2.5rem;
 	border-radius: 1.2rem;
 	padding: 0.5rem;
 	text-align: center;
+	color: white;
 }
 
 .category-food {
-	@include category-label-style(rgb(216, 127, 19));
+	@include category-label-style(#CC3FC6);
 }
 
 .category-bills {
-	@include category-label-style(rgb(34, 110, 232));
+	@include category-label-style(#537FCC);
 }
 
 .category-entertainment {
-	@include category-label-style(rgb(22, 201, 129));
+	@include category-label-style(#CC3C3C);
 }

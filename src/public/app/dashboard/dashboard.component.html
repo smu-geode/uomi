@@ -1,73 +1,80 @@
-<div class="page-center">
-	<div class="card-md">
-		<section id="dashboard" class="card-content">
+<main class="page">
+	<div class="page-center">
+		<div class="card-md">
+			<section id="dashboard" class="card-content">
 
-			<div class="row">
-				<div class="column-xs">
+				<section class="row big-numbers-section">
+					<div class="column-xs">
 
-					<div class="currency-view big-currency-view currency-main">
-						<currency-view [amountCents]="lentTotal"></currency-view>
+						<div class="currency-view big-currency-view currency-main">
+							<currency-view [amountCents]="lentTotal"></currency-view>
+						</div>
+
+						<div class="currency-caption">
+							Lent
+						</div>
+
+					</div><!-- .column-sm -->
+					<div class="column-xs">
+						<div class="currency-view big-currency-view currency-main">
+							<currency-view [amountCents]="borrowedTotal"></currency-view>
+						</div>
+
+						<div class="currency-caption">
+							Borrowed
+						</div>
+
+					</div><!-- .column-sm -->
+				</section><!-- .big-numbers-section -->
+
+				<div class="table-container loan-table">
+					<table class="table">
+						<tr *ngFor="let loan of loans">
+							<td class="fit-content hide-xs-down">
+								<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+							</td>
+							<td>
+								{{ loan.fromMe ? loan.to.name : loan.from.name }}
+								
+							</td>
+							<td [class]="loan.category?.identifier">
+								<span class="loan-category-label">
+									<i [class]="'fa loan-category-icon ' + loan.category?.icon" [attr.aria-label]="'Category: '+ loan.category?.name"></i>
+									<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
+								</span><!-- .loan-category-label -->
+							</td>
+							<td [ngClass]="{'loan-amount': true, 'amount-debt': !loan.fromMe, 'amount-credit': loan.fromMe}"><currency-view [amountCents]="loan.amountCents"></currency-view></td>
+							<td class="fit-content table-center">
+								<div class="dropdown" dropdown>
+									<button class="button loan-table-dropdown-button" dropdownOpen>
+										<i class="fa fa-chevron-down"></i>
+									</button>
+									<ul class="dropdown-content dropdown-content-left" dropdownContent>
+										<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+									</ul>
+								</div><!-- .dropdown -->
+							</td>
+						</tr><!-- [loan] -->
+					</table>
+				</div><!-- .table-container -->
+				<div class="row row-padded">
+					<div class="column-xs column-padded form-block">
+						<button class="button button-success button-big" (click)="openModal('lend-modal')">Lend</button>
 					</div>
-
-					<div class="currency-caption">
-						Lent
+					<div class="column-xs column-padded form-block">
+						<button class="button button-danger button-big" (click)="openModal('borrow-modal')">Borrow</button>
 					</div>
-
-				</div><!-- .column-sm -->
-				<div class="column-xs">
-					<div class="currency-view big-currency-view currency-main">
-						<currency-view [amountCents]="borrowedTotal"></currency-view>
-					</div>
-
-					<div class="currency-caption">
-						Borrowed
-					</div>
-
-				</div><!-- .column-sm -->
-			</div><!-- .row -->
-
-			<div class="table-container loan-table">
-				<table class="table">
-					<tr *ngFor="let loan of loans">
-						<td class="fit-content hide-xs-down">
-							<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
-						</td>
-						<td>{{ loan.fromMe ? loan.to.name : loan.from.name }}</td>
-						<td [class]="loan.category?.identifier">
-							<span class="loan-category-label">
-								<i [class]="'fa loan-category-icon ' + loan.category?.icon" [attr.aria-label]="'Category: '+ loan.category?.name"></i>
-								<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
-							</span><!-- .loan-category-label -->
-						</td>
-						<td>{{ loan.fromMe ? 'Owes ' : 'You owe ' }} <currency-view [amountCents]="loan.amountCents"></currency-view></td>
-						<td class="fit-content table-center">
-							<button class="button loan-table-dropdown-button">
-								<i class="fa fa-chevron-down"></i>
-							</button>
-						</td>
-					</tr><!-- [loan] -->
-				</table>
-			</div><!-- .table-container -->
-			<div class="row row-padded">
-				<div class="column-sm column-padded form-block">
-					<button class="button button-main" (click)="openModal('lend-modal')">Lend</button>
 				</div>
-				<div class="column-sm column-padded form-block">
-					<button class="button button-warning" (click)="openModal('borrow-modal')">Borrow</button>
-				</div>
-			</div>
-		</section><!-- .dashboard -->
+			</section><!-- .dashboard -->
+		</div><!-- .card-md -->
+	</div><!-- .page-center -->
+</main><!-- .page -->
+
+<modal id="lend-modal" title="Lend">
+	<lend-form (closeModal)="closeModal('lend-modal')"></lend-form>
+</modal>
 
 
-		<modal id="lend-modal" title="Lend">
-			<lend-form (closeModal)="closeModal('lend-modal')"></lend-form>
-		</modal>
-
-
-		<modal id="borrow-modal" title="Borrow">
-			<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
-		</modal>
-
-
-	</div><!-- .card-md -->
-</div><!-- .page-center -->
+<modal id="borrow-modal" title="Borrow">
+	<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
+</modal>
