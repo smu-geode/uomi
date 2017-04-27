@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 function root(__path) {
-  return path.join(__dirname, __path);
+	return path.join(__dirname, __path);
 }
 
 module.exports = {
@@ -17,29 +17,28 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: ['.ts', '.js']
+		extensions: ['.ts', '.js'],
+		modules: [
+			path.resolve('./app'),
+			'../../node_modules'
+		]
 	},
 
 	output: {
-		path: root('build/public'),
-		publicPath: '/',
+		path: root('../build/public'),
 		filename: '[name].[hash].js',
-		chunkFileName: '[id].[hash].chunk.js'
+		chunkFilename: '[id].[hash].chunk.js'
 	},
 
 	module: {
 		rules: [
 			{
 				test: /\.ts$/,
-				loaders: [
-					{
-						loader: 'awesome-typescript-loader',
-						options: {
-							configFileName: helpers.root('src', 'tsconfig.json')
-						}
-					},
-					'angular2-template-loader'
-				]
+				loader: 'ts-loader',
+				exclude: /node_modules/,
+				options: {
+					configFileName: 'tsconfig.json'
+				}
 			},
 			{
 				test: /\.html$/,
@@ -48,13 +47,13 @@ module.exports = {
 		]
 	},
 
-	plugins: {
+	plugins: [
 		new webpack.NoEmitOnErrorsPlugin(),
 
 		new webpack.ContextReplacementPlugin(
 			// The (\\|\/) piece accounts for path separators in *nix and Windows
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-			helpers.root('./src'), // location of your src
+			root('./src'), // location of your src
 			{} // a map of your routes
 		),
 
@@ -69,7 +68,7 @@ module.exports = {
 		}),
 
 		new HtmlWebpackPlugin({
-			template: 'src/index.html'
+			template: 'src/public/index.html'
 		})
-	}
+	]
 }
