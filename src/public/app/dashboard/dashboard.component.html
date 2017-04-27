@@ -1,6 +1,9 @@
 <main class="page">
 	<div class="page-center">
-		<div class="card-md">
+		<div class="page-loader" *ngIf="!isLoaded">
+			<i class="fa fa-3x fa-spin fa-circle-o-notch" aria-label="Loading"></i>
+		</div>
+		<div class="card-md" *ngIf="isLoaded">
 			<section id="dashboard" class="card-content">
 
 				<section class="row big-numbers-section">
