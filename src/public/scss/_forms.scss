@@ -109,6 +109,10 @@ $text-input-padding: 13px;
 	}
 }
 
+.button-big {
+	font-size: 1.3rem;
+}
+
 .button-default {
 	@include button-style($default-color);
 }
