@@ -1,13 +1,12 @@
 $form-border-radius: 3px;
 $input-blur-color: rgba(0,0,0,0.1);
 $input-focus-color: rgb(96, 157, 255);
-$text-input-border-size: 4px;
+$text-input-border-size: 2px;
 $text-input-padding: 13px;
 
 .form {
-	margin-top: 1rem;
-	padding: 0 1rem;
-	margin-bottom: 1rem;
+	padding: 1rem 1rem 0;
+	position: relative;
 }
 
 .form-block {

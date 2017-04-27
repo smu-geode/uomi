@@ -30,7 +30,10 @@
 					</div><!-- .column-sm -->
 				</section><!-- .big-numbers-section -->
 
-				<div class="table-container loan-table">
+				<div class="placeholder-message">
+					You have no open loans.
+				</div>
+				<div class="table-container loan-table" *ngIf="loans">
 					<table class="table">
 						<tr *ngFor="let loan of loans">
 							<td class="fit-content hide-xs-down">

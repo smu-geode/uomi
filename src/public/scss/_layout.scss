@@ -73,13 +73,13 @@ $card-border-radius: 3px;
 
 // in this case, the loading text.
 .placeholder-message {
-	color: rgba(0,0,0,0.5);
-	font-size: 2rem;
+	color: rgba(0,0,0,0.7);
+	font-size: 1.8rem;
 	font-style: italic;
 	font-weight: 300;
 	text-align: center;
 	display: block;
-	padding: 1rem;
+	padding: 1.3rem;
 }
 
 .card-header {
@@ -107,6 +107,7 @@ $card-border-radius: 3px;
 
 .card-content {
 	background: white;
+	padding: 1px 0;
 }
 
 @each $name, $_ in $breakpoints {
