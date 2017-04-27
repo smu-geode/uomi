@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-		"module": "system",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"emitDecoratorMetadata": true,
@@ -9,6 +9,13 @@
 		"noImplicitAny": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"baseUrl": "./app",
-		"lib": ["es6", "dom"]
+		"lib": ["es6", "dom"],
+		"typeRoots": [
+			"../../node_modules/@types"
+		],
+		"types": [
+			"core-js",
+			"node"
+		]
 	}
 }

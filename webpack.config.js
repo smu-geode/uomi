@@ -2,8 +2,10 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-function root(__path) {
-	return path.join(__dirname, __path);
+// we're in PROJECT/src/public, we want to be in PROJECT.
+const PROJECT_ROOT = path.join(__dirname, '../..');
+root(p) {
+	return path.join(PROJECT_ROOT, p);
 }
 
 module.exports = {
@@ -11,21 +13,21 @@ module.exports = {
 	devtool: 'source-map',
 
 	entry: {
-		'polyfills': './src/public/app/polyfills.ts',
-		'vendor': './src/public/app/vendor.ts',
-		'app': './src/public/app/main.ts'
+		'polyfills': root('./src/public/app/polyfills.ts'),
+		'vendor': root('./src/public/app/vendor.ts'),
+		'app': root('./src/public/app/main.ts')
 	},
 
 	resolve: {
 		extensions: ['.ts', '.js'],
 		modules: [
-			path.resolve('./app'),
-			'../../node_modules'
+			root('./src/public/app'),
+			'node_modules'
 		]
 	},
 
 	output: {
-		path: root('../build/public'),
+		path: root('./build/public'),
 		filename: '[name].[hash].js',
 		chunkFilename: '[id].[hash].chunk.js'
 	},
@@ -34,10 +36,10 @@ module.exports = {
 		rules: [
 			{
 				test: /\.ts$/,
-				loader: 'ts-loader',
+				loader: 'awesome-typescript-loader',
 				exclude: /node_modules/,
 				options: {
-					configFileName: 'tsconfig.json'
+					configFileName: root('./src/public/tsconfig.json')
 				}
 			},
 			{
@@ -68,7 +70,7 @@ module.exports = {
 		}),
 
 		new HtmlWebpackPlugin({
-			template: 'src/public/index.html'
+			template: root('./src/public/index.html')
 		})
 	]
 }
