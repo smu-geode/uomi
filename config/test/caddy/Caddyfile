@@ -12,6 +12,7 @@ testing.uomi.cash {
 
 	rewrite / {
 		regexp .*
+		ext /
 		to {path} {path}/ /index.html
 	}
 

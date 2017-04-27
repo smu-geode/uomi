@@ -10,7 +10,7 @@ function root(p) {
 
 module.exports = {
 
-	devtool: 'source-map',
+	// devtool: 'source-map',
 
 	entry: {
 		'polyfills': root('./src/public/app/polyfills.ts'),
@@ -22,7 +22,7 @@ module.exports = {
 		extensions: ['.ts', '.js'],
 		modules: [
 			root('./src/public/app'),
-			'node_modules'
+			root('./node_modules')
 		]
 	},
 
@@ -37,15 +37,23 @@ module.exports = {
 		rules: [
 			{
 				test: /\.ts$/,
-				loader: 'awesome-typescript-loader',
 				exclude: /node_modules/,
-				options: {
-					configFileName: root('./src/public/tsconfig.json')
-				}
+				use: [
+					{
+						loader: 'awesome-typescript-loader',
+						options: {
+							configFileName: root('./src/public/tsconfig.json')
+						}
+					}
+				]
 			},
 			{
 				test: /\.html$/,
 				loader: 'html-loader'
+			},
+			{
+				test: /\.png$/, 
+				loader: 'file-loader'
 			}
 		]
 	},

@@ -36,10 +36,11 @@ class SessionController {
 		$factory = new SessionFactory($this->container);
 		try {
 			$session = $factory->submitLogInForm($data);
-			AnalyticsController::track($req, $session->user_id);
 		} catch(\RuntimeException $e) {
 			return self::badLogInResponse($res, $factory->getErrors());
 		}
+
+		\Uomi\Factory\AnalyticFactory::track($req, $session->user_id);
 		
 		$stat = new Status($session);
 		$stat = $stat->message('Session successfully created.');

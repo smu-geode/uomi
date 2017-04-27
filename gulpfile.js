@@ -6,13 +6,10 @@ const util          = require('gulp-util');
 const sass          = require('gulp-sass');
 const imagemin      = require('gulp-imagemin');
 const sourcemaps    = require('gulp-sourcemaps');
-const ts            = require('gulp-typescript');
-const uglify        = require('gulp-uglify');
-const concat        = require('gulp-concat');
+const flatten       = require('gulp-flatten');
 
 const spawn         = require('child_process').spawn;
 const del           = require('del');
-
 
 const srcBase       = 'src/';
 const buildBase     = 'build/';
@@ -20,7 +17,7 @@ const publicBase    = buildBase + 'public/';
 const vendorBase    = 'vendor/';
 
 const paths = {
-	html:           './src/public/**/*.html',
+	html:           './src/public/app/**/*.html',
 	img:            './src/public/img/*.*',
 	scss:           './src/public/scss/*.scss',
 	js:             './src/public/*.js',
@@ -29,7 +26,6 @@ const paths = {
 };
 
 const bases = {
-	html:           srcBase + 'html/',
 	ts:             srcBase,
 	phpVendor:      vendorBase
 };
@@ -43,8 +39,8 @@ const buildPaths = {
 	phpVendor:      'build/vendor/'
 };
 
-const buildTasks = ['html','img','sass','js','php','php:vendor','ts','nodeModules'];
-const watchTasks = ['watch:html','watch:img','watch:sass','watch:js','watch:php','watch:php:vendor','watch:ts'];
+const buildTasks = ['html','img','sass','php','php:vendor','app'];
+const watchTasks = ['watch:html','watch:img','watch:sass','watch:php','watch:php:vendor','watch:app'];
 
 // Handle environment flags '--test' and '--production'.
 // Build environment is 'dev' by default.
@@ -72,7 +68,8 @@ util.log('TARGET:', util.colors.green(`${TARGET}`));
 /*************************************/
 
 gulp.task('html', (done) => {
-	gulp.src(paths.html, { base: bases.html })
+	gulp.src(paths.html)
+		.pipe(flatten())
 		.pipe(gulp.dest(buildPaths.html))
 		.on('end', done);
 });
@@ -114,44 +111,30 @@ gulp.task('watch:sass', () => {
 });
 
 /*************************************/
-/* Javascript                        */
-/*************************************/
-
-gulp.task('js', (done) => {
-	gulp.src(paths.js)
-		.pipe(gulp.dest(buildPaths.js))
-		.on('end', done);
-});
-
-gulp.task('watch:js', () => {
-	gulp.watch(paths.js, gulp.parallel('js'));
-});
-
-/*************************************/
 /* Typescript                        */
 /*************************************/
 
-var tsProject = ts.createProject('src/public/tsconfig.json', {
-	typescript: require('typescript')
+function webpack(options, done) {
+	let cmd = spawn('webpack', options);
+	cmd.stdout.on('data', (data) => {
+		process.stdout.write(data.toString());
+	});
+	cmd.stderr.on('data', (data) => {
+		process.stderr.write(data.toString());
+	});
+	cmd.on('error', (error) => {
+		process.stderr.write('From webpack: ' + error);
+		return;
+	});
+	cmd.on('exit', done);
+}
+
+gulp.task('app', (done) => {
+	webpack(['--config', `src/public/webpack.config.js`], done);
 });
 
-gulp.task('nodeModules', (done) => {
-	gulp.src('node_modules/**/*.*')
-		.pipe(gulp.dest('build/public/node_modules'))
-		.on('end', done);
-});
-
-gulp.task('ts', (done) => {
-	var result = gulp.src(paths.ts, { base: bases.ts })
-		.pipe(sourcemaps.init())
-		.pipe(tsProject())
-		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest('build/'))
-		.on('end', done);
-});
-
-gulp.task('watch:ts', () => {
-	gulp.watch(paths.ts, gulp.parallel('ts'));
+gulp.task('watch:app', () => {
+	webpack(['--config', `src/public/webpack.config.js`, '--watch'], _=>{});
 });
 
 /*************************************/
