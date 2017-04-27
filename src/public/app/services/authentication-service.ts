@@ -1,10 +1,10 @@
-import { Injectable , OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class AuthenticationService implements OnInit { 
+export class AuthenticationService { 
 
 	private baseUrl = 'http://uomi.dev';
 	private resource = 'api/sessions';
@@ -12,9 +12,7 @@ export class AuthenticationService implements OnInit {
 	public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(null); 
 
 	constructor(private http: Http,
-				private router: Router) {}
-
-	ngOnInit() {
+				private router: Router) {
 		let status = this.checkUserAuthenticated();
 		this.isAuthenticated.next(status);
 	}
