@@ -27,7 +27,7 @@ Borrow Form
 				[(ngModel)]="newLoan.category">
 			<option></option>
 			<option *ngFor="let category of categories"
-					[value]="category.identifier">
+					[value]="category.id">
 				{{ category.name }}
 			</option>
 		</select>

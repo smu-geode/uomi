@@ -35,7 +35,7 @@
 				[(ngModel)]="newLoan.category">
 			<option></option>
 			<option *ngFor="let category of categories"
-					[value]="category.identifier">
+					[value]="category.id">
 				{{ category.name }}
 			</option>
 		</select>
@@ -48,6 +48,11 @@
 		<div class="column-xs column-padded form-block">
 			<button class="button button-default" (click)="cancel()">Cancel</button>
 		</div>
+	</div>
+	<div *ngIf="isError">
+		<p>
+			{{ currentError }}
+		</p>
 	</div>
 
 </div>
