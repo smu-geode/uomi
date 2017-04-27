@@ -33,10 +33,7 @@ export class DashboardComponent implements OnInit {
 				private modalService: ModalService) {}
 
 	ngOnInit() {
-		if (!this.authService.isUserAuthenticated()) {
-			this.authService.rerouteIfNotAuthenticated('/registration');
-			return;		
-		}
+		this.authService.rerouteIfNotAuthenticated('/registration');
 
 		let userId = this.authService.getCurrentUserId();
 		this.loansService.getLoansForUser(userId).subscribe(

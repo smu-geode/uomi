@@ -30,10 +30,6 @@ export class LendFormComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (!this.authService.isUserAuthenticated()) {
-			this.router.navigate(['/registration']);
-		}
-
 		this.loansService.getCategories().subscribe(x => this.categories = x);
 	}
 

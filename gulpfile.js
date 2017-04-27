@@ -115,7 +115,9 @@ gulp.task('watch:sass', () => {
 /*************************************/
 
 function webpack(options, done) {
-	let cmd = spawn('webpack', options);
+	let envMod = Object.create( process.env );
+	envMod.TARGET = `${TARGET}`
+	let cmd = spawn('webpack', options, { env: envMod });
 	cmd.stdout.on('data', (data) => {
 		process.stdout.write(data.toString());
 	});
@@ -130,11 +132,11 @@ function webpack(options, done) {
 }
 
 gulp.task('app', (done) => {
-	webpack(['--config', `src/public/webpack.config.js`], done);
+	webpack(['--colors', '--config', `src/public/webpack.config.js`], done);
 });
 
 gulp.task('watch:app', () => {
-	webpack(['--config', `src/public/webpack.config.js`, '--watch'], _=>{});
+	webpack(['--colors', '--config', `src/public/webpack.config.js`, '--watch'], _=>{});
 });
 
 /*************************************/

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { AuthenticationService } from './services/authentication-service';
 
 @Component({
@@ -11,11 +11,16 @@ export class AppComponent {
 	private isAuthenticated: boolean;
 
 	constructor(authService: AuthenticationService) {
-		this.isAuthenticated = authService.isUserAuthenticated();
 
-		authService.authenticationChange.subscribe((value: any) => {
-			console.log('change:', value);
-			this.isAuthenticated = value;
+		console.log(`Running uomi on the ${process.env.TARGET} target.`);
+		if(process.env.TARGET === 'production') {
+			enableProdMode();
+		}
+
+		// this.isAuthenticated = authService.isAuthenticated.getValue();
+		authService.isAuthenticated.subscribe(newValue => {
+			console.log('change:', newValue);
+			this.isAuthenticated = newValue;
 		});
 	}
 }

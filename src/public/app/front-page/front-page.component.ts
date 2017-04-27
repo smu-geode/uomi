@@ -12,16 +12,11 @@ export class FrontPageComponent implements OnInit {
 
 	constructor(private authService: AuthenticationService,
 				private router: Router,
-				private route: ActivatedRoute) {
-	
-	}
+				private route: ActivatedRoute) {}
 
 	ngOnInit() {
-		if (this.authService.isUserAuthenticated()) {
-			this.router.navigate(['/dashboard']);
-		} else {
-			this.router.navigate(['/registration']);
-		}
+		this.authService.rerouteIfAuthenticated('/dashboard');
+		this.authService.rerouteIfNotAuthenticated('/registration');
 	}
 
 }

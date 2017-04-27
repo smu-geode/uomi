@@ -1,9 +1,11 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
 const path = require('path');
 
 // we're in PROJECT/src/public, we want to be in PROJECT.
 const PROJECT_ROOT = path.join(__dirname, '../..');
+
 function root(p) {
 	return path.join(PROJECT_ROOT, p);
 }
@@ -61,6 +63,10 @@ module.exports = {
 	plugins: [
 		new webpack.NoEmitOnErrorsPlugin(),
 
+		new CleanObsoleteChunks(),
+
+		new webpack.EnvironmentPlugin(['TARGET']),
+
 		new webpack.ContextReplacementPlugin(
 			// The (\\|\/) piece accounts for path separators in *nix and Windows
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
@@ -74,7 +80,7 @@ module.exports = {
 
 		new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
 			mangle: {
-			keep_fnames: true
+				keep_fnames: true
 			}
 		}),
 
