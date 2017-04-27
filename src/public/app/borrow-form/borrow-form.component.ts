@@ -19,13 +19,7 @@ export class BorrowFormComponent implements OnInit {
 	private amount: string;
 	private fromUser: object;
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
-	private categories: object[] = [
-		// {name: 'Food', identifier: 'category-food', id: 1}, 
-		// {name:'Bills', identifier: 'category-bills', id: 2}, 
-		// {name:'Entertainment', identifier: 'categroy-entertainment', id: 3}, 
-		// {name:'Transport', identifier: 'category-transport', id: 4}, 
-		// {name:'Other', identifier: 'category-other', id: 5}
-	];
+	private categories: object[];
 
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
@@ -44,11 +38,11 @@ export class BorrowFormComponent implements OnInit {
 	}
 
 	completeBorrow() {
-		// convert amount string to cents - !!
+		// convert amount string to cents
 		if (this.isValidCurrenyString(this.amount)) {
 			this.newLoan.amountCents = this.convertToCents(this.amount);
 			console.log(this.newLoan.amountCents);
-			
+
 			this.newLoan.to = sessionStorage.user_id;
 
 			// get user id for toUser
@@ -65,7 +59,7 @@ export class BorrowFormComponent implements OnInit {
 					console.error("email does not match a user's email");
 				}
 			}, err => console.error(err));
-			// ugly casting is ugly
+
 		} else {
 			console.error("invalid currency string");
 		}

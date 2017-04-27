@@ -19,13 +19,7 @@ export class LendFormComponent implements OnInit {
 	private amount: string;
 	private toUser: object;
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
-	private categories: object[] = [
-		// {name: 'Food', identifier: 'category-food', id: 1}, 
-		// {name:'Bills', identifier: 'category-bills', id: 2}, 
-		// {name:'Entertainment', identifier: 'categroy-entertainment', id: 3}, 
-		// {name:'Transport', identifier: 'category-transport', id: 4}, 
-		// {name:'Other', identifier: 'category-other', id: 5}
-	];
+	private categories: object[];
 
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
@@ -44,7 +38,7 @@ export class LendFormComponent implements OnInit {
 	}
 
 	completeLend() {
-		// convert amount string to cents - !!
+		// convert amount string to cents
 		if (this.isValidCurrenyString(this.amount)) {
 			this.newLoan.amountCents = this.convertToCents(this.amount);
 			console.log(this.newLoan.amountCents);
@@ -67,7 +61,7 @@ export class LendFormComponent implements OnInit {
 			}, err => {
 				console.error(err);
 			});
-			// ugly casting is ugly
+			
 		} else {
 			console.error("invalid currency string");
 		}
