@@ -1,5 +1,5 @@
 import { Directive, ElementRef, AfterContentInit, QueryList, ContentChild, HostListener } from '@angular/core';
-import * as Tether from 'tether';
+// import * as Tether from 'tether';
 
 @Directive({ selector: '[dropdownOpen]' })
 export class DropdownOpenDirective {

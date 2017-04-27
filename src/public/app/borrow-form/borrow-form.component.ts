@@ -1,13 +1,16 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
+import { UsersService } from '../services/users-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Loan } from '../services/loan';
 
 @Component({
 	selector: 'borrow-form',
 	templateUrl: './borrow-form.component.html',
-	providers: [ AuthenticationService ]
+	providers: [ AuthenticationService,
+				 LoansService,
+				 UsersService ]
 })
 
 export class BorrowFormComponent implements OnInit { 
@@ -26,6 +29,7 @@ export class BorrowFormComponent implements OnInit {
 
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
+				private usersService: UsersService,
 				private router: Router,
 				private route: ActivatedRoute) {
 	
@@ -41,15 +45,14 @@ export class BorrowFormComponent implements OnInit {
 		// convert amount string to cents - !!
 		this.newLoan.amountCents = +this.amount;
 
-		// get user id for toUser
-		// this.newLoan.to = getIdForUser(this.toUser);
-		this.newLoan.from = this.fromUser;
-
 		this.newLoan.to = sessionStorage.user_id;
 
-		this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
+		// get user id for fromUser
+		this.usersService.searchUserByEmail(""+this.fromUser)
+		.subscribe(x => {console.log(x); this.newLoan.from = x[0].id; 
+			this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 			this.newLoan.amountCents, ""+this.newLoan.category)
-			.subscribe(x => this.cancel(), x => console.log(x));
+			.subscribe(x => this.cancel(), x => console.log(x));});
 		// ugly casting is ugly
 	}
 

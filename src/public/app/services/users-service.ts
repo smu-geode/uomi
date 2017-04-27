@@ -77,6 +77,24 @@ export class UsersService implements OnInit {
 			.catch(this.handleError);
 	}
 
+	searchUserByName(userName: string): Observable<object> {
+
+		let options = this.authService.getRequestOptions();
+
+		return this.http.get(`api/users/?name=${userName}`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	searchUserByEmail(userEmail: string): Observable<object> {
+
+		let options = this.authService.getRequestOptions();
+
+		return this.http.get(`api/users/?email=${userEmail}`, options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	extractData(response: Response) {
 		// let body = response.json();
 		// console.log("Response body: ");
