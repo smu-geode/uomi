@@ -169,20 +169,62 @@ $button-disabled-color: #999;
 	@include links-same-color(inherit);
 	width: 200px;
 	position: absolute;
-	background: white;
 	display: none;
-	border: 1px solid rgba(black, .1);
-	box-shadow: 0px 2px 10px rgba(black, .1);
 	z-index: 5;
 	border-radius: $form-border-radius;
 }
 
-.dropdown-content-left {
-	right: 0;
-}
-
 .dropdown-open .dropdown-content {
 	display: block;
+}
+
+.dropdown-box {
+	width: 100%;
+	border: 1px solid rgba(black, .1);
+	box-shadow: 0px 2px 10px rgba(black, .1);
+	background: white;
+	position: relative;
+}
+
+$dropdown-arrow-size: 12px;
+
+.dropdown-arrow {
+	margin-top: $dropdown-arrow-size + 4px;
+}
+
+.dropdown-arrow:before, .dropdown-arrow:after {
+	width: 0;
+	height: 0;
+	display: block;
+	content: '';
+	border: $dropdown-arrow-size solid transparent;
+	position: absolute;
+	left: 8px;
+}
+
+.dropdown-arrow:before {
+	border-width: $dropdown-arrow-size + 2px;
+	border-bottom-color: #e0e0e0;
+	top: -2*$dropdown-arrow-size - 4px;
+}
+
+.dropdown-arrow:after {
+	border-bottom-color: white;
+	top: -2*$dropdown-arrow-size;
+}
+
+.dropdown-content-left {
+	right: 0;
+
+	& .dropdown-arrow:after {
+		left: initial;
+		right: 8px;
+	}
+
+	& .dropdown-arrow:before {
+		left: initial;
+		right: 6px;
+	}
 }
 
 .dropdown-item {
