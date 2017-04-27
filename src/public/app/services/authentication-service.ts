@@ -1,4 +1,4 @@
-import { Injectable , OnInit } from '@angular/core';
+import { Injectable , OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
@@ -6,13 +6,13 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class AuthenticationService implements OnInit { 
 
+	@Output() authenticationChange: EventEmitter<any> = new EventEmitter();
+
 	private baseUrl = 'http://uomi.dev';
 	private resource = 'api/sessions';
 
 	constructor(private http: Http,
-				private router: Router) {
-
-	}
+				private router: Router) {}
 
 	ngOnInit() {}
 
@@ -27,6 +27,7 @@ export class AuthenticationService implements OnInit {
 				sessionStorage.setItem('user_id', res.data.user_id);
 				sessionStorage.setItem('token', res.data.token);
 				this.router.navigate(['/dashboard']);
+				this.authenticationChange.emit(true);
 			}
 		);
 	}
