@@ -52,7 +52,7 @@ export class BorrowFormComponent implements OnInit {
 		.subscribe(x => {console.log(x); this.newLoan.from = x[0].id; 
 			this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 			this.newLoan.amountCents, ""+this.newLoan.category)
-			.subscribe(x => this.cancel(), x => console.log(x));});
+			.subscribe(x => this.cancel(), x => console.log(x));}, err => console.log(err));
 		// ugly casting is ugly
 	}
 
