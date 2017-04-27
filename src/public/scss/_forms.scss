@@ -4,6 +4,8 @@ $input-focus-color: rgb(96, 157, 255);
 $text-input-border-size: 2px;
 $text-input-padding: 13px;
 
+$button-disabled-color: #999;
+
 .form {
 	padding: 1rem 1rem 0;
 	position: relative;
@@ -88,6 +90,9 @@ $text-input-padding: 13px;
 	border-radius: $form-border-radius;
 	background: transparent;
 	cursor: pointer;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
+	transition-property: border, background;
 }
 
 .button:active, .button:focus {
@@ -100,16 +105,32 @@ $text-input-padding: 13px;
 }
 
 @mixin button-style($color) {
-	border: 1px solid rgba($color, 0.5);
+	&:not(.button-flat) {
+		border: 1px solid rgba($color, 0.5);
+	}
 	color: $color;
-	transition: 0.3s border ease;
-	&:hover, &:focus {
+	
+	&:hover:not(.button-flat), &:focus:not(.button-flat) {
 		border: 1px solid $color;
 	}
 }
 
 .button-big {
 	font-size: 1.3rem;
+}
+
+.button-flat {
+	&, &:hover, &:focus { border: none; }
+	background: transparent;
+	&:hover {
+		background: rgba(black, .05);
+	}
+	&:active {
+		background: rgba(black, .15);
+	}
+	&:disabled {
+		color: $button-disabled-color;
+	}
 }
 
 .button-default {

@@ -30,10 +30,10 @@
 					</div><!-- .column-sm -->
 				</section><!-- .big-numbers-section -->
 
-				<div class="placeholder-message">
+				<div class="placeholder-message" *ngIf="loans.length === 0">
 					You have no open loans.
 				</div>
-				<div class="table-container loan-table" *ngIf="loans">
+				<div class="table-container loan-table" *ngIf="loans.length !== 0">
 					<table class="table">
 						<tr *ngFor="let loan of loans">
 							<td class="fit-content hide-xs-down">
@@ -65,10 +65,10 @@
 				</div><!-- .table-container -->
 				<div class="row row-padded">
 					<div class="column-xs column-padded form-block">
-						<button class="button button-success button-big" (click)="openModal('lend-modal')">Lend</button>
+						<button class="button button-success button-big button-flat" (click)="openModal('lend-modal')">Lend</button>
 					</div>
 					<div class="column-xs column-padded form-block">
-						<button class="button button-danger button-big" (click)="openModal('borrow-modal')">Borrow</button>
+						<button class="button button-danger button-big button-flat" (click)="openModal('borrow-modal')">Borrow</button>
 					</div>
 				</div>
 			</section><!-- .dashboard -->

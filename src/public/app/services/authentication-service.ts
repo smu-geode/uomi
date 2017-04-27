@@ -16,11 +16,10 @@ export class AuthenticationService implements OnInit {
 
 	ngOnInit() {}
 
-	logIn(user: any) {
-		console.log(JSON.stringify(user));
+	logIn(logInForm: any) {
 		let options = this.getRequestOptions();
 
-		this.http.post(`api/sessions/`, JSON.stringify(user), options)
+		this.http.post(`api/sessions/`, JSON.stringify(logInForm), options)
 			.map(this.extractData)
 			.catch(this.handleError)
 			.subscribe(res => {
