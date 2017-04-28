@@ -43,7 +43,7 @@ export class LoansService {
 		let options = this.authService.getRequestOptions();
 
 		return this.http.get(`api/loans/${loanId}/`, options)
-			.map(this.extractLoanData)
+			.map(this.extractSingleLoanData)
 			.catch(this.handleError);
 	}
 
@@ -77,10 +77,15 @@ export class LoansService {
 			.catch(this.handleError);
 	}
 
-	addPaymentToLoan(loanId: number): Observable<object> {
+	addPaymentToLoan(loanId: number, amount: number, details: string): Observable<object> {
+		let payment = {
+			'amount_cents': amount,
+			'details': details
+		}
+
 		let options = this.authService.getRequestOptions();
 
-		return this.http.post(`api/loans/${loanId}/payments/`, options)
+		return this.http.post(`api/loans/${loanId}/payments/`, JSON.stringify(payment), options)
 			.map(this.extractPaymentData)
 			.catch(this.handleError);
 	}
@@ -112,6 +117,12 @@ export class LoansService {
 			result['to_me'].push(loan.deserialize(loanObject));
 		}
 		return result || { };
+	}
+
+	extractSingleLoanData(res: Response) {
+		// let loan = new Loan();
+		return res.json().data || { };
+
 	}
 
 	extractPaymentData(res: Response) {

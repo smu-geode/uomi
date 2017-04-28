@@ -1,1 +1,47 @@
-{{ loanId }}
+<div class="form" *ngIf="currentLoan">
+
+	<div class="form-item form-block" magicFormItem>
+		To: {{ currentLoan.fromMe ? currentLoan.to.name : currentLoan.from.name }}
+	</div><!-- .form-item -->
+
+	<div class="form-item form-block" magicFormItem>
+		<label for="payment_amount">
+			Amount
+		</label>
+		<input  
+		 type="text"
+		 id="payment_amount"
+		 class="text-input"
+		 placeholder="$0.00"
+		 [(ngModel)]="amount"
+		>
+	</div><!-- .form-item -->
+
+	<div class="form-item form-block" magicFormItem>
+	<label for="memo">
+			Memo
+		</label>
+		<input  
+		 type="text"
+		 id="memo"
+		 class="text-input"
+		 placeholder="Memo"
+		 [(ngModel)]="memo"
+		>
+	</div>
+
+	<div class="row row-padded">
+		<div class="column-xs column-padded form-block">
+			<button class="button button-primary" (click)="completePayment()">Make Payment</button>
+		</div>
+		<div class="column-xs column-padded form-block">
+			<button class="button button-default" (click)="cancel()">Cancel</button>
+		</div>
+	</div>
+	<div *ngIf="isError">
+		<p>
+			{{ currentError }}
+		</p>
+	</div>
+
+</div>
