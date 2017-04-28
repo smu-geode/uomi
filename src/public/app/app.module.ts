@@ -10,7 +10,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ModalComponent } from './modal/modal.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
 import { LendFormComponent } from './lend-form/lend-form.component';
 import { BorrowFormComponent } from './borrow-form/borrow-form.component';
 import { UsersService } from './services/users-service';
@@ -49,7 +49,7 @@ var routes = [
 					LoginComponent,
 					DashboardComponent,
 					FrontPageComponent,
-					ModalComponent,
+					PaymentFormComponent,
 					LendFormComponent,
 					BorrowFormComponent ],
 	bootstrap:    [ AppComponent ],

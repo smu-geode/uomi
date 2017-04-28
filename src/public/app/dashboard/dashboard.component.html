@@ -79,7 +79,7 @@
 									</button>
 									<div class="dropdown-content dropdown-content-left" dropdownContent>
 										<ul class="dropdown-box">
-											<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+											<li class="dropdown-item" (click)="openPaymentModal(loan.id)"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
 										</ul><!-- .dropdown-box -->
 									</div><!-- .dropdown-content -->
 								</div><!-- .dropdown -->
@@ -107,4 +107,8 @@
 
 <modal id="borrow-modal" title="Borrow">
 	<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
+</modal>
+
+<modal id="payment-modal" title="Payment">
+	<payment-form [loanId]="loanIdForPayment" (closeModal)="closeModal('payment-modal')"></payment-form>
 </modal>
