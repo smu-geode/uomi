@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from './services/authentication-service';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'app',
@@ -9,11 +10,12 @@ import { AuthenticationService } from './services/authentication-service';
 export class AppComponent {
 
 	private isAuthenticated: boolean;
+	private isAuthenticatedSubscription: Subscription;
 
 	constructor(private authService: AuthenticationService) {
-		setTimeout(() => console.log('AppComponent heartbeat'), 3000);
 		// this.isAuthenticated = authService.isAuthenticated.getValue();
-		authService.isAuthenticated.subscribe(newValue => {
+		this.isAuthenticatedSubscription = authService
+		.isAuthenticated.subscribe(newValue => {
 			console.log('change:', newValue);
 			this.isAuthenticated = newValue;
 		});

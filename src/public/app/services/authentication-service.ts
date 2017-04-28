@@ -27,8 +27,9 @@ export class AuthenticationService {
 				// place data payload in sessionStorage
 				sessionStorage.setItem('user_id', res.data.user_id);
 				sessionStorage.setItem('token', res.data.token);
-				this.router.navigate(['/dashboard']);
+				debugger;
 				this.isAuthenticated.next(true);
+				this.router.navigate(['/dashboard']);
 			})
 		;
 	}
