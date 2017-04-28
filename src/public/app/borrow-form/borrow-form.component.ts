@@ -62,7 +62,6 @@ export class BorrowFormComponent implements OnInit {
 	}
 
 	cancel() {
-		// this.modalService.closeModal(this.enclosingModalId);
 		this.closeModal.emit();
 	}
 

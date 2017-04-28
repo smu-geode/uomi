@@ -50,6 +50,8 @@ export class PaymentFormComponent implements OnInit {
 				.subscribe(x => {
 					console.log("payment posted");
 					this.cancel();
+				}, err => {
+					console.error(err);
 				});
 		} else {
 			console.error("invalid amount");
@@ -58,7 +60,6 @@ export class PaymentFormComponent implements OnInit {
 	}
 
 	cancel() {
-		// this.modalService.closeModal(this.enclosingModalId);
 		this.closeModal.emit();
 	}
 
