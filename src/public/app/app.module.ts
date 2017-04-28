@@ -34,15 +34,7 @@ var routes = [
 	{
 		path: 'dashboard',
 		component: DashboardComponent
-	}//,
-	// {
-	// 	path: 'lend',
-	// 	component: LoanModalComponent
-	// },
-	// {
-	// 	path: 'borrow/:userId',
-	// 	component: LoanModalComponent
-	// }
+	}
 ];
 
 @NgModule({

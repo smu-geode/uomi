@@ -7,6 +7,15 @@
 			<path d="M146.64,38.21a14.75,14.75,0,0,1-.16,1.92c-.42,1.91-1,2.38-3,2.31a15,15,0,0,1-2.39-.19c-3.22-.64-4.81-3.33-4.11-7,1-5,2-10.09,3-15.13a8.1,8.1,0,0,0,.16-1.31,2.12,2.12,0,0,0-2.17-2.45c-.92-.1-1.8-.48-1.84-1.38a2.91,2.91,0,0,1,.9-2.12,4.91,4.91,0,0,1,2.52-.87,41.75,41.75,0,0,1,4.19,0c2.34,0,3.29,1.12,2.85,3.42-.65,3.4-1.35,6.8-2,10.2-.58,3-1.17,5.94-1.73,8.92-.4,2.12.49,3.29,2.62,3.54Z"/>
 			<path d="M146.79,0a2.32,2.32,0,0,1,2.43,2.4,3.84,3.84,0,0,1-3.68,3.45,2.27,2.27,0,0,1-2.43-2.49A3.61,3.61,0,0,1,146.79,0Z"/>
 		</svg><!-- .page-header-brand -->
+
+		<div class="dropdown" dropdown *ngIf="isAuthenticated">
+			<img src="/img/default-profile-picture.png" class="header-user-menu" aria-label="User menu" dropdownOpen>
+			<div class="dropdown-content dropdown-content-left" dropdownContent>
+				<ul class="dropdown-box dropdown-arrow">
+					<li class="dropdown-item" (click)="didClickLogOutButton()">Sign out</li>
+				</ul>
+			</div>
+		</div><!-- .dropdown -->
 	</div><!-- .page-header-contents -->
 </header>
 <router-outlet></router-outlet>

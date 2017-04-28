@@ -1,6 +1,9 @@
 <main class="page">
 	<div class="page-center">
-		<div class="card-md">
+		<div class="page-loader" *ngIf="!isLoaded">
+			<i class="fa fa-3x fa-spin fa-circle-o-notch" aria-label="Loading"></i>
+		</div>
+		<div class="card-md" *ngIf="isLoaded">
 			<section id="dashboard" class="card-content">
 
 				<section class="row big-numbers-section">
@@ -27,11 +30,14 @@
 					</div><!-- .column-sm -->
 				</section><!-- .big-numbers-section -->
 
-				<div class="table-container loan-table">
+				<div class="placeholder-message" *ngIf="loans.length === 0">
+					You have no open loans.
+				</div>
+				<div class="table-container loan-table" *ngIf="loans.length !== 0">
 					<table class="table">
 						<tr *ngFor="let loan of loans">
 							<td class="fit-content hide-xs-down">
-								<img src="img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
+								<img src="/img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
 							</td>
 							<td>
 								{{ loan.fromMe ? loan.to.name : loan.from.name }}
@@ -49,9 +55,11 @@
 									<button class="button loan-table-dropdown-button" dropdownOpen>
 										<i class="fa fa-chevron-down"></i>
 									</button>
-									<ul class="dropdown-content dropdown-content-left" dropdownContent>
-										<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
-									</ul>
+									<div class="dropdown-content dropdown-content-left" dropdownContent>
+										<ul class="dropdown-box">
+											<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+										</ul><!-- .dropdown-box -->
+									</div><!-- .dropdown-content -->
 								</div><!-- .dropdown -->
 							</td>
 						</tr><!-- [loan] -->
@@ -59,10 +67,10 @@
 				</div><!-- .table-container -->
 				<div class="row row-padded">
 					<div class="column-xs column-padded form-block">
-						<button class="button button-success button-big" (click)="openModal('lend-modal')">Lend</button>
+						<button class="button button-success button-big button-flat" (click)="openModal('lend-modal')">Lend</button>
 					</div>
 					<div class="column-xs column-padded form-block">
-						<button class="button button-danger button-big" (click)="openModal('borrow-modal')">Borrow</button>
+						<button class="button button-danger button-big button-flat" (click)="openModal('borrow-modal')">Borrow</button>
 					</div>
 				</div>
 			</section><!-- .dashboard -->

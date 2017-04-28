@@ -13,6 +13,7 @@ rewrite /api {
 
 rewrite / {
 	regexp .*
+	ext /
 	to {path} {path}/ /index.html
 }
 

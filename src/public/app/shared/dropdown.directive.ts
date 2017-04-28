@@ -1,4 +1,4 @@
-import { Directive, ElementRef, AfterContentInit, QueryList, ContentChild, HostListener } from '@angular/core';
+import { Directive, ElementRef, Input, AfterContentInit, QueryList, ContentChild, HostListener } from '@angular/core';
 // import * as Tether from 'tether';
 
 @Directive({ selector: '[dropdownOpen]' })
@@ -17,7 +17,10 @@ export class DropdownOpenDirective {
 	}
 }
 
-@Directive({ selector: '[dropdownContent]' })
+@Directive({ 
+	selector: '[dropdownContent]',
+	host: {'(document:click)': 'didClickPage($event)'}
+})
 export class DropdownContentDirective {
 
 	private delegate: DropdownDirective;
@@ -26,6 +29,35 @@ export class DropdownContentDirective {
 	setDelegate(delegate: DropdownDirective) {
 		this.delegate = delegate;
 	}
+
+	didClickPage(event: any) {
+
+		let target = event.target;
+		let contentElement = this.element.nativeElement;
+		let delegateElement = this.delegate.element.nativeElement;
+
+		if(this.delegate == null) {
+			return;
+		}
+
+		if(this.delegate.isOpen === false) {
+			return;
+		}
+
+		// close on content click if closeOnClick is true
+		let clickedContent = contentElement.contains(target);
+		if(clickedContent && this.delegate.closeOnClick) {
+			this.delegate.close();
+		}
+
+		// otherwise check if click was outside
+		let clickOutside = !clickedContent 
+			&& !delegateElement.contains(target);
+
+		if(clickOutside) {
+			this.delegate.close(); 
+		}
+	}
 }
 
 @Directive({ selector: '[dropdown]' })
@@ -33,7 +65,10 @@ export class DropdownDirective implements AfterContentInit {
 	@ContentChild(DropdownOpenDirective) opener: DropdownOpenDirective;
 	@ContentChild(DropdownContentDirective) content: DropdownContentDirective;
 
-	private isOpen: boolean = false;
+	public isOpen: boolean = false;
+
+	@Input()
+	public closeOnClick: boolean = true;
 
 	constructor(public element: ElementRef) {}
 
@@ -51,11 +86,13 @@ export class DropdownDirective implements AfterContentInit {
 	}
 
 	open() { 
+		if(this.isOpen === true) { return; }
 		this.isOpen = true;
 		this.element.nativeElement.classList.add('dropdown-open');
 	}
 
 	close() {
+		if(this.isOpen === false) { return; }
 		this.isOpen = false;
 		this.element.nativeElement.classList.remove('dropdown-open');
 	}

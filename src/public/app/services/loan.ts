@@ -4,6 +4,7 @@ export class Loan implements Serializable<Loan> {
 
 	id: number;
 	amountCents: number;
+	balance: number;
 	fromMe: boolean;
 	from: object;
 	to: object;
@@ -22,6 +23,7 @@ export class Loan implements Serializable<Loan> {
 
 		loan.id = input['id'];
 		loan.amountCents = input['amount_cents'];
+		loan.balance = input['balance'];
 
 		loan.from = input['from'];
 		loan.to = input['to'];

@@ -4,6 +4,7 @@ $caption-color: rgba(0,0,0,0.7);
 .big-numbers-section {
 	background: $uomi-green;
 	color: #fff;
+	margin-top: -1px;
 
 	@include breakpoint-up(md) {
 		border-top-left-radius: 3px;
