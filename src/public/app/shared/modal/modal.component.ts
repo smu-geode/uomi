@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, OnDestroy, ElementRef } from '@angular/core';
-import { ModalService } from '../services/modal-service';
+import { ModalService } from '../../services/modal-service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import {
   trigger,
