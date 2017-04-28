@@ -16,6 +16,8 @@ const buildBase     = 'build/';
 const publicBase    = buildBase + 'public/';
 const vendorBase    = 'vendor/';
 
+const colors        = require('colors');
+
 const paths = {
 	html:           './src/public/app/**/*.html',
 	img:            './src/public/img/*.*',
