@@ -9,6 +9,7 @@ use \Slim\Container;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
+use \Uomi\Authentication;
 
 use \Uomi\Model\Loan;
 use \Uomi\Model\User;
@@ -35,9 +36,19 @@ class LoanController {
 	}
 
 	public function getLoanHandler(Request $req, Response $res): Response {
-
+		
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+			$auth = new Authentication();
+			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 			$stat = new Status($loan);
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
@@ -49,7 +60,10 @@ class LoanController {
 	}
 
 	public function getUserLoanCollection(Request $req, Response $res): Response {
-
+		$auth = new Authentication();
+		if(!$auth->isRequestAuthorized($req, $req->getAttribute('user_id'))) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
 		try {
 			$user = User::findOrFail( $req->getAttribute('user_id') );
 		} catch(ModelNotFoundException $e) { // user not found
@@ -81,6 +95,14 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 			$loan->details = $details;
 			$loan->category_id = $catModel->id;
 			$loan->save();
@@ -103,6 +125,16 @@ class LoanController {
 		$from_user = $form['from_user'] ?? null;
 		$amount_cents = $form['amount_cents'] ?? null;
 		$category_id = $form['category_id'] ?? null;
+
+
+		$auth = new Authentication();
+		$isTo = $auth->isRequestAuthorized($req, $to_user);
+		$auth = new Authentication();
+		$isFrom = $auth->isRequestAuthorized($req, $from_user);
+
+		if(!($isTo || $isFrom)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
 
 
 		if($to_user === null) {
@@ -151,6 +183,16 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
+
 			$loan->delete();
 			$stat = new Status();
 			$stat = $stat->message("Loan deleted");
