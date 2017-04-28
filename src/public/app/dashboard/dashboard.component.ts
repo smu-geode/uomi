@@ -71,4 +71,8 @@ export class DashboardComponent implements OnInit {
 		this.modalService.closeModal(id);
 	}
 
+	didClickLogOutButton() {
+		this.authService.logOut();
+	}
+
 }
