@@ -58,6 +58,12 @@ class PaymentController {
 			return $res->withStatus(404)->withJson($stat);
 		}
 
+		if($amount > $loan->balance){
+			$stat = new Status($req);
+			$stat = $stat->error("Overdraw")->message("Withdrawal amount exceeds balance on loan");
+			return $res->withStatus(406)->withJson($stat);
+		}
+
 		$payment = new \Uomi\Model\Payment();
 		$payment->loan_id = $loan->id;
 		$payment->amount_cents = $amount;

@@ -20,7 +20,7 @@
 	.column-#{$name} {
 		width: 100%;
 		display: block;
-		flex: 0 2 0; // a flex basis of zero distributes space evenly
+		flex: 1 0 100%; // a flex basis of zero distributes space evenly
 
 		@include breakpoint-up($name) {
 			flex: 1 1 8%; // ~1/12, a reasonable max # of columns
@@ -28,4 +28,8 @@
 	}
 }
 
+.column-padded {
+	margin: 0 0 1rem;
+	padding: 0 1rem;
+}
 

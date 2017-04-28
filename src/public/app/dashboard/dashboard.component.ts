@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
+import { ModalService } from '../services/modal-service';
 import { Loan } from '../services/loan';
 
 @Component({
 	selector: 'dashboard',
 	templateUrl: './dashboard.component.html',
-	providers: [ UsersService,
-				 AuthenticationService,
-				 LoansService ],
-	// changeDetection: ChangeDetectionStrategy.OnPush
+	providers: [ 
+		UsersService,
+		AuthenticationService,
+		LoansService,
+		ModalService
+	]
 })
-
 export class DashboardComponent implements OnInit { 
+
+	isLoaded: boolean = false;
 
 	loans: Loan[] = [];
 	loansFromMe: Loan[] = [];
@@ -25,7 +29,8 @@ export class DashboardComponent implements OnInit {
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
-				private loansService: LoansService) {}
+				private loansService: LoansService,
+				private modalService: ModalService) {}
 
 	ngOnInit() {
 		this.authService.rerouteIfNotAuthenticated('/registration');
@@ -48,13 +53,22 @@ export class DashboardComponent implements OnInit {
 
 		this.lentTotal = this.loansTotal(this.loansFromMe);
 		this.borrowedTotal = this.loansTotal(this.loansToMe);
-		console.log(this.loans);
+
+		this.isLoaded = true;
 	}
 
 	loansTotal(loans: Loan[]): number {
-		console.warn('DashboardComponent.loansTotal only sums initial loan amountCents. (TODO)');
-		let sum = loans.map(l => l.amountCents).reduce((S, s) => S+s, 0);
+		let sum = loans.map(l => l.balance).reduce((S, s) => S+s, 0);
 		return sum;
+	}
+
+	openModal(id: string) {
+		console.log("open modal: " + id);
+		this.modalService.openModal(id);
+	}
+
+	closeModal(id: string) {
+		this.modalService.closeModal(id);
 	}
 
 }

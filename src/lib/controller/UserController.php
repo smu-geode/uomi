@@ -17,23 +17,35 @@ use \Uomi\HashedPassword;
 
 // ROUTES
 $this->group('/users', function() {
-    $this->group('/{user_id}', function() {
-        $this->get('/', '\Uomi\Controller\UserController:getUserHandler');
+	 $this->get('/', '\Uomi\Controller\UserController:getUserCollectionHandler');
+	
+	$this->group('/{user_id}', function() {
+		$this->get('/', '\Uomi\Controller\UserController:getUserHandler');
 		$this->put('/', '\Uomi\Controller\UserController:putUserHandler');
 
 		$this->get('/settings/', '\Uomi\Controller\UserController:getUserSettingsHandler');
 		$this->put('/settings/', '\Uomi\Controller\UserController:putUserSettingsHandler');
-    });
-    $this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
+	});
+	$this->post('/', '\Uomi\Controller\UserController:postUserCollectionHandler');
 });
 
 class UserController {
 
-    private $container;
+	private $container;
 
-    function __construct(Container $c) {
-        $this->container = $c;
-    }
+	function __construct(Container $c) {
+		$this->container = $c;
+	}
+
+	public function getUserCollectionHandler(Request $req, Response $res): Response {
+		$users = User::orderBy('name');
+		foreach(['email', 'name'] as $field) {
+			if(null !== $req->getQueryParam($field)) {
+				$users = $users->like($field, $req->getQueryParam($field));
+			}
+		}
+		return $res->withJson( new Status($users->get()) );
+	}
 
     public function getUserHandler(Request $req, Response $res): Response {
 		$auth = new Authentication();
@@ -51,9 +63,9 @@ class UserController {
         }
     }
 
-    public function postUserCollectionHandler(Request $req, Response $res): Response {
+	public function postUserCollectionHandler(Request $req, Response $res): Response {
 		//again no authorization errors
-        $data = $req->getParsedBody();
+		$data = $req->getParsedBody();
 
 		// Create the user
 		$factory = new UserFactory($this->container);
@@ -76,7 +88,7 @@ class UserController {
 		$stat = new Status($user);
 		$stat = $stat->message('User successfully created.');
 		return $res->withStatus(201)->withJson($stat); // Created
-    }
+	}
 
 	public function getUserSettingsHandler(Request $req, Response $res): Response {
 		$auth = new Authentication();
@@ -88,8 +100,11 @@ class UserController {
 
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
+			//$settings = Settings::findOrFail($req->getAttribute('user_id'));
 			$stat = new Status($settings);
 			$stat = $stat->message('Got settings.');
+			if($settings == [])
+				throw new ModelNotFoundException;
 			return $res->withStatus(200)->withJson($stat); // Get
 		} catch(ModelNotFoundException $e) { //user/settings not found
 			return self::invalidUserResponse($res);
@@ -109,15 +124,15 @@ class UserController {
 		try {
 			$settings = Settings::where("user_id", $req->getAttribute('user_id'))->first();
 
-			$allNotifications = $data['allNotifications'] ?? $settings->allow_notif;
-			$borrowingRequests = $data['borrowingRequests'] ?? $settings->borrow_requests;
-			$payBackReminders = $data['payBackReminders'] ?? $settings->payback_reminders;
-			$viewEmail = $data['viewEmail'] ?? $settings->view_email;
+			$allNotifications = $data['allow_notifications'] ?? $settings->allow_notifications;
+			$borrowingRequests = $data['borrow_requests'] ?? $settings->borrow_requests;
+			$payBackReminders = $data['payback_reminders'] ?? $settings->payback_reminders;
+			$viewEmail = $data['view_email'] ?? $settings->view_email;
 
-			$settings->allNotifications = $allNotifications;
-			$settings->borrowingRequests = $borrowingRequests;
-			$settings->payBackReminders = $payBackReminders;
-			$settings->viewEmail = $viewEmail;
+			$settings->allow_notifications = $allNotifications;
+			$settings->borrow_requests = $borrowingRequests;
+			$settings->payback_reminders = $payBackReminders;
+			$settings->view_email = $viewEmail;
 			$settings->save();
 
 			$stat = new Status($settings);
@@ -160,16 +175,16 @@ class UserController {
 		}
 	}
 
-    public static function invalidUserResponse(Response $res): Response {
-        $stat = new Status();
-        $stat = $stat->error("InvalidUser")->message("Please make sure user is valid");
-        return $res->withStatus(404)->withJson($stat);
-    }
+	public static function invalidUserResponse(Response $res): Response {
+		$stat = new Status();
+		$stat = $stat->error("InvalidUser")->message("Please make sure user is valid");
+		return $res->withStatus(404)->withJson($stat);
+	}
 
-    protected static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
-        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
-        $stat = $stat->error('BadUserRegistration')->message('There was an error in registering the user.');
+	protected static function badUserRegistrationResponse(Response $res, array $errorStrings): Response {
+		$stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
+		$stat = $stat->error('BadUserRegistration')->message('There was an error in registering the user.');
 
-        return $res->withStatus(400)->withJson($stat); // Bad Request
-    }
+		return $res->withStatus(400)->withJson($stat); // Bad Request
+	}
 }

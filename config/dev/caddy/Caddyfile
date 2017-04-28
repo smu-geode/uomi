@@ -8,11 +8,12 @@ errors /var/log/caddy/error.log
 
 rewrite /api {
 	regexp .*
-	to ../api.php?url={uri}
+	to ../api.php?{query}
 }
 
 rewrite / {
 	regexp .*
+	ext /
 	to {path} {path}/ /index.html
 }
 

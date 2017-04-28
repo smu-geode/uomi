@@ -17,6 +17,7 @@ use \Uomi\Model\User;
 // ROUTES
 $this->group('/loans', function() {
 	$this->post('/', '\Uomi\Controller\LoanController:postLoanCollectionHandler');
+	$this->get('/categories/', '\Uomi\Controller\LoanController:getLoanCategoryCollectionHandler');
 	$this->get('/{loan_id}/', '\Uomi\Controller\LoanController:getLoanHandler');
 	$this->put('/{loan_id}/', '\Uomi\Controller\LoanController:putLoanHandler');
 	$this->delete('/{loan_id}/', '\Uomi\Controller\LoanController:deleteLoanHandler');
@@ -53,7 +54,7 @@ class LoanController {
 			return $res->withStatus(200)->withJson($stat);
 		} catch (ModelNotFoundException $e) {
 			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
+			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $req->getAttribute('loan_id') . " is not found");
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}
@@ -71,6 +72,10 @@ class LoanController {
 
 		$stat = new Status(['from_me' => $user->loansFrom()->get(), 'to_me' => $user->loansTo()->get()]);
 		return $res->withJson($stat);
+	}
+
+	public function getLoanCategoryCollectionHandler(Request $req, Response $res): Response {
+		return $res->withJson( new Status(\Uomi\Model\Category::all() ));
 	}
 
 	public function putLoanHandler(Request $req, Response $res): Response {
