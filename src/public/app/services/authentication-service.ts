@@ -20,14 +20,13 @@ export class AuthenticationService {
 	logIn(logInForm: any) {
 		let options = this.getRequestOptions();
 
-		this.http.post(`api/sessions/`, JSON.stringify(logInForm), options)
-			.map(this.extractData)
+		this.http.post(`api/sessions/`, logInForm, options)
+			.map(res => { console.log(res); return this.extractData(res); })
 			.catch(this.handleError)
 			.subscribe(res => {
 				// place data payload in sessionStorage
 				sessionStorage.setItem('user_id', res.data.user_id);
 				sessionStorage.setItem('token', res.data.token);
-				debugger;
 				this.isAuthenticated.next(true);
 				this.router.navigate(['/dashboard']);
 			})

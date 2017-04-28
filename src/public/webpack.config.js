@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
 const path = require('path');
 
+// https://github.com/webpack/webpack/issues/3460
+const { CheckerPlugin } = require('awesome-typescript-loader');
+
 // we're in PROJECT/src/public, we want to be in PROJECT.
 const PROJECT_ROOT = path.join(__dirname, '../..');
 
@@ -12,7 +15,8 @@ function root(p) {
 
 module.exports = {
 
-	// devtool: 'source-map',
+	devtool: 'cheap-module-source-map',
+	target: 'web',
 
 	entry: {
 		'polyfills': root('./src/public/app/polyfills.ts'),
@@ -30,8 +34,8 @@ module.exports = {
 
 	output: {
 		path: root('./build/public'),
-		filename: '[name].[hash].js',
-		chunkFilename: '[id].[hash].chunk.js'
+		filename: 'js/[name].[hash].js',
+		chunkFilename: 'js/[id].[hash].chunk.js'
 	},
 
 	module: {
@@ -44,7 +48,8 @@ module.exports = {
 					{
 						loader: 'awesome-typescript-loader',
 						options: {
-							configFileName: root('./src/public/tsconfig.json')
+							configFileName: root('./src/public/tsconfig.json'),
+							silent: true
 						}
 					}
 				]
@@ -60,7 +65,12 @@ module.exports = {
 		]
 	},
 
+	stats: 'errors-only',
+
 	plugins: [
+
+		new CheckerPlugin(),
+
 		new webpack.NoEmitOnErrorsPlugin(),
 
 		new CleanObsoleteChunks(),
@@ -79,9 +89,8 @@ module.exports = {
 		}),
 
 		new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-			mangle: {
-				keep_fnames: true
-			}
+			mangle: false,
+			sourceMap: true
 		}),
 
 		new HtmlWebpackPlugin({
