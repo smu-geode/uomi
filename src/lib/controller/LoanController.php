@@ -11,6 +11,8 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Uomi\Status;
 use \Uomi\Authentication;
 
+use \Uomi\Factory\LoanFactory;
+
 use \Uomi\Model\Loan;
 use \Uomi\Model\User;
 
@@ -118,7 +120,34 @@ class LoanController {
 		}
 	}
 
-	public function postLoanCollectionHandler(Request $req, Response $res): Response {
+	public function postLoanCollectinoHandler(Request $req, Response $res): Response {
+		$data = $req->getParsedBody();
+
+		$auth = new Authentication();
+		$isTo = $auth->isRequestAuthorized($req, $to_user);
+		$auth = new Authentication();
+		$isFrom = $auth->isRequestAuthorized($req, $from_user);
+
+		if(!($isTo || $isFrom)) {
+			return $auth->unathroizedResponse($res, $auth->getErrors());
+		}
+
+		$factory = new LoanFactory($this->container);
+
+		try {
+			$loan = $factory->submitLoanCreationForm($data);
+		} catch(RuntimeException $e) {
+			$stat = new Status(['error' => $factory->getErrors()]);
+			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a lona");
+			return $res->withStatus(400)->withJson($stat);
+		}
+
+		$stat = new Status($loan);
+		$stat = $stat->message('Loan successfully created.');
+		return $res->withStatus(201)->withJson($stat); // Created
+	}
+
+	/*public function postLoanCollectionHandler(Request $req, Response $res): Response {
 		$form = $req->getParsedBody();
 
 		$to_user = $form['to_user'] ?? null;
@@ -177,7 +206,7 @@ class LoanController {
 		$stat = new \Uomi\Status($loan);
 		$stat = $stat->message('Loan successfully created.');
 		return $res->withStatus(201)->withJson($stat);
-	}
+	}*/
 
 	public function deleteLoanHandler(Request $req, Response $res): Response {
 
