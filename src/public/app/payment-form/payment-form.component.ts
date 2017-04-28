@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { UsersService } from '../services/users-service';
@@ -6,18 +6,20 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Loan } from '../services/loan';
 
 @Component({
-	selector: 'borrow-form',
-	templateUrl: './borrow-form.component.html',
+	selector: 'payment-form',
+	templateUrl: './payment-form.component.html',
 	providers: [ AuthenticationService,
 				 LoansService,
 				 UsersService ]
 })
 
-export class BorrowFormComponent implements OnInit { 
+export class PaymentFormComponent implements OnInit { 
 
-	private newLoan: Loan = new Loan();
+	@Input() loanId: number;
+	private currentLoan: Loan;
 	private amount: string;
-	private fromUser: object;
+	private toUser: object;
+	private memo: string;
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[];
 
@@ -30,35 +32,31 @@ export class BorrowFormComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.loansService.getCategories().subscribe(x => this.categories = x);
+
 	}
 
-	completeBorrow() {
-		// convert amount string to cents
-		if (this.isValidCurrenyString(this.amount)) {
-			this.newLoan.amountCents = this.convertToCents(this.amount);
-			console.log(this.newLoan.amountCents);
-
-			this.newLoan.to = sessionStorage.user_id;
-
-			// get user id for toUser
-			let emailMatch: boolean = false;
-			this.usersService.searchUserByEmail(""+this.fromUser)
-			.subscribe(x => {
-				console.log(x);
-				if (x[0].email == this.fromUser) {
-					this.newLoan.from = x[0].id;
-					this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
-						this.newLoan.amountCents, +this.newLoan.category)
-						.subscribe(x => this.cancel(), x => console.log(x));
-				} else {
-					console.error("email does not match a user's email");
-				}
-			}, err => console.error(err));
-
-		} else {
-			console.error("invalid currency string");
+	ngOnChanges() {
+		if (this.loanId) {
+			this.loansService.getLoanById(this.loanId).subscribe(x => {this.currentLoan = x as Loan; console.log(x);});
+			this.amount = '';
+			this.memo = '';
 		}
+	}
+
+	completePayment() {
+		if(this.isValidCurrenyString(this.amount)) {
+			let amountCents = this.convertToCents(this.amount);
+			this.loansService.addPaymentToLoan(this.loanId, amountCents, this.memo)
+				.subscribe(x => {
+					console.log("payment posted");
+					this.cancel();
+				}, err => {
+					console.error(err);
+				});
+		} else {
+			console.error("invalid amount");
+		}
+
 	}
 
 	cancel() {

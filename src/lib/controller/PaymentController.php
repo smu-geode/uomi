@@ -7,7 +7,7 @@ use \Slim\Http\Response;
 use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use \Uomi\Authentication;
 use \Uomi\Status;
 
 // ROUTES

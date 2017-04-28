@@ -27,6 +27,8 @@ export class DashboardComponent implements OnInit {
 	lentTotal: number;
 	borrowedTotal: number;
 
+	loanIdForPayment: number;
+
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
 				private loansService: LoansService,
@@ -65,6 +67,11 @@ export class DashboardComponent implements OnInit {
 	openModal(id: string) {
 		console.log("open modal: " + id);
 		this.modalService.openModal(id);
+	}
+
+	openPaymentModal(loanId: number) {
+		this.loanIdForPayment = loanId;
+		this.modalService.openModal('payment-modal');
 	}
 
 	closeModal(id: string) {

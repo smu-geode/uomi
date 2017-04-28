@@ -65,7 +65,6 @@ export class LendFormComponent implements OnInit {
 	}
 
 	cancel() {
-		// this.modalService.closeModal(this.enclosingModalId);
 		this.closeModal.emit();
 	}
 
