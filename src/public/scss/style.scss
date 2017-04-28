@@ -5,9 +5,6 @@
 @import 'features';     // classes that implement common layout behavior,
 						// meant to be "@extend"-ed rather than used directly
 
-@import 'breakpoints';  // classes that hide or show in certain breakpoint
-						// ranges.
-
 @import 'reset';        // Direct CSS rules begin here. Resets stylesheet to
 						// sane, cross-platform defaults.
 
@@ -22,3 +19,9 @@
 @import 'forms';        // opt-in rules for form elements.
 
 @import 'dashboard';
+
+@import 'modal';
+
+// must come last
+@import 'breakpoints';  // classes that hide or show in certain breakpoint
+						// ranges.

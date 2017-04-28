@@ -36,10 +36,11 @@ class SessionController {
 		$factory = new SessionFactory($this->container);
 		try {
 			$session = $factory->submitLogInForm($data);
-			AnalyticsController::track($req, $session->user_id);
 		} catch(\RuntimeException $e) {
 			return self::badLogInResponse($res, $factory->getErrors());
 		}
+
+		\Uomi\Factory\AnalyticFactory::track($req, $session->user_id);
 		
 		$stat = new Status($session);
 		$stat = $stat->message('Session successfully created.');
@@ -47,25 +48,25 @@ class SessionController {
 	}
 
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
-		$form = $req->getParsedBody();
+		$authorizationHeader = $req->getHeaders()['HTTP_AUTHORIZATION'][0];
+		$headerArray = explode(' ', $authorizationHeader);
 
-		$session_key = $form['session_key'] ?? null;
-
-		if($session_key === null) {
-			$stat = new Status($req);
-			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
-			return $res->withStatus(400)->withJson($stat);
+		if($headerArray[0] !== 'Bearer') {
+			$stat = new Status();
+			$stat = $stat->error('MissingBearerDeclaration');
+			return $stat;
 		}
 
+		$token = $headerArray[1];
+
 		try {
-			$sessModel = \Uomi\Model\Session::where('session_key', $session_key)->first();
+			$sessModel = \Uomi\Model\Session::where('token', $token)->firstOrFail();
 			$sessModel->delete();
 			$stat = new Status();
-			$stat = $stat->message("Session deleted. User is now logged out.");
-			return $res->withStatus(200)->withJson($stat);
-		}catch(ModelNotFound $e) {
+			return $res->withStatus(201)->withJson($stat);
+		} catch(ModelNotFoundException $e) {
 			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
+			$stat = $stat->error('SessionNotFound');
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}

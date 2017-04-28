@@ -1,0 +1,58 @@
+<div class="form">
+
+	<div class="form-item form-block" magicFormItem>
+		<label for="to_user">
+			To
+		</label>
+		<input  
+		 type="text"
+		 id="to_user"
+		 class="text-input"
+		 placeholder="friend@example.com"
+		 [(ngModel)]="toUser"
+		>
+	</div><!-- .form-item -->
+
+	<div class="form-item form-block" magicFormItem>
+		<label for="lend_amount">
+			Amount
+		</label>
+		<input  
+		 type="text"
+		 id="lend_amount"
+		 class="text-input"
+		 placeholder="$0.00"
+		 [(ngModel)]="amount"
+		>
+	</div><!-- .form-item -->
+
+	<div class="form-item form-block">
+		<label for="category">
+			Category
+		</label>
+		<select class="lend-category"
+				id="category"
+				[(ngModel)]="newLoan.category">
+			<option></option>
+			<option *ngFor="let category of categories"
+					[value]="category.id">
+				{{ category.name }}
+			</option>
+		</select>
+	</div>
+
+	<div class="row row-padded">
+		<div class="column-xs column-padded form-block">
+			<button class="button button-primary" (click)="completeLend()">Lend</button>
+		</div>
+		<div class="column-xs column-padded form-block">
+			<button class="button button-default" (click)="cancel()">Cancel</button>
+		</div>
+	</div>
+	<div *ngIf="isError">
+		<p>
+			{{ currentError }}
+		</p>
+	</div>
+
+</div>
