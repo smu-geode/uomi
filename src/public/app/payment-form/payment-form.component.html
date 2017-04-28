@@ -1,7 +1,7 @@
 <div class="form" *ngIf="currentLoan">
 
 	<div class="form-item form-block" magicFormItem>
-		To: {{ currentLoan.fromMe ? currentLoan.to.name : currentLoan.from.name }}
+		To: {{ currentLoan.fromMe ? (currentLoan.to.name || currentLoan.to.email) : (currentLoan.from.name || currentLoan.from.email) }}
 	</div><!-- .form-item -->
 
 	<div class="form-item form-block" magicFormItem>
