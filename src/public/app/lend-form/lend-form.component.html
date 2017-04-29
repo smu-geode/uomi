@@ -73,7 +73,11 @@
 
 		<div class="row row-padded">
 			<div class="column-xs column-padded form-block">
-				<button class="button button-primary" (click)="completeLend()">Lend</button>
+				<button class="button button-primary" 
+						type="submit"
+						[disabled]="lend_form.invalid">
+					Lend
+				</button>
 			</div>
 			<div class="column-xs column-padded form-block">
 				<button class="button button-default" (click)="cancel()">Cancel</button>
