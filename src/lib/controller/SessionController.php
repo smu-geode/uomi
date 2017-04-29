@@ -49,7 +49,7 @@ class SessionController {
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
 		
 		try {
-		$token = Authentication::getSessionToken();
+			$token = Authentication::getSessionToken($req);
 		} catch(\RuntimeException $e) {
 			return Authentication::unauthorizedResponse($res);
 		}
