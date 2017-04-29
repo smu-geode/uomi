@@ -13,6 +13,9 @@ import { AuthenticationService } from '../services/authentication-service';
 
 export class RegistrationComponent { 
 	user: any;
+	passwordVerify: string;
+	serverError: string;
+	isServerError: boolean = false;
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
@@ -20,8 +23,7 @@ export class RegistrationComponent {
 				private route: ActivatedRoute ) {
 		this.user = {
 			email: '',
-			password: '',
-			passwordVerify: ''
+			password: ''
 		};
 	}
 
@@ -29,7 +31,15 @@ export class RegistrationComponent {
 		// call to users service
 		delete this.user.passwordVerify;
 		this.usersService.signUp(this.user)
-			.subscribe(valid => this.authService.logIn(this.user),
-				error => this.router.navigate(['/registration']));
+			.subscribe(valid => {
+				this.isServerError = false;
+				this.authService.logIn(this.user)
+			}, error => {
+				console.log("create user error");
+				let errors = JSON.parse(error);
+				console.error(errors['data']['errors'][0]);
+				this.serverError = errors['data']['errors'][0];
+				this.isServerError = true;
+				this.router.navigate(['/registration'])});
 	}
 }

@@ -84,7 +84,7 @@
 									name="user_password_verify"
 									class="text-input"
 									placeholder="Confirm Password"
-									[(ngModel)]="user.passwordVerify"
+									[(ngModel)]="passwordVerify"
 									#user_password_verify="ngModel"
 									required
 									passwordmatch="user_password"
@@ -104,6 +104,10 @@
 								[messages]="{
 									passwordmatch: 'Passwords must match'}">
 							</validation-messages>
+
+							<div *ngIf="isServerError" class="color-danger form-item">
+								{{ serverError }}
+							</div>
 
 							<button 
 							[disabled]="registration_form.invalid"

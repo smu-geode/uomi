@@ -104,15 +104,16 @@ export class UsersService implements OnInit {
 
 	handleError(error: Response | any) {
 		let errorMessage: string;
+		let err: string;
 		if (error instanceof Response) {
 			let body = error.json() || '';
-			let err = body.error || JSON.stringify(body);
+			err = body.error || JSON.stringify(body);
 			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
 		} else {
 			errorMessage = error._body.message ? error._body.message : error.toString();
 		}
 		console.error(errorMessage);
-		return Observable.throw(errorMessage);
+		return Observable.throw(err);
 	}
 
 }
