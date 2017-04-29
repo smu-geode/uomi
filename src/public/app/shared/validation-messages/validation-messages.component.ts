@@ -2,16 +2,12 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'validation-messages',
-  template: `<div *ngIf="model.errors && model.touched"
-                class="alert alert-danger" role="alert">
-                <ul>
-                    <li *ngFor="let validator of validators"
-                        [hidden]="!model.errors[validator.key]">
-                        {{ validator.message }}
-                    </li>
-                </ul>
-            </div>
-`
+  template: `<ul *ngIf="model.errors && model.touched" class="color-danger form-item" role="alert">
+				<li *ngFor="let validator of validators"
+					[hidden]="!model.errors[validator.key]">
+					{{ validator.message }}
+				</li>
+            </ul>`
 })
 
 export class ValidationMessagesComponent { 

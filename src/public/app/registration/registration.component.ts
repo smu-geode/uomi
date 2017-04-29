@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
 
 @Component({
 	selector: 'registration',
