@@ -70,6 +70,9 @@
 					required: 'Please select a category'}">
 			</validation-messages>
 		</div>
+		<div *ngIf="isError" class="color-danger form-item">
+			{{ errorString }}
+		</div>
 
 		<div class="row row-padded">
 			<div class="column-xs column-padded form-block">

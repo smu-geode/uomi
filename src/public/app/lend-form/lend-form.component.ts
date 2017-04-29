@@ -22,6 +22,9 @@ export class LendFormComponent implements OnInit {
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[];
 
+	errorString: string;
+	isError: boolean = false;
+
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
 				private usersService: UsersService,
@@ -47,13 +50,16 @@ export class LendFormComponent implements OnInit {
 			this.usersService.searchUserByEmail(""+this.toUser)
 			.subscribe(x => {
 				console.log(x);
-				if (x[0].email == this.toUser) {
+				if (x[0] && x[0].email == this.toUser) {
+					this.isError = false;
 					this.newLoan.to = x[0].id;
 					this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 						this.newLoan.amountCents, +this.newLoan.category)
 						.subscribe(x => {formRef.reset(); this.cancel();}, x => console.log(x));
 				} else {
 					console.error("email does not match a user's email");
+					this.errorString = "Email does not match a user's email";
+					this.isError = true;
 				}
 			}, err => {
 				console.error(err);

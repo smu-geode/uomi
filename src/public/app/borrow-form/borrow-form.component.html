@@ -63,6 +63,9 @@
 					required: 'Please select a category'}">
 			</validation-messages>
 		</div>
+		<div *ngIf="isError" class="color-danger form-item">
+			{{ errorString }}
+		</div>
 		<br />
 		<button class="btn-lend"
 				type="submit"
