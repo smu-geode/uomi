@@ -11,4 +11,8 @@ class Session extends \Illuminate\Database\Eloquent\Model {
 
 	// Cast these fields to dates
 	protected $dates = ['created_at','updated_at'];
+
+	protected $casts = [
+		'user_id' => 'integer'
+	];	
 }

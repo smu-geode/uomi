@@ -10,6 +10,7 @@ use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
 use \Uomi\Analytics;
+use \Uomi\Authentication;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -27,7 +28,7 @@ class SessionController {
 		$this->container = $c;
 	}
 
-	public function postSessionCollectionHandler(Request $req, Response $res): Response{
+	public function postSessionCollectionHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
 
 		// Create the user
@@ -46,16 +47,12 @@ class SessionController {
 	}
 
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
-		$authorizationHeader = $req->getHeaders()['HTTP_AUTHORIZATION'][0];
-		$headerArray = explode(' ', $authorizationHeader);
-
-		if($headerArray[0] !== 'Bearer') {
-			$stat = new Status();
-			$stat = $stat->error('MissingBearerDeclaration');
-			return $stat;
+		
+		try {
+		$token = Authentication::getSessionToken();
+		} catch(\RuntimeException $e) {
+			return Authentication::unauthorizedResponse($res);
 		}
-
-		$token = $headerArray[1];
 
 		try {
 			$sessModel = \Uomi\Model\Session::where('token', $token)->firstOrFail();

@@ -75,19 +75,25 @@ export class LoansService {
 		return this.http.get(`api/loans/${loanId}/payments/`, options)
 			.map(this.extractPaymentData)
 			.catch(this.handleError);
-	}
+	} 
 
-	addPaymentToLoan(loanId: number, amount: number, details: string): Observable<object> {
+	addPaymentToLoan(loan: Loan, amount: number, details: string): Observable<object> {
+
 		let payment = {
+			'loan_id': loan.id,
 			'amount_cents': amount,
-			'details': details
-		}
+			'details': details,
+			'from_user': loan.to.id,
+			'to_user': loan.from.id
+		};
 
 		let options = this.authService.getRequestOptions();
 
-		return this.http.post(`api/loans/${loanId}/payments/`, JSON.stringify(payment), options)
-			.map(this.extractPaymentData)
-			.catch(this.handleError);
+		let sub = this.http.post(`api/loans/${loan.id}/payments/`, payment, options)
+				.map(this.extractPaymentData)
+				.catch(this.handleError);
+
+		return sub;
 	}
 
 	getPaymentForLoan(loanId: number, paymentId: number): Observable<object> {
@@ -134,16 +140,16 @@ export class LoansService {
 	}
 
 	handleError(error: Response | any) {
-		let errorMessage: string;
-		if (error instanceof Response) {
-			let body = error.json() || '';
-			let err = body.error || JSON.stringify(body);
-			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
+		if(error instanceof Response) {
+			try {
+				console.error('LoansService error:', JSON.parse(error['_body']));
+			} catch(e) {
+				console.error('LoansService error:', error['_body']);
+			}
 		} else {
-			errorMessage = error._body.message ? error._body.message : error.toString();
+			console.error('LoansService error', error);
 		}
-		console.error(errorMessage);
-		return Observable.throw(errorMessage);
+		return Observable.throw('LoansService error handler todo');
 	}
 
 }

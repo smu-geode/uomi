@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { UsersService } from '../services/users-service';
@@ -13,13 +13,13 @@ import { Loan } from '../services/loan';
 				 UsersService ]
 })
 
-export class PaymentFormComponent implements OnInit { 
+export class PaymentFormComponent { 
 
-	@Input() loanId: number;
-	private currentLoan: Loan;
+	@Input() loan: Loan;
+
 	private amount: string;
-	private toUser: object;
-	private memo: string;
+	private memo: string = '';
+
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[];
 
@@ -28,34 +28,19 @@ export class PaymentFormComponent implements OnInit {
 				private usersService: UsersService,
 				private router: Router,
 				private route: ActivatedRoute) {
-	
-	}
-
-	ngOnInit() {
-
-	}
-
-	ngOnChanges() {
-		if (this.loanId) {
-			this.loansService.getLoanById(this.loanId).subscribe(x => {this.currentLoan = x as Loan; console.log(x);});
-			this.amount = '';
-			this.memo = '';
-		}
 	}
 
 	completePayment() {
-		if(this.isValidCurrenyString(this.amount)) {
-			let amountCents = this.convertToCents(this.amount);
-			this.loansService.addPaymentToLoan(this.loanId, amountCents, this.memo)
-				.subscribe(x => {
-					console.log("payment posted");
-					this.cancel();
-				}, err => {
-					console.error(err);
-				});
-		} else {
-			console.error("invalid amount");
+		if(!this.isValidCurrenyString(this.amount)) {
+			console.error("Invalid amount for payment");
 		}
+
+		let amountCents = this.convertToCents(this.amount);
+		this.loansService.addPaymentToLoan(this.loan, amountCents, this.memo)
+			.subscribe(x => {
+				console.log("payment posted");
+				this.cancel();
+			});
 
 	}
 

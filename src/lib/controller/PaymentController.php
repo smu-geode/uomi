@@ -7,14 +7,15 @@ use \Slim\Http\Response;
 use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Uomi\Factory\PaymentFactory;
 use \Uomi\Authentication;
 use \Uomi\Status;
 
 // ROUTES
 $this->group('/loans/{loan_id}/payments', function() {
     $this->post('/', '\Uomi\Controller\PaymentController:postPaymentCollectionHandler');
-	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentHandler');
-	$this->get('/{payment_id}/', '\Uomi\Controller\PaymentController:getPaymentHandlerWithID');
+	$this->get('/', '\Uomi\Controller\PaymentController:getPaymentCollectionHandler');
+	$this->get('/{payment_id}/', '\Uomi\Controller\PaymentController:getPaymentHandler');
 	$this->delete('/{payment_id}/', '\Uomi\Controller\PaymentController:deletePaymentHandler');
 });
 
@@ -27,81 +28,46 @@ class PaymentController {
     }
 
 	public function postPaymentCollectionHandler(Request $req, Response $res): Response {
-		$form = $req->getParsedBody();
-		$loan;
+		$data = $req->getParsedBody();
 
-		$amount = $form['amount_cents'];
-		$details = $form['details'];
-
-		if($amount === null) {
-			$stat = new Status($form);
-            $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include an amount for the payment.");
-            return $res->withStatus(400)->withJson($stat);
-		}
-
+		// Create the user
+		$factory = new PaymentFactory($this->container);
 		try {
-			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-
-
-			$auth = new Authentication();
-			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
-			$auth = new Authentication();
-			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
-
-			if(!($isTo || $isFrom)) {
-				return $auth->unathroizedResponse($res, $auth->getErrors());
-			}
-
-		} catch (ModelNotFound $e) {
-			$stat = new Status($req);
-			$stat = $stat->error("LoanNotFound")->message("Loan not found for " . $req->getAttribute('loan_id') . ".");
-			return $res->withStatus(404)->withJson($stat);
+			$payment = $factory->submitPaymentForm($data);
+		} catch(\RuntimeException $e) {
+			return self::badPaymentResponse($res, array_merge($factory->getErrors(),[$e]));
 		}
 
-		if($amount > $loan->balance){
-			$stat = new Status($req);
-			$stat = $stat->error("Overdraw")->message("Withdrawal amount exceeds balance on loan");
-			return $res->withStatus(406)->withJson($stat);
-		}
-
-		$payment = new \Uomi\Model\Payment();
-		$payment->loan_id = $loan->id;
-		$payment->amount_cents = $amount;
-		$payment->details = $details;
-		$payment->save();
-
+		\Uomi\Factory\AnalyticFactory::track($req);
+		
 		$stat = new Status($payment);
-		$stat = $stat->message("New payment created for loan " . $req->getAttribute('loan_id') . ".");
-		return $res->withStatus(201)->withJson($stat);
+		$stat = $stat->message('Payment successfully created.');
+		return $res->withStatus(201)->withJson($stat); // Created
 	}
 
-	public function getPaymentHandler(Request $req, Response $res): Response {
+	public function getPaymentCollectionHandler(Request $req, Response $res): Response {
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
 
+			$isToMe = Authentication::isRequestAuthorized($req, $loan->to_user);
+			$isFromMe = Authentication::isRequestAuthorized($req, $loan->from_user);
 
-			$auth = new Authentication();
-			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
-			$auth = new Authentication();
-			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
-
-			if(!($isTo || $isFrom)) {
-				return $auth->unathroizedResponse($res, $auth->getErrors());
+			if(!($isToMe || $isFromMe)) {
+				return Authentication::unauthorizedResponse($res);
 			}
 
-
-			$payments = $loan->payments;
+			$payments = $loan->payments()->get();
 			$stat = new Status($payments);
 			$stat = $stat->message("Payments found for loan " . $req->getAttribute('loan_id') . ".");
 			return $res->withStatus(200)->withJson($stat);
 		} catch (ModelNotFound $e) {
 			$stat = new Status();
 			$stat = $stat->error("LoanNotFound")->message("Loan not found.");
-			return $res->withStatus(404)->withJson($req);
+			return $res->withStatus(404)->withJson();
 		}
 	}
 
-	public function getPaymentHandlerWithId(Request $req, Response $res): Response {
+	public function getPaymentHandler(Request $req, Response $res): Response {
 		$loan;
 		$payment;
 
@@ -162,5 +128,12 @@ class PaymentController {
 		$stat = new Status();
 		$stat = $stat->message("Payment deleted for loan " . $req->getAttribute('loan_id') . ".");
 		return $res->withStatus(200)->withJson($stat);
+	}
+
+	protected static function badPaymentResponse(Response $res, array $errorStrings): Response {
+		$stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
+		$stat = $stat->error('BadPayment')->message('There was an error while making a payment.');
+
+		return $res->withStatus(400)->withJson($stat); // Bad Request
 	}
 }
