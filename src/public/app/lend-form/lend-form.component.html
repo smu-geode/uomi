@@ -1,7 +1,7 @@
 <div class="form">
 	<form name="lendForm"
 		  #lend_form="ngForm"
-		  (ngSubmit)="completeLend()"
+		  (ngSubmit)="completeLend(lend_form)"
 		  novalidate>
 
 		<div class="form-item form-block" magicFormItem>
@@ -80,7 +80,7 @@
 				</button>
 			</div>
 			<div class="column-xs column-padded form-block">
-				<button class="button button-default" (click)="cancel()">Cancel</button>
+				<button class="button button-default" (click)="cancel(); lend_form.reset()">Cancel</button>
 			</div>
 		</div>
 		<div *ngIf="isError">

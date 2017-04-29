@@ -47,6 +47,8 @@ export class PaymentFormComponent {
 	}
 
 	cancel() {
+		this.memo = '';
+		this.amount = '';
 		this.closeModal.emit();
 	}
 

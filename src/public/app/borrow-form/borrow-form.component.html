@@ -1,7 +1,7 @@
 <div class="lend-form">
 	<form name="borrowForm"
 		  #borrow_form="ngForm"
-		  (ngSubmit)="completeBorrow()"
+		  (ngSubmit)="completeBorrow(borrow_form)"
 		  novalidate>
 		<div>
 			<label for="from_user">
@@ -70,7 +70,7 @@
 			Borrow
 		</button>
 		<button class="btn-cancel"
-				(click)="cancel()">
+				(click)="cancel(); borrow_form.reset()">
 			Cancel
 		</button>
 	</form>

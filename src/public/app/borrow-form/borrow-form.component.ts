@@ -34,7 +34,7 @@ export class BorrowFormComponent implements OnInit {
 		this.loansService.getCategories().subscribe(x => this.categories = x);
 	}
 
-	completeBorrow() {
+	completeBorrow(formRef: any) {
 		// convert amount string to cents
 		if (this.isValidCurrenyString(this.amount)) {
 			this.newLoan.amountCents = this.convertToCents(this.amount);
@@ -51,7 +51,7 @@ export class BorrowFormComponent implements OnInit {
 					this.newLoan.from = x[0].id;
 					this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 						this.newLoan.amountCents, +this.newLoan.category)
-						.subscribe(x => this.cancel(), x => console.log(x));
+						.subscribe(x => {formRef.reset(); this.cancel()}, x => console.log(x));
 				} else {
 					console.error("email does not match a user's email");
 				}
@@ -63,6 +63,7 @@ export class BorrowFormComponent implements OnInit {
 	}
 
 	cancel() {
+		this.amount = '';
 		this.closeModal.emit();
 	}
 

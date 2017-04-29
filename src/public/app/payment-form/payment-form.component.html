@@ -2,7 +2,7 @@
 	<form name="paymentForm"
 		  #payment_form="ngForm"
 		  *ngIf="loan"
-		  (ngSubmit)="completePayment()"
+		  (ngSubmit)="completePayment(); payment_form.reset()"
 		  novalidate>
 
 		<div class="form-item form-block" magicFormItem>
