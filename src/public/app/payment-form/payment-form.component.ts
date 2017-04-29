@@ -33,6 +33,7 @@ export class PaymentFormComponent {
 	completePayment() {
 		if(!this.isValidCurrenyString(this.amount)) {
 			console.error("Invalid amount for payment");
+			return;
 		}
 
 		let amountCents = this.convertToCents(this.amount);

@@ -9,7 +9,8 @@ import { NG_VALIDATORS, Validator, AbstractControl } from "@angular/forms";
 })
 export class CurrencyValidatorDirective implements Validator {  
   validate(control: AbstractControl): { [key: string]: any } {
-      var isValid = new RegExp("^\d+(?:\.\d{0,2})?$").test(control.value);
+	  console.log("currency check");
+      var isValid = /^\d+(\.\d{2})?$/.test(control.value);
       return isValid ? null : { 'currency': true };
   }
 }

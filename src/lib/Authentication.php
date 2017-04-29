@@ -44,7 +44,7 @@ class Authentication {
 		return $session->user_id === $user_id;
 	}
 
-	public static function getCurrentUserId(Request $req): int {
+	public static function getCurrentUserId(Request $req) {
 		try {
 			$token = self::getSessionToken($req);
 		} catch(\RuntimeException $e) {

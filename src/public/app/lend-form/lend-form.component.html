@@ -1,58 +1,88 @@
 <div class="form">
+	<form name="lendForm"
+		  #lend_form="ngForm"
+		  (ngSubmit)="completeLend()"
+		  novalidate>
 
-	<div class="form-item form-block" magicFormItem>
-		<label for="to_user">
-			To
-		</label>
-		<input  
-		 type="text"
-		 id="to_user"
-		 class="text-input"
-		 placeholder="friend@example.com"
-		 [(ngModel)]="toUser"
-		>
-	</div><!-- .form-item -->
+		<div class="form-item form-block" magicFormItem>
+			<label for="to_user">
+				To
+			</label>
+			<input  
+			type="text"
+			id="to_user"
+			name="to_user"
+			class="text-input"
+			placeholder="friend@example.com"
+			[(ngModel)]="toUser"
+			#to_user="ngModel"
+			required
+			email
+			>
+			<validation-messages
+				[model]="to_user"
+				[messages]="{
+					email: 'Please enter a valid email'}">
+			</validation-messages>
+		</div><!-- .form-item -->
 
-	<div class="form-item form-block" magicFormItem>
-		<label for="lend_amount">
-			Amount
-		</label>
-		<input  
-		 type="text"
-		 id="lend_amount"
-		 class="text-input"
-		 placeholder="$0.00"
-		 [(ngModel)]="amount"
-		>
-	</div><!-- .form-item -->
+		<div class="form-item form-block" magicFormItem>
+			<label for="lend_amount">
+				Amount
+			</label>
+			<input  
+			type="text"
+			id="lend_amount"
+			name="lend_amount"
+			class="text-input"
+			placeholder="$0.00"
+			[(ngModel)]="amount"
+			#lend_amount="ngModel"
+			required
+			currency
+			>
+			<validation-messages
+				[model]="lend_amount"
+				[messages]="{
+					currency: 'Please enter a valid quantity'}">
+			</validation-messages>
+		</div><!-- .form-item -->
 
-	<div class="form-item form-block">
-		<label for="category">
-			Category
-		</label>
-		<select class="lend-category"
-				id="category"
-				[(ngModel)]="newLoan.category">
-			<option></option>
-			<option *ngFor="let category of categories"
-					[value]="category.id">
-				{{ category.name }}
-			</option>
-		</select>
-	</div>
-
-	<div class="row row-padded">
-		<div class="column-xs column-padded form-block">
-			<button class="button button-primary" (click)="completeLend()">Lend</button>
+		<div class="form-item form-block">
+			<label for="category">
+				Category
+			</label>
+			<select class="lend-category"
+					id="category"
+					name="category"
+					[(ngModel)]="newLoan.category"
+					#category="ngModel"
+					required>
+				<option></option>
+				<option *ngFor="let category of categories"
+						[value]="category.id">
+					{{ category.name }}
+				</option>
+			</select>
+			<validation-messages
+				[model]="category"
+				[messages]="{
+					required: 'Please select a category'}">
+			</validation-messages>
 		</div>
-		<div class="column-xs column-padded form-block">
-			<button class="button button-default" (click)="cancel()">Cancel</button>
-		</div>
-	</div>
-	<div *ngIf="isError">
-		<p>
-			{{ currentError }}
-		</p>
-	</div>
 
+		<div class="row row-padded">
+			<div class="column-xs column-padded form-block">
+				<button class="button button-primary" (click)="completeLend()">Lend</button>
+			</div>
+			<div class="column-xs column-padded form-block">
+				<button class="button button-default" (click)="cancel()">Cancel</button>
+			</div>
+		</div>
+		<div *ngIf="isError">
+			<p>
+				{{ currentError }}
+			</p>
+		</div>
+	</form>
 </div>
