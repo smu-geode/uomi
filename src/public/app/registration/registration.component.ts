@@ -35,9 +35,7 @@ export class RegistrationComponent {
 				this.isServerError = false;
 				this.authService.logIn(this.user)
 			}, error => {
-				console.log("create user error");
 				let errors = JSON.parse(error);
-				console.error(errors['data']['errors'][0]);
 				this.serverError = errors['data']['errors'][0];
 				this.isServerError = true;
 				this.router.navigate(['/registration'])});

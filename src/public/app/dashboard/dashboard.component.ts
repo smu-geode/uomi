@@ -76,6 +76,12 @@ export class DashboardComponent implements OnInit {
 
 	closeModal(id: string) {
 		this.modalService.closeModal(id);
+		
+		let userId = this.authService.getCurrentUserId();
+		this.loansService.getLoansForUser(userId).subscribe(
+			data => this.didLoadLoanData(data),
+			error => this.errorMessage = <any>error
+		);
 	}
 
 	didClickLogOutButton() {
