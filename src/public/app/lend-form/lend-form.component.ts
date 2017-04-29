@@ -73,6 +73,8 @@ export class LendFormComponent implements OnInit {
 
 	cancel() {
 		this.amount = '';
+		this.isError = false;
+		this.errorString = '';
 		this.closeModal.emit();
 	}
 
