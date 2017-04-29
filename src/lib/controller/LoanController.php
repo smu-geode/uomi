@@ -39,11 +39,9 @@ class LoanController {
 		
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-
-			$auth = new Authentication();
-			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
-			$auth = new Authentication();
-			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+			
+			$isTo = Authentication::isRequestAuthorized($req, $loan->to_user);
+			$isFrom = Authentication::isRequestAuthorized($req, $loan->from_user);
 
 			if(!($isTo || $isFrom)) {
 				return $auth->unathroizedResponse($res, $auth->getErrors());
@@ -62,7 +60,7 @@ class LoanController {
 	public function getUserLoanCollection(Request $req, Response $res): Response {
 		$auth = new Authentication();
 		if(!$auth->isRequestAuthorized($req, $req->getAttribute('user_id'))) {
-			return $auth->unathroizedResponse($res, $auth->getErrors());
+			return $auth->unauthorizedResponse($res);
 		}
 		try {
 			$user = User::findOrFail( $req->getAttribute('user_id') );
@@ -133,7 +131,7 @@ class LoanController {
 		$isFrom = $auth->isRequestAuthorized($req, $from_user);
 
 		if(!($isTo || $isFrom)) {
-			return $auth->unathroizedResponse($res, $auth->getErrors());
+			return \Authentication\unauthorizedResponse($res);
 		}
 
 

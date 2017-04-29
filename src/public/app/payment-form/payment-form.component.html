@@ -1,14 +1,14 @@
-<div class="form" *ngIf="currentLoan">
+<div class="form" *ngIf="loan">
 
 	<div class="form-item form-block" magicFormItem>
-		To: {{ currentLoan.fromMe ? currentLoan.to.name : currentLoan.from.name }}
+		To: {{ loan.fromMe ? loan.to.name : loan.from.name }}
 	</div><!-- .form-item -->
 
 	<div class="form-item form-block" magicFormItem>
 		<label for="payment_amount">
 			Amount
 		</label>
-		<input  
+		<input
 		 type="text"
 		 id="payment_amount"
 		 class="text-input"

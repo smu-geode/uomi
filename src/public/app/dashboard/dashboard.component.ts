@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
 	lentTotal: number;
 	borrowedTotal: number;
 
-	loanIdForPayment: number;
+	loanForPayment: Loan;
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
@@ -69,8 +69,8 @@ export class DashboardComponent implements OnInit {
 		this.modalService.openModal(id);
 	}
 
-	openPaymentModal(loanId: number) {
-		this.loanIdForPayment = loanId;
+	openPaymentModal(loan: Loan) {
+		this.loanForPayment = loan;
 		this.modalService.openModal('payment-modal');
 	}
 

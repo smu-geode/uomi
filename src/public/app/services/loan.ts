@@ -1,4 +1,5 @@
 import { Serializable } from '../shared/serializable';
+import { User } from './user';
 
 export class Loan implements Serializable<Loan> {
 
@@ -6,8 +7,8 @@ export class Loan implements Serializable<Loan> {
 	amountCents: number;
 	balance: number;
 	fromMe: boolean;
-	from: object;
-	to: object;
+	from: User;
+	to: User;
 
 	category: object;
 	confirmed: boolean;
@@ -20,13 +21,14 @@ export class Loan implements Serializable<Loan> {
 
 	deserialize(input: object) {
 		let loan = new Loan();
+		let user = new User();
 
 		loan.id = input['id'];
 		loan.amountCents = input['amount_cents'];
 		loan.balance = input['balance'];
 
-		loan.from = input['from'];
-		loan.to = input['to'];
+		loan.from = user.deserialize(input['from']);
+		loan.to = user.deserialize(input['to']);
 		loan.fromMe = null;
 
 		loan.category = input['category'];
