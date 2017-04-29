@@ -2,7 +2,7 @@ import { Directive } from "@angular/core";
 import { NG_VALIDATORS, Validator, AbstractControl } from "@angular/forms";
 
 @Directive({
-  selector: '[year]',
+  selector: '[currency]',
   providers: [
     { provide: NG_VALIDATORS, useExisting: CurrencyValidatorDirective, multi: true }
   ]

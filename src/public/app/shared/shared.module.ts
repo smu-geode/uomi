@@ -6,12 +6,13 @@ import { CurrencyViewComponent } from './currency-view.component';
 import { DropdownOpenDirective, DropdownContentDirective, DropdownDirective } from './dropdown.directive';
 import { ModalComponent } from './modal/modal.component';
 import { CurrencyValidatorDirective } from './validators/currency-validator.directive';
+import { EmailValidatorDirective } from './validators/email-validator.directive';
 import { ValidationMessagesComponent } from './validation-messages/validation-messages.component';
 
 @NgModule({
 	imports:      [ BrowserModule ],
-	declarations: [ MagicFormItemDirective, FocusOnLoadDirective, CurrencyViewComponent, DropdownOpenDirective, DropdownContentDirective, DropdownDirective, ModalComponent, CurrencyValidatorDirective, ValidationMessagesComponent ],
-	exports:      [ MagicFormItemDirective, FocusOnLoadDirective, CurrencyViewComponent, DropdownOpenDirective, DropdownContentDirective, DropdownDirective, ModalComponent, CurrencyValidatorDirective, ValidationMessagesComponent ]
+	declarations: [ MagicFormItemDirective, FocusOnLoadDirective, CurrencyViewComponent, DropdownOpenDirective, DropdownContentDirective, DropdownDirective, ModalComponent, CurrencyValidatorDirective, EmailValidatorDirective, ValidationMessagesComponent ],
+	exports:      [ MagicFormItemDirective, FocusOnLoadDirective, CurrencyViewComponent, DropdownOpenDirective, DropdownContentDirective, DropdownDirective, ModalComponent, CurrencyValidatorDirective, EmailValidatorDirective, ValidationMessagesComponent ]
 })
 
 export class SharedModule { }
