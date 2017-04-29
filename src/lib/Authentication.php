@@ -61,9 +61,14 @@ class Authentication {
 	}
 
 	public static function getSessionToken(Request $req): string {
-		$header = $req->getHeaders();
+		$headers = $req->getHeaders();
 
-		$authorizationHeader = $req->getHeaders()['HTTP_AUTHORIZATION'][0];
+		if(isset($headers['HTTP_AUTHORIZATION'][0])) {
+			$authorizationHeader = $req->getHeaders()['HTTP_AUTHORIZATION'][0];
+		} else {
+			throw new \RuntimeException('Authorization header was unset"'); 
+		}
+		
 		$headerArray = explode(' ', $authorizationHeader);
 
 		if(count($headerArray) !== 2) {
