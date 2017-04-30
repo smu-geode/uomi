@@ -13,6 +13,9 @@ export class LoginComponent {
 	user: any;
 	incorrect: boolean;
 
+	private serverError: string;
+	private isServerError: boolean;
+
 	constructor(private authService: AuthenticationService,
 				private router: Router,
 				private route: ActivatedRoute ) {
@@ -25,6 +28,18 @@ export class LoginComponent {
 
 	authenticateUser() {
 		// call to users service
-		this.authService.logIn(this.user);
+		this.authService.logIn(this.user).subscribe(res => {
+			console.log(res);
+			sessionStorage.setItem('user_id', res.data.user_id);
+			sessionStorage.setItem('token', res.data.token);
+			this.authService.isAuthenticated.next(true);
+			this.router.navigate(['/dashboard']);
+		}, err => {
+				let errors = JSON.parse(err);
+				console.log(errors);
+				this.serverError = errors['data']['errors'][0];
+				console.log(this.serverError);
+				this.isServerError = true;
+		});
 	}
 }
