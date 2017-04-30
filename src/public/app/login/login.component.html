@@ -78,6 +78,10 @@
 								</div><!-- .form-item -->
 							</div><!-- .form-vertical-item-group -->
 
+							<div *ngIf="isServerError" class="color-danger form-item">
+								{{ serverError }}
+							</div>
+
 							<button 
 							[disabled]="logInForm.invalid"
 							class="form-item button button-success"

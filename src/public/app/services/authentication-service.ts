@@ -20,16 +20,9 @@ export class AuthenticationService {
 	logIn(logInForm: any) {
 		let options = this.getRequestOptions();
 
-		this.http.post(`api/sessions/`, logInForm, options)
+		return this.http.post(`api/sessions/`, logInForm, options)
 			.map(this.extractData)
 			.catch(this.handleError)
-			.subscribe(res => {
-				// place data payload in sessionStorage
-				sessionStorage.setItem('user_id', res.data.user_id);
-				sessionStorage.setItem('token', res.data.token);
-				this.isAuthenticated.next(true);
-				this.router.navigate(['/dashboard']);
-			})
 		;
 	}
 
@@ -80,16 +73,17 @@ export class AuthenticationService {
 
 	handleError(error: Response | any) {
 		let errorMessage: string;
+		let err: string;
 		if (error instanceof Response) {
 			let body = error.json() || '';
-			let err = body.error || JSON.stringify(body);
+			err = body.error || JSON.stringify(body);
 			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
 		} 
 		else {
 			errorMessage = error._body.message ? error._body.message : error.toString();
 		}
 		console.error(errorMessage);
-		return Observable.throw(errorMessage);
+		return Observable.throw(err);
 	}
 
 }	
