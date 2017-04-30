@@ -23,13 +23,6 @@ export class AuthenticationService {
 		return this.http.post(`api/sessions/`, logInForm, options)
 			.map(this.extractData)
 			.catch(this.handleError)
-			// .subscribe(res => {
-			// 	// place data payload in sessionStorage
-			// 	sessionStorage.setItem('user_id', res.data.user_id);
-			// 	sessionStorage.setItem('token', res.data.token);
-			// 	this.isAuthenticated.next(true);
-			// 	this.router.navigate(['/dashboard']);
-			// })
 		;
 	}
 
