@@ -64,10 +64,10 @@ export class UsersService implements OnInit {
 		allowEmailUseBySearch: boolean): Observable<object> {
 		
 		let settings = {
-			'allNotifications': allowNotifications,
-			'borrowingRequests': borrowingRequests,
-			'payBackReminders': payBackReminders,
-			'allowEmailUseBySearch': allowEmailUseBySearch
+			'allow_notifications': allowNotifications,
+			'borrow_requests': borrowingRequests,
+			'payback_reminders': payBackReminders,
+			'view_email': allowEmailUseBySearch
 		};
 
 		let options = this.authService.getRequestOptions();

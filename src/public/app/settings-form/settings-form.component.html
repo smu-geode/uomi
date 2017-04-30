@@ -1,4 +1,3 @@
-Settings Form
 <div class="form">
 	<form name="settingsForm"
 		  #settings_form="ngForm"
@@ -6,58 +5,62 @@ Settings Form
 		  (ngSubmit)="updateSettings()"
 		  novalidate>
 
-		<div class="form-item form-block" magicFormItem>
-			To: {{ loan.fromMe ? (loan.to.name || loan.to.email) : (loan.from.name || loan.from.email) }}
-		</div><!-- .form-item -->
-
-		<div class="form-item form-block" magicFormItem>
-			<label for="payment_amount">
-				Amount
+		<div class="form-item form-block">
+			<label for="allow_notifications">
+				Allow Notifications
 			</label>
 			<input
-			type="text"
-			id="payment_amount"
-			name="payment_amount"
-			class="text-input"
-			placeholder="$0.00"
-			[(ngModel)]="amount"
-			#payment_amount="ngModel"
-			required
-			currency
+			type="checkbox"
+			id="allow_notifications"
+			name="allow_notifications"
+			[(ngModel)]="_allow_notifications"
+			#allow_notifications="ngModel"
 			>
-			<validation-messages
-				[model]="payment_amount"
-				[messages]="{
-					currency: 'Please enter a valid quantity'}">
-			</validation-messages>
 		</div><!-- .form-item -->
 
-		<div class="form-item form-block" magicFormItem>
-		<label for="payment_memo">
-				Memo
+		<div class="form-item form-block">
+			<label for="borrow_requests">
+				Borrow Requests
 			</label>
-			<input  
-			type="text"
-			id="payment_memo"
-			name="payment_memo"
-			class="text-input"
-			placeholder="Memo"
-			[(ngModel)]="memo"
-			#payment_memo="ngModel"
-			pattern="([a-zA-Z 0-9]*)"
+			<input
+			type="checkbox"
+			id="borrow_requests"
+			name="borrow_requests"
+			[(ngModel)]="_borrow_requests"
+			#borrow_requests="ngModel"
 			>
-			<validation-messages
-				[model]="payment_memo"
-				[messages]="{
-					pattern: 'Please enter a valid memo'}">
-			</validation-messages>
-		</div>
+		</div><!-- .form-item -->
+
+		<div class="form-item form-block">
+			<label for="payback_reminders">
+				Payback Reminders
+			</label>
+			<input
+			type="checkbox"
+			id="payback_reminders"
+			name="payback_reminders"
+			[(ngModel)]="_payback_reminders"
+			#payback_reminders="ngModel"
+			>
+		</div><!-- .form-item -->
+
+		<div class="form-item form-block">
+			<label for="view_email">
+				Allow email use in search
+			</label>
+			<input
+				type="checkbox"
+				id="view_email"
+				name="view_email"
+				[(ngModel)]="_view_email"
+				#view_email="ngModel" />
+		</div><!-- .form-item -->
 
 		<div class="row row-padded">
 			<div class="column-xs column-padded form-block">
 				<button class="button button-primary"
 						type="submit"
-						[disabled]="payment_form.invalid">
+						[disabled]="settings_form.invalid">
 					Update Settings
 				</button>
 			</div>
