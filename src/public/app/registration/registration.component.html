@@ -27,57 +27,96 @@
 
 				<section class="card-content">
 					<div class="form form-block">
-						<div class="form-item" magicFormItem>
-							<label for="user_email">
-								Email
-							</label>
-							<input 
-							 type="text"
-							 id="user_email"
-							 class="text-input"
-							 placeholder="email@example.com"
-							 [(ngModel)]="user.email"
-							 focusOnLoad
+						<form name="registrationForm"
+							  #registration_form="ngForm"
+							  (ngSubmit)="createUser()"
+							  novalidate>
+							<div class="form-item" magicFormItem>
+								<label for="user_email">
+									Email
+								</label>
+								<input 
+								type="text"
+								id="user_email"
+								name="user_email"
+								class="text-input"
+								placeholder="email@example.com"
+								[(ngModel)]="user.email"
+								#user_email="ngModel"
+								required
+								email
+								focusOnLoad
+								>
+								<validation-messages
+									[model]="user_email"
+									[messages]="{
+										email: 'Please enter a valid email'}">
+								</validation-messages>
+							</div><!-- .form-item -->
+
+							<div class="form-vertical-item-group">
+
+								<div class="form-item form-group-first-item" magicFormItem>
+									<label for="user_password">
+										Password
+									</label>
+									<input 
+									type="password"
+									id="user_password"
+									name="user_password"
+									class="text-input"
+									placeholder="Password"
+									[(ngModel)]="user.password"
+									#user_password="ngModel"
+									required
+									password
+									>
+									
+								</div><!-- .form-item -->
+								
+								<div class="form-item form-group-last-item" magicFormItem>
+									<label for="user_password_verify">
+										Confirm Password
+									</label>
+									<input 
+									type="password"
+									id="user_password_verify"
+									name="user_password_verify"
+									class="text-input"
+									placeholder="Confirm Password"
+									[(ngModel)]="passwordVerify"
+									#user_password_verify="ngModel"
+									required
+									passwordmatch="user_password"
+									>
+									
+								</div><!-- .form-item -->
+
+							</div><!-- .form-vertical-item-group -->
+
+							<validation-messages
+								[model]="user_password"
+								[messages]="{
+									password: 'Password must be 8 characters or longer'}">
+							</validation-messages>
+							<validation-messages
+								[model]="user_password_verify"
+								[messages]="{
+									passwordmatch: 'Passwords must match'}">
+							</validation-messages>
+
+							<div *ngIf="isServerError" class="color-danger form-item">
+								{{ serverError }}
+							</div>
+
+							<button 
+							[disabled]="registration_form.invalid"
+							class="form-item button button-success"
+							type="submit"
 							>
-						</div><!-- .form-item -->
-
-						<div class="form-vertical-item-group">
-
-							<div class="form-item form-group-first-item" magicFormItem>
-								<label for="user_password">
-									Password
-								</label>
-								<input 
-								 type="password"
-								 id="user_password"
-								 class="text-input"
-								 placeholder="Password"
-								 [(ngModel)]="user.password"
-								>
-							</div><!-- .form-item -->
-							
-							<div class="form-item form-group-last-item" magicFormItem>
-								<label for="user_password_verify">
-									Confirm Password
-								</label>
-								<input 
-								 type="password"
-								 id="user_password_verify"
-								 class="text-input"
-								 placeholder="Confirm Password"
-								 [(ngModel)]="user.passwordVerify"
-								>
-							</div><!-- .form-item -->
-
-						</div><!-- .form-vertical-item-group -->
-
-						<button 
-						 (click)="createUser()" [disabled]="(!user.password || !user.email) || user.password != user.passwordVerify"
-						 class="form-item button button-success"
-						 type="button"
-						>
-							Create Account
-						</button>
+								Create Account
+							</button>
+						</form>
 					</div><!-- .form -->
 				</section><!-- .card-content -->
 			</div><!-- .card-sm -->

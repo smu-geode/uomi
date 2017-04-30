@@ -21,7 +21,7 @@ export class AuthenticationService {
 		let options = this.getRequestOptions();
 
 		this.http.post(`api/sessions/`, logInForm, options)
-			.map(res => { console.log(res); return this.extractData(res); })
+			.map(this.extractData)
 			.catch(this.handleError)
 			.subscribe(res => {
 				// place data payload in sessionStorage

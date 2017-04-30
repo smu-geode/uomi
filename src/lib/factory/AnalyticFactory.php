@@ -10,6 +10,7 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Model\Analytic;
 use \Uomi\Status;
+use \Uomi\Authentication;
 
 class AnalyticFactory {
 
@@ -19,8 +20,10 @@ class AnalyticFactory {
 		$this->container = $c;
 	}
 
-	public function track(Request $req, int $user_id) {
+	public function track(Request $req) {
 		$header = $req->getHeaders();
+
+		$user_id = Authentication::getCurrentUserId($req);
 
 		$host = null;
 		$ip = $_SERVER['REMOTE_ADDR'];

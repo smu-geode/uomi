@@ -9,6 +9,7 @@ use \Slim\Container;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
+use \Uomi\Model\Session;
 
 class Authentication {
 
@@ -18,71 +19,73 @@ class Authentication {
 		$this->errors = [];
 	}
 
-	public function isRequestAuthorized(Request $req, int $user_id = null): bool {
-		$token = $this->getBearerToken($req);
-		if($token === "") {
-			array_push($this->errors, 'No token found.');
+	public static function isRequestAuthorized(Request $req, int $user_id = null): bool {
+
+		try {
+			$token = self::getSessionToken($req);
+		} catch(\RuntimeException $e) {
 			return false;
 		}
 
+		try {
+			$session = Session::where('token', $token)->firstOrFail();
+		} catch (ModelNotFoundException $e) {
+			return false; // session does not exist
+		}
+
+		// if the session exists and $user_id is null, we don't care what user
+		// holds the token
 		if($user_id === null) {
-			try {
-				$session = \Uomi\Model\Session::where('token', $token)->first();
-				return true;
-			} catch (ModelNotFoundException $e) {
-				array_push($this->errors, 'No session open for that token');
-				return false;
-			}
-		}else {
-			try {
-				$session = \Uomi\Model\Session::where('token', $token)->first();
-				if($user_id == $session->user_id) {
-					return true;
-				}else {
-					array_push($this->errors, 'User not authorized to access that data.');
-					return false;
-				}
-			} catch (ModelNotFoundException $e) {
-				array_push($this->errors, 'No session open for that token.');
-				return false;
-			}
+			return true;
 		}
+
+		// Otherwise we must additionally check that the session belongs to the
+		// given user ID.
+		return $session->user_id === $user_id;
 	}
 
-	private function getBearerToken(Request $req): string {
-		$header = $req->getHeaders();
-
-		$auth;
-		foreach($header as $name => $value) {
-			if($name == 'HTTP_AUTHORIZATION') {
-				$auth = $value ?? null;
-			}
+	public static function getCurrentUserId(Request $req) {
+		try {
+			$token = self::getSessionToken($req);
+		} catch(\RuntimeException $e) {
+			return null;
 		}
 
-		if($auth === null) {
-			array_push('No authorization field');
+		try {
+			$session = Session::where('token', $token)->firstOrFail();
+		} catch(ModelNotFoundException $e) {
+			return null;
 		}
 
-		$token = explode(' ', $auth[0]);
-		//array_push($this->errors, $token[0]);
-		if($token[0] != "Bearer") {
-			array_push($this->errors, 'Token is not of type Bearer');
+		return $session->user_id;
+	}
+
+	public static function getSessionToken(Request $req): string {
+		$headers = $req->getHeaders();
+
+		if(isset($headers['HTTP_AUTHORIZATION'][0])) {
+			$authorizationHeader = $req->getHeaders()['HTTP_AUTHORIZATION'][0];
 		} else {
-			if (sizeof($this->errors) == 0) {
-				return $token[1] ?? "";
-			}	
+			throw new \RuntimeException('Authorization header was unset"'); 
 		}
-		return "";
+		
+		$headerArray = explode(' ', $authorizationHeader);
+
+		if(count($headerArray) !== 2) {
+			throw new \RuntimeException('Authorization header must be of the form "Bearer [token]"');
+		}
+
+		if($headerArray[0] !== 'Bearer') {
+			throw new \RuntimeException('Authorization header not of type Bearer.');
+		}
+
+		$token = $headerArray[1];
+		return $token;
 	}
 
-	public function getErrors(): array {
-		return $this->errors;
-	}
-
-	public static function unathroizedResponse(Response $res, array $errorStrings): Response {
-        $stat = new \Uomi\Status([ 'errors' => $errorStrings ]);
-        $stat = $stat->error('UnathorizedAccess')->message('You do not have permission to access this data.');
-
-        return $res->withStatus(401)->withJson($stat); // Bad Request
+	public static function unauthorizedResponse(Response $res): Response {
+        $stat = new Status();
+        $stat = $stat->error('MustBeLoggedIn')->message('You must be logged in to perform this action.');
+        return $res->withStatus(401)->withJson($stat);
     }
 }

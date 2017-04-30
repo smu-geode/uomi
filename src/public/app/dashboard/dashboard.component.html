@@ -57,7 +57,7 @@
 				</div>
 				<div class="table-container loan-table" *ngIf="loans.length !== 0">
 					<table class="table">
-						<tr *ngFor="let loan of loans">
+						<tr *ngFor="let loan of loans" [hidden]="loan.balance == 0">
 							<td class="fit-content hide-xs-down">
 								<img src="/img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
 							</td>
@@ -71,7 +71,9 @@
 									<span class="loan-category-name hide-xs-down" aria-hidden="true">{{loan.category?.name}}</span>
 								</span><!-- .loan-category-label -->
 							</td>
-							<td [ngClass]="{'loan-amount': true, 'amount-debt': !loan.fromMe, 'amount-credit': loan.fromMe}"><currency-view [amountCents]="loan.amountCents"></currency-view></td>
+							<td [ngClass]="{'loan-amount': true, 'amount-debt': !loan.fromMe, 'amount-credit': loan.fromMe}">
+								<currency-view [amountCents]="loan.balance"></currency-view>
+							</td>
 							<td class="fit-content table-center">
 								<div class="dropdown" dropdown>
 									<button class="button loan-table-dropdown-button" dropdownOpen>
@@ -79,7 +81,7 @@
 									</button>
 									<div class="dropdown-content dropdown-content-left" dropdownContent>
 										<ul class="dropdown-box">
-											<li class="dropdown-item"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+											<li class="dropdown-item" (click)="openPaymentModal(loan)"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
 										</ul><!-- .dropdown-box -->
 									</div><!-- .dropdown-content -->
 								</div><!-- .dropdown -->
@@ -107,4 +109,8 @@
 
 <modal id="borrow-modal" title="Borrow">
 	<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>
+</modal>
+
+<modal id="payment-modal" title="Payment">
+	<payment-form [loan]="loanForPayment" (closeModal)="closeModal('payment-modal')"></payment-form>
 </modal>

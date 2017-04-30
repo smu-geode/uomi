@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
 
 @Component({
 	selector: 'registration',
@@ -12,6 +13,9 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 
 export class RegistrationComponent { 
 	user: any;
+	passwordVerify: string;
+	serverError: string;
+	isServerError: boolean = false;
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
@@ -19,8 +23,7 @@ export class RegistrationComponent {
 				private route: ActivatedRoute ) {
 		this.user = {
 			email: '',
-			password: '',
-			passwordVerify: ''
+			password: ''
 		};
 	}
 
@@ -28,7 +31,13 @@ export class RegistrationComponent {
 		// call to users service
 		delete this.user.passwordVerify;
 		this.usersService.signUp(this.user)
-			.subscribe(valid => this.authService.logIn(this.user),
-				error => this.router.navigate(['/registration']));
+			.subscribe(valid => {
+				this.isServerError = false;
+				this.authService.logIn(this.user)
+			}, error => {
+				let errors = JSON.parse(error);
+				this.serverError = errors['data']['errors'][0];
+				this.isServerError = true;
+				this.router.navigate(['/registration'])});
 	}
 }

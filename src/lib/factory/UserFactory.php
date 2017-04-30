@@ -53,15 +53,8 @@ class UserFactory {
 		$user = new User();
 		$user->email = $email;
 		$user->password = HashedPassword::makeFromPlainText($plainTextPassword);
-		$settings = new \Uomi\Model\Settings();  //creating new settings when user is created
+		$settings = new \Uomi\Model\Settings();
 		$settings->user_id = $user->id;
-		/*$settings->allow_notif = 1;
-		$settings->borrow_request = 1;
-		$settings->payback_reminders = 1;
-		$settings->view_email = 1;*/
-		// $crypto = new HashedPassword($plainTextPassword);
-		// $user->password = $crypto->getHash();
-		// $user->salt = $crypto->getSalt();
 		return $user;
 	}
 
