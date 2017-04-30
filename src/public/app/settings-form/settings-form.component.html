@@ -1,3 +1,8 @@
+<div class="column-xs column-padded form-block">
+	<button class="button button-default" [disabled]="true">Settings</button>
+	<button class="button button-default" (click)="switchToPasswordModal()">Update Password</button>
+</div>
+
 <div class="form">
 	<form name="settingsForm"
 		  #settings_form="ngForm"

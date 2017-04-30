@@ -22,8 +22,14 @@
 </header>
 
 <modal id="settings-modal" title="Settings">
-	<!--<settings-form (closeModal)="closeModal('settings-modal')"></settings-form>-->
-	<update-password-form (closeModal)="closeModal('settings-modal')"></update-password-form>
+	<settings-form (closeModal)="closeModal('settings-modal')"
+				   (switchPassword)="closeModal('settings-modal'); openModal('password-modal')">
+	</settings-form>
+</modal>
+<modal id="password-modal" title="Update Password">
+	<update-password-form (closeModal)="closeModal('password-modal')"
+						  (switchSettings)="closeModal('password-modal'); openModal('settings-modal')">
+	</update-password-form>
 </modal>
 
 <main class="page">

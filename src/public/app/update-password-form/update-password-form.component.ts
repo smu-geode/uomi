@@ -17,6 +17,7 @@ export class UpdatePasswordFormComponent implements OnInit {
 	private newPasswordVerify: string;
 
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+	@Output() switchSettings: EventEmitter<void> = new EventEmitter<void>();
 
 	constructor(private authService: AuthenticationService,
 				private usersService: UsersService,
@@ -35,5 +36,9 @@ export class UpdatePasswordFormComponent implements OnInit {
 
 	cancel() {
 		this.closeModal.emit();
+	}
+
+	switchToSettingsModal() {
+		this.switchSettings.emit();
 	}
 }

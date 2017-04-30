@@ -19,6 +19,7 @@ export class SettingsFormComponent implements OnInit {
 	private _view_email: boolean;
 
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+	@Output() switchPassword: EventEmitter<void> = new EventEmitter<void>();
 
 	constructor(private authService: AuthenticationService,
 				private usersService: UsersService,
@@ -48,5 +49,9 @@ export class SettingsFormComponent implements OnInit {
 
 	cancel() {
 		this.closeModal.emit();
+	}
+
+	switchToPasswordModal() {
+		this.switchPassword.emit();
 	}
 }
