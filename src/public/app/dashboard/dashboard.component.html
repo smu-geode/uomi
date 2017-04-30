@@ -22,42 +22,46 @@
 
 <main class="page">
 	<div class="page-center">
+		<!-- Loading screen -->
 		<div class="page-loader" *ngIf="!isLoaded">
 			<i class="fa fa-3x fa-spin fa-circle-o-notch" aria-label="Loading"></i>
 		</div>
 		<div class="card-md" *ngIf="isLoaded">
-			<section #chartsElement>
-				Charts
+
+			<!-- Charts go here -->
+			<section class="charts row">
+				<section class="column-sm" #lentChart></section>
+				<section class="column-sm" #borrowedChart></section>
 			</section>
+
 			<section id="dashboard" class="card-content">
 
+				<!-- these are the two giant balance numbers -->
 				<section class="row big-numbers-section">
 					<div class="column-xs">
-
 						<div class="currency-view big-currency-view currency-main">
 							<currency-view [amountCents]="lentTotal"></currency-view>
 						</div>
-
 						<div class="currency-caption">
 							Lent
 						</div>
-
 					</div><!-- .column-sm -->
 					<div class="column-xs">
 						<div class="currency-view big-currency-view currency-main">
 							<currency-view [amountCents]="borrowedTotal"></currency-view>
 						</div>
-
 						<div class="currency-caption">
 							Borrowed
 						</div>
-
 					</div><!-- .column-sm -->
 				</section><!-- .big-numbers-section -->
+
 
 				<div class="placeholder-message" *ngIf="loans.length === 0">
 					You have no open loans.
 				</div>
+
+				<!-- The big table of all loans to or from you -->
 				<div class="table-container loan-table" *ngIf="loans.length !== 0">
 					<table class="table">
 						<tr *ngFor="let loan of loans">
@@ -90,6 +94,9 @@
 						</tr><!-- [loan] -->
 					</table>
 				</div><!-- .table-container -->
+
+
+				<!-- The two big buttons at the bottom to create a loan -->
 				<div class="row row-padded">
 					<div class="column-xs column-padded form-block">
 						<button class="button button-success button-big button-flat" (click)="openModal('lend-modal')">Lend</button>
@@ -97,16 +104,17 @@
 					<div class="column-xs column-padded form-block">
 						<button class="button button-danger button-big button-flat" (click)="openModal('borrow-modal')">Borrow</button>
 					</div>
-				</div>
+				</div><!-- .row -->
+
 			</section><!-- .dashboard -->
 		</div><!-- .card-md -->
 	</div><!-- .page-center -->
 </main><!-- .page -->
 
+
 <modal id="lend-modal" title="Lend">
 	<lend-form (closeModal)="closeModal('lend-modal')"></lend-form>
 </modal>
-
 
 <modal id="borrow-modal" title="Borrow">
 	<borrow-form (closeModal)="closeModal('borrow-modal')"></borrow-form>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { UsersService } from '../services/users-service';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
@@ -16,7 +16,7 @@ import * as c3 from 'c3';
 		ModalService
 	]
 })
-export class DashboardComponent implements OnInit { 
+export class DashboardComponent implements AfterViewInit { 
 
 	isLoaded: boolean = false;
 
@@ -30,7 +30,14 @@ export class DashboardComponent implements OnInit {
 
 	loanIdForPayment: number;
 
-	@ViewChild('chartsElement') chartsElement: any;
+	@ViewChildren('lentChart') lentChartElements: QueryList<ElementRef>;
+	@ViewChildren('borrowedChart') borrowedChartElements: QueryList<ElementRef>;
+
+	lentChart: c3.ChartAPI;
+	borrowedChart: c3.ChartAPI;
+
+	lentChartReady: boolean = false;
+	borrowedChartReady: boolean = false;
 
 	constructor(private usersService: UsersService,
 				private authService: AuthenticationService,
@@ -47,8 +54,19 @@ export class DashboardComponent implements OnInit {
 		);		
 	}
 
-	ngAfterContentInit() {
-		this.loadCharts();
+	ngAfterViewInit() {
+		this.lentChartElements.changes.subscribe(_ => {
+			if(this.lentChartElements.length) {
+				this.lentChartReady = true;
+				this.tryToLoadCharts();
+			}
+		});
+		this.borrowedChartElements.changes.subscribe(_ => {
+			if(this.borrowedChartElements.length) {
+				this.borrowedChartReady = true;
+				this.tryToLoadCharts();
+			}
+		});
 	}
 
 	didLoadLoanData(loanData: object) {
@@ -71,23 +89,37 @@ export class DashboardComponent implements OnInit {
 		return sum;
 	}
 
-	loadCharts() {
-		console.log('loadCharts DUMMY');
-		console.log(this.chartsElement);
-		// let chart = c3.generate({
-		// 	bindto: this.chartsElement.nativeElement,
-		// 	data: {
-		// 		// iris data from R
-		// 		columns: [
-		// 		['data1', 30],
-		// 		['data2', 120],
-		// 		],
-		// 		type : 'pie',
-		// 		onclick: function (d, i) { console.log("onclick", d, i); },
-		// 		onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-		// 		onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-		// 	}
-		// });
+	tryToLoadCharts() {
+		if(!this.lentChartReady || !this.borrowedChartReady) {
+			return;
+		}
+
+		let lentChartElement = this.lentChartElements.first.nativeElement;
+		let borrowedChartElement = this.borrowedChartElements.first.nativeElement;
+
+		let chartFormat = {
+			type : 'donut',
+			columns: [ ['A', 50], ['B', 50] ]
+		};
+
+		this.lentChart = c3.generate({
+			bindto: lentChartElement,
+			data: chartFormat
+		});
+
+		this.borrowedChart = c3.generate({
+			bindto: borrowedChartElement,
+			data: chartFormat
+		});
+
+		setTimeout(() => {
+			let mockData = [
+				['A', 300, 100, 250, 150, 300, 150, 500],
+				['B', 100, 200, 150, 50, 100, 250]
+			]
+			this.lentChart.load({ columns: mockData });
+			this.borrowedChart.load({ columns: mockData });
+		}, 1000);
 	}
 
 	openModal(id: string) {
