@@ -16,18 +16,14 @@ const buildBase     = 'build/';
 const publicBase    = buildBase + 'public/';
 const vendorBase    = 'vendor/';
 
+const colors        = require('colors');
+
 const paths = {
 	html:           './src/public/app/**/*.html',
 	img:            './src/public/img/*.*',
 	scss:           './src/public/scss/*.scss',
 	js:             './src/public/*.js',
-	ts:             './src/public/**/*.ts',
 	php:            './src/**/*.php'
-};
-
-const bases = {
-	ts:             srcBase,
-	phpVendor:      vendorBase
 };
 
 const buildPaths = {
@@ -122,21 +118,21 @@ function webpack(options, done) {
 		process.stdout.write(data.toString());
 	});
 	cmd.stderr.on('data', (data) => {
-		process.stderr.write(data.toString());
+		process.stderr.write(colors.red(data.toString()));
 	});
 	cmd.on('error', (error) => {
-		process.stderr.write('From webpack: ' + error);
+		process.stderr.write(colors.red('[Webpack] ' + error));
 		return;
 	});
 	cmd.on('exit', done);
 }
 
 gulp.task('app', (done) => {
-	webpack(['--colors', '--config', `src/public/webpack.config.js`], done);
+	webpack(['--config', `src/public/webpack.config.js`], done);
 });
 
 gulp.task('watch:app', () => {
-	webpack(['--colors', '--config', `src/public/webpack.config.js`, '--watch'], _=>{});
+	webpack(['--config', `src/public/webpack.config.js`, '--watch'], _=>{});
 });
 
 /*************************************/
@@ -180,10 +176,10 @@ function docker(cmdName, done) {
 		process.stdout.write(data.toString());
 	});
 	cmd.stderr.on('data', (data) => {
-		process.stderr.write(data.toString());
+		process.stderr.write(colors.red(data.toString()));
 	});
 	cmd.on('error', (error) => {
-		process.stderr.write('From spawn: ' + error);
+		process.stderr.write(colors.red('[Docker] ' + error));
 		return;
 	});
 	cmd.on('exit', done);

@@ -151,7 +151,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE `analytics` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) unsigned NOT NULL,
+    `user_id` int(11) unsigned DEFAULT NULL,
     `host` varchar(256) DEFAULT NULL,
     `ip` varchar(256) DEFAULT NULL,
     `user_agent` varchar(256) DEFAULT NULL,

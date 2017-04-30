@@ -1,0 +1,74 @@
+<div class="form">
+	<form name="paymentForm"
+		  #payment_form="ngForm"
+		  *ngIf="loan"
+		  (ngSubmit)="completePayment(); payment_form.reset()"
+		  novalidate>
+
+		<div class="form-item form-block" magicFormItem>
+			To: {{ loan.fromMe ? (loan.to.name || loan.to.email) : (loan.from.name || loan.from.email) }}
+		</div><!-- .form-item -->
+
+		<div class="form-item form-block" magicFormItem>
+			<label for="payment_amount">
+				Amount
+			</label>
+			<input
+			type="text"
+			id="payment_amount"
+			name="payment_amount"
+			class="text-input"
+			placeholder="$0.00"
+			[(ngModel)]="amount"
+			#payment_amount="ngModel"
+			required
+			currency
+			>
+			<validation-messages
+				[model]="payment_amount"
+				[messages]="{
+					currency: 'Please enter a valid quantity'}">
+			</validation-messages>
+		</div><!-- .form-item -->
+
+		<div class="form-item form-block" magicFormItem>
+		<label for="payment_memo">
+				Memo
+			</label>
+			<input  
+			type="text"
+			id="payment_memo"
+			name="payment_memo"
+			class="text-input"
+			placeholder="Memo"
+			[(ngModel)]="memo"
+			#payment_memo="ngModel"
+			pattern="([a-zA-Z 0-9]*)"
+			>
+			<validation-messages
+				[model]="payment_memo"
+				[messages]="{
+					pattern: 'Please enter a valid memo'}">
+			</validation-messages>
+		</div>
+
+		<div class="row row-padded">
+			<div class="column-xs column-padded form-block">
+				<button class="button button-primary"
+						type="submit"
+						[disabled]="payment_form.invalid">
+					Make Payment
+				</button>
+			</div>
+			<div class="column-xs column-padded form-block">
+				<button class="button button-default" (click)="cancel()">Cancel</button>
+			</div>
+		</div>
+		<div *ngIf="isError">
+			<p>
+				{{ currentError }}
+			</p>
+		</div>
+
+	</form>
+</div>

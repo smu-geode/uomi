@@ -1,44 +1,80 @@
-Borrow Form
 <div class="lend-form">
-	<div>
-		<label for="from_user">
-			From user
-		</label>
-		<input type="text"
-			id="from_user"
-			class="borrow-from-user"
-			[(ngModel)]="fromUser" />
-	</div>
-	<div>
-		<label for="amount">
-			Amount
-		</label>
-		<input type="text"
-			id="amount"
-			class="borrow-amount"
-			[(ngModel)]="amount" />
-	</div>
-	<div>
-		<label for="category">
-			Category
-		</label>
-		<select class="lend-category"
-				id="category"
-				[(ngModel)]="newLoan.category">
-			<option></option>
-			<option *ngFor="let category of categories"
-					[value]="category.id">
-				{{ category.name }}
-			</option>
-		</select>
-	</div>
-	<br />
-	<button class="btn-lend"
-			(click)="completeBorrow()">
-		Borrow
-	</button>
-	<button class="btn-cancel"
-			(click)="cancel()">
-		Cancel
-	</button>
+	<form name="borrowForm"
+		  #borrow_form="ngForm"
+		  (ngSubmit)="completeBorrow(borrow_form)"
+		  novalidate>
+		<div>
+			<label for="from_user">
+				From user
+			</label>
+			<input type="text"
+				id="from_user"
+				name="from_user"
+				class="borrow-from-user"
+				placeholder="friend@example.com"
+				[(ngModel)]="fromUser"
+				#from_user="ngModel"
+				required
+				email />
+				<validation-messages
+					[model]="from_user"
+					[messages]="{
+						email: 'Please enter a valid email'}">
+				</validation-messages>
+		</div>
+		<div>
+			<label for="borrow_amount">
+				Amount
+			</label>
+			<input type="text"
+				id="borrow_amount"
+				name="borrow_amount"
+				class="borrow-amount"
+				placeholder="$0.00"
+				[(ngModel)]="amount"
+				#borrow_amount="ngModel"
+				required
+				currency />
+				<validation-messages
+					[model]="borrow_amount"
+					[messages]="{
+						currency: 'Please enter a valid quantity'}">
+				</validation-messages>
+		</div>
+		<div>
+			<label for="category">
+				Category
+			</label>
+			<select class="lend-category"
+					id="category"
+					name="category"
+					[(ngModel)]="newLoan.category"
+					#category="ngModel"
+					required>
+				<option></option>
+				<option *ngFor="let category of categories"
+						[value]="category.id">
+					{{ category.name }}
+				</option>
+			</select>
+			<validation-messages
+				[model]="category"
+				[messages]="{
+					required: 'Please select a category'}">
+			</validation-messages>
+		</div>
+		<div *ngIf="isError" class="color-danger form-item">
+			{{ errorString }}
+		</div>
+		<br />
+		<button class="btn-lend"
+				type="submit"
+				[disabled]="borrow_form.invalid">
+			Borrow
+		</button>
+		<button class="btn-cancel"
+				(click)="cancel(); borrow_form.reset()">
+			Cancel
+		</button>
+	</form>
 </div>

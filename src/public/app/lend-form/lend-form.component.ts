@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { UsersService } from '../services/users-service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Loan } from '../services/loan';
 
 @Component({
@@ -21,6 +22,9 @@ export class LendFormComponent implements OnInit {
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[];
 
+	errorString: string;
+	isError: boolean = false;
+
 	constructor(private authService: AuthenticationService,
 				private loansService: LoansService,
 				private usersService: UsersService,
@@ -33,7 +37,7 @@ export class LendFormComponent implements OnInit {
 		this.loansService.getCategories().subscribe(x => this.categories = x);
 	}
 
-	completeLend() {
+	completeLend(formRef: any) {
 		// convert amount string to cents
 		if (this.isValidCurrenyString(this.amount)) {
 			this.newLoan.amountCents = this.convertToCents(this.amount);
@@ -46,13 +50,16 @@ export class LendFormComponent implements OnInit {
 			this.usersService.searchUserByEmail(""+this.toUser)
 			.subscribe(x => {
 				console.log(x);
-				if (x[0].email == this.toUser) {
+				if (x[0] && x[0].email == this.toUser) {
+					this.isError = false;
 					this.newLoan.to = x[0].id;
 					this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
 						this.newLoan.amountCents, +this.newLoan.category)
-						.subscribe(x => this.cancel(), x => console.log(x));
+						.subscribe(x => {formRef.reset(); this.cancel();}, x => console.log(x));
 				} else {
 					console.error("email does not match a user's email");
+					this.errorString = "Email does not match a user's email";
+					this.isError = true;
 				}
 			}, err => {
 				console.error(err);
@@ -65,7 +72,9 @@ export class LendFormComponent implements OnInit {
 	}
 
 	cancel() {
-		// this.modalService.closeModal(this.enclosingModalId);
+		this.amount = '';
+		this.isError = false;
+		this.errorString = '';
 		this.closeModal.emit();
 	}
 
