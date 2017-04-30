@@ -14,6 +14,7 @@ use \Uomi\Model\User;
 use \Uomi\Model\Settings;
 use \Uomi\Factory\UserFactory;
 use \Uomi\HashedPassword;
+use \Uomi\Authentication;
 
 // ROUTES
 $this->group('/users', function() {

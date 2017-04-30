@@ -14,11 +14,16 @@
 			<div class="dropdown-content dropdown-content-left" dropdownContent>
 				<ul class="dropdown-box dropdown-arrow">
 					<li class="dropdown-item" (click)="didClickLogOutButton()">Sign out</li>
+					<li class="dropdown-item" (click)="openModal('settings-modal')">Settings</li>
 				</ul>
 			</div>
 		</div><!-- .dropdown -->
 	</div><!-- .page-header-contents -->
 </header>
+
+<modal id="settings-modal" title="Settings">
+	<settings-form (closeModal)="closeModal('settings-modal')"></settings-form>
+</modal>
 
 <main class="page">
 	<div class="page-center">
