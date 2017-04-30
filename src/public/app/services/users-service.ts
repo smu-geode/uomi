@@ -38,9 +38,8 @@ export class UsersService implements OnInit {
 			.catch(this.handleError);
 	}
 
-	updatePassword(userId: number, email: string, oldPassword: string, newPassword: string): Observable<object> {
+	updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<object> {
 		let accountUpdate = {
-			'email': email,
 			'oldPassword': oldPassword,
 			'newPassword': newPassword
 		};
