@@ -81,18 +81,32 @@ class LoanController {
 	}
 
 	public function putLoanHandler(Request $req, Response $res): Response {
-		$form = $req->getParsedBody();
+		$form = new \Uomi\Form('Loan Creation');
+		$form->addField(
+			\Uomi\Field::make()->name('Details', 'details')
+		);
+		$form->addField(
+			\Uomi\Field::make()->name('Category', 'category')
+		);
 
-		$details = $form['details'] ?? null;
-		$category_id = $form['category_id'] ?? null;
-
-		$catModel = null;
 		try {
-			$catModel = \Uomi\Model\Category::findOrFail($category_id);
-		}catch (ModelNotFoundException $e) {
-			$stat = new \Uomi\Status();
-			$stat = $stat->error("CategoryNotFound")->message("Category is not found");
-			return $res->withStatus(404)->withJson($stat);
+			$fromResult = $form->submit($req->getParsedBody());
+		} catch(\RuntimeException $e) {
+			$$stat = new Status(['error' => $form->getErrors()]);
+			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a lona");
+			return $res->withStatus(400)->withJson($stat);
+		}
+
+		try {
+			$categoryModel = \Uomi\Model\Category::where('name', $form['name'])->firstOrFail();
+		} catch(ModelNotFoundException $e) {
+			try {
+				$categoryModel = \Uomi\Modle\Category::findOfFail(4);
+			} catch (ModelNotFoundException $f) {
+				$stat = new \Uomi\Status();
+				$stat = $stat->error("CategoryNotFound")->message("Category is not found");
+				return $res->withStatus(404)->withJson($stat);
+			}
 		}
 
 		try {
@@ -105,8 +119,8 @@ class LoanController {
 				return $auth->unathroizedResponse($res, $auth->getErrors());
 			}
 
-			$loan->details = $details;
-			$loan->category_id = $catModel->id;
+			$loan->details = $form['details'];
+			$loan->category_id = $categoryModel->id;
 			$loan->save();
 
 			$stat = new Status($loan);

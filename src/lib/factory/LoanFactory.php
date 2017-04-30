@@ -33,9 +33,9 @@ class LoanFactory {
 			throw $e;
 		}
 
-		$user = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['name']);
-		$user->save();
-		return $user;
+		$loan = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['name']);
+		$loan->save();
+		return $loan;
 	}
 
 	public function create(string $to_user, string $from_user, string $amount_cents, string $name): Loan {

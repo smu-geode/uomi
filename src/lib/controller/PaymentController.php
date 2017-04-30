@@ -27,21 +27,8 @@ class PaymentController {
     }
 
 	public function postPaymentCollectionHandler(Request $req, Response $res): Response {
-		$form = $req->getParsedBody();
-		$loan;
-
-		$amount = $form['amount_cents'];
-		$details = $form['details'];
-
-		if($amount === null) {
-			$stat = new Status($form);
-            $stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include an amount for the payment.");
-            return $res->withStatus(400)->withJson($stat);
-		}
-
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
-
 
 			$auth = new Authentication();
 			$isTo = $auth->isRequestAuthorized($req, $loan->to_user);
@@ -51,7 +38,6 @@ class PaymentController {
 			if(!($isTo || $isFrom)) {
 				return $auth->unathroizedResponse($res, $auth->getErrors());
 			}
-
 		} catch (ModelNotFound $e) {
 			$stat = new Status($req);
 			$stat = $stat->error("LoanNotFound")->message("Loan not found for " . $req->getAttribute('loan_id') . ".");
@@ -64,10 +50,17 @@ class PaymentController {
 			return $res->withStatus(406)->withJson($stat);
 		}
 
-		$payment = new \Uomi\Model\Payment();
+		$factory = new PaymentFactory($this->container);
+
+		try {
+			$payment = $factory->submitLoanCreationForm($data);
+		} catch(RuntimeException $e) {
+			$stat = new Status(['error' => $factory->getErrors()]);
+			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a lona");
+			return $res->withStatus(400)->withJson($stat);
+		}
+
 		$payment->loan_id = $loan->id;
-		$payment->amount_cents = $amount;
-		$payment->details = $details;
 		$payment->save();
 
 		$stat = new Status($payment);
