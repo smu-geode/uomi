@@ -33,7 +33,14 @@ export class RegistrationComponent {
 		this.usersService.signUp(this.user)
 			.subscribe(valid => {
 				this.isServerError = false;
-				this.authService.logIn(this.user)
+				this.authService.logIn(this.user).subscribe(res => {
+					sessionStorage.setItem('user_id', res.data.user_id);
+					sessionStorage.setItem('token', res.data.token);
+					this.authService.isAuthenticated.next(true);
+					this.router.navigate(['/dashboard']);
+				}, err => {
+					console.error(err);
+				})
 			}, error => {
 				let errors = JSON.parse(error);
 				this.serverError = errors['data']['errors'][0];
