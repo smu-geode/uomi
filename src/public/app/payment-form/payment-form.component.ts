@@ -21,6 +21,9 @@ export class PaymentFormComponent {
 	private amount: string;
 	private memo: string = '';
 
+	errorString: string;
+	isError: boolean = false;
+
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	private categories: object[];
 
@@ -33,22 +36,30 @@ export class PaymentFormComponent {
 
 	completePayment() {
 		if(!this.isValidCurrenyString(this.amount)) {
-			console.error("Invalid amount for payment");
+			console.log("Invalid amount for payment");
 			return;
 		}
 
 		let amountCents = this.convertToCents(this.amount);
-		this.loansService.addPaymentToLoan(this.loan, amountCents, this.memo)
-			.subscribe(x => {
-				console.log("payment posted");
-				this.cancel();
-			});
+		if (amountCents <= this.loan.amountCents) {
+			this.loansService.addPaymentToLoan(this.loan, amountCents, this.memo)
+				.subscribe(x => {
+					this.isError = false;
+					console.log("payment posted");
+					this.cancel();
+				});
+		} else {
+			this.errorString = "Cannot payback more then loan amount";
+			this.isError = true;
+		}
 
 	}
 
 	cancel() {
 		this.memo = '';
 		this.amount = '';
+		this.isError = false;
+		this.errorString = '';
 		this.closeModal.emit();
 	}
 
