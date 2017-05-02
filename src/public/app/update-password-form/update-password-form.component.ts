@@ -15,6 +15,7 @@ export class UpdatePasswordFormComponent implements OnInit {
 	private oldPassword: string;
 	private newPassword: string;
 	private newPasswordVerify: string;
+	private userName: string = "";
 
 	@Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
 	@Output() switchSettings: EventEmitter<void> = new EventEmitter<void>();
@@ -27,10 +28,19 @@ export class UpdatePasswordFormComponent implements OnInit {
 	ngOnInit() {
 		this.authService.rerouteIfAuthenticated('/dashboard');
 		this.authService.rerouteIfNotAuthenticated('/login');
+
+		this.usersService.getUserInfo(+sessionStorage.getItem('user_id')).subscribe(x => {
+			this.userName = x['name'] || "";
+		}, err => console.log(err));
 	}
 
 	updatePassword(formRef: any) {
 		this.usersService.updatePassword(+sessionStorage.getItem('user_id'), this.oldPassword, this.newPassword)
+			.subscribe(x => {console.log(x); this.cancel(); formRef.reset()}, err => console.log(err));
+	}
+
+	updateName(formRef: any) {
+		this.usersService.updateUserName(+sessionStorage.getItem('user_id'), this.userName)
 			.subscribe(x => {console.log(x); this.cancel(); formRef.reset()}, err => console.log(err));
 	}
 

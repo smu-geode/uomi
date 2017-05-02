@@ -50,6 +50,17 @@ export class UsersService implements OnInit {
 			.catch(this.handleError);
 	}
 
+	updateUserName(userId: number, userName: string): Observable<object> {
+		let name = {
+			'user_name': userName
+		}
+
+		let options = this.authService.getRequestOptions();
+		return this.http.put(`api/users/${userId}/`, JSON.stringify(name), options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	getSettings(userId: number): Observable<object> {
 		let options = this.authService.getRequestOptions();
 

@@ -27,12 +27,12 @@
 			<button class="button button-default" (click)="setSettingsTab('general')">General</button>
 		</div>
 		<div class="column-padded">
-			<button class="button button-default" (click)="setSettingsTab('security')">Security</button>
+			<button class="button button-default" (click)="setSettingsTab('account')">Account</button>
 		</div>
 	</div>
 	<settings-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='general'">
 	</settings-form>
-	<update-password-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='security'">
+	<update-password-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='account'">
 	</update-password-form>
 </modal>
 
