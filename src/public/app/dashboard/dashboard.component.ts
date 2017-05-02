@@ -5,6 +5,11 @@ import { LoansService } from '../services/loans-service';
 import { ModalService } from '../services/modal-service';
 import { Loan } from '../services/loan';
 
+// export enum SettingsTab {
+// 	General,
+// 	Security
+// }
+
 @Component({
 	selector: 'dashboard',
 	templateUrl: './dashboard.component.html',
@@ -17,6 +22,7 @@ import { Loan } from '../services/loan';
 })
 export class DashboardComponent implements OnInit { 
 
+	settingsTab: string = "general";
 	isLoaded: boolean = false;
 
 	loans: Loan[] = [];
@@ -90,13 +96,18 @@ export class DashboardComponent implements OnInit {
 
 	forgiveLoan(loan: Loan) {
 		console.log(loan);
-		this.loansService.deleteLoan(loan.id).subscribe(x => console.log(x), err => console.error(err));
+		this.loansService.deleteLoan(loan.id).subscribe(x => {
+			let userId = this.authService.getCurrentUserId();
+			this.loansService.getLoansForUser(userId).subscribe(
+				data => this.didLoadLoanData(data),
+				error => this.errorMessage = <any>error
+			);
+		}, err => console.error(err));
 		
-		let userId = this.authService.getCurrentUserId();
-		this.loansService.getLoansForUser(userId).subscribe(
-			data => this.didLoadLoanData(data),
-			error => this.errorMessage = <any>error
-		);
+	}
+
+	setSettingsTab(val: string) {
+		this.settingsTab = val;
 	}
 
 }

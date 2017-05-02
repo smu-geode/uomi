@@ -22,13 +22,17 @@
 </header>
 
 <modal id="settings-modal" title="Settings">
-	<settings-form (closeModal)="closeModal('settings-modal')"
-				   (switchPassword)="closeModal('settings-modal'); openModal('password-modal')">
+	<div class="row row-padded">
+		<div class="column-padded">
+			<button class="button button-default" (click)="setSettingsTab('general')">General</button>
+		</div>
+		<div class="column-padded">
+			<button class="button button-default" (click)="setSettingsTab('security')">Security</button>
+		</div>
+	</div>
+	<settings-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='general'">
 	</settings-form>
-</modal>
-<modal id="password-modal" title="Update Password">
-	<update-password-form (closeModal)="closeModal('password-modal')"
-						  (switchSettings)="closeModal('password-modal'); openModal('settings-modal')">
+	<update-password-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='security'">
 	</update-password-form>
 </modal>
 
