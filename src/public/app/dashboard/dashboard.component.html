@@ -14,7 +14,7 @@
 			<div class="dropdown-content dropdown-content-left" dropdownContent>
 				<ul class="dropdown-box dropdown-arrow">
 					<li class="dropdown-item" (click)="didClickLogOutButton()">Sign out</li>
-					<li class="dropdown-item" (click)="openModal('settings-modal')">Settings</li>
+					<li class="dropdown-item" (click)="openModal('settings-modal'); setSettingsTab('general')">Settings</li>
 				</ul>
 			</div>
 		</div><!-- .dropdown -->
