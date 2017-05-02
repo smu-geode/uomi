@@ -62,7 +62,7 @@
 								<img src="/img/default-profile-picture.png" class="profile-picture" width="32" height="32" aria-hidden="true">
 							</td>
 							<td>
-								{{ loan.fromMe ? loan.to.name : loan.from.name }}
+								{{ loan.fromMe ? (loan.to.name || loan.to.email) : (loan.from.name || loan.from.email) }}
 								
 							</td>
 							<td [class]="loan.category?.identifier">
