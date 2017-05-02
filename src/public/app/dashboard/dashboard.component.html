@@ -81,7 +81,8 @@
 									</button>
 									<div class="dropdown-content dropdown-content-left" dropdownContent>
 										<ul class="dropdown-box">
-											<li class="dropdown-item" (click)="openPaymentModal(loan)"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+											<li *ngIf="!loan.fromMe" class="dropdown-item" (click)="openPaymentModal(loan)"><i class="fa fa-money"></i>&nbsp; Pay Back</li>
+											<li *ngIf="loan.fromMe" class="dropdown-item" (click)="forgiveLoan(loan)"><i class="fa fa-times"></i>&nbsp; Forgive Loan</li>
 										</ul><!-- .dropdown-box -->
 									</div><!-- .dropdown-content -->
 								</div><!-- .dropdown -->

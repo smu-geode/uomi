@@ -72,7 +72,7 @@ export class LendFormComponent implements OnInit {
 			});
 			
 		} else {
-			console.error("invalid currency string");
+			console.log("invalid currency string");
 		}
 		
 	}

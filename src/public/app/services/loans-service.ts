@@ -61,11 +61,11 @@ export class LoansService {
 			.catch(this.handleError);
 	}
 
-	deleteLoan(loanId: number) {
+	deleteLoan(loanId: number): Observable<any> {
 		let options = this.authService.getRequestOptions();
 
-		this.http.delete(`api/loans/${loanId}/`, options)
-			.map(this.extractLoanData)
+		return this.http.delete(`api/loans/${loanId}/`, options)
+			// .map(this.extractLoanData)
 			.catch(this.handleError);
 	}
 
