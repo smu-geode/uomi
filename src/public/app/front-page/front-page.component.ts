@@ -16,7 +16,7 @@ export class FrontPageComponent implements OnInit {
 
 	ngOnInit() {
 		this.authService.rerouteIfAuthenticated('/dashboard');
-		this.authService.rerouteIfNotAuthenticated('/login');
+		// this.authService.rerouteIfNotAuthenticated('/login');
 	}
 
 }

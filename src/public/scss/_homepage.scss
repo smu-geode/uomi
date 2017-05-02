@@ -1,0 +1,43 @@
+
+.inverted-header {
+	color: #fff;
+	.page-header-brand {
+		fill: #fff;
+	}
+}
+
+.homepage {
+	height: auto;
+	background: linear-gradient(to bottom right, #007991, #78ffd6);
+	color: #fff;
+	.has-fixed-header & {
+		padding-top: 0;
+	}
+}
+
+.homepage-hero {
+	padding: 0 1rem;
+	margin-bottom: 3rem;
+}
+
+.homepage-hero-text {
+	font-weight: 700;
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.homepage-image {
+	width: 100%;
+	padding: 0 1rem;
+}
+
+.homepage-block {
+	@extend .feature--max-width-md;
+	@extend .feature--horizontally-centered;
+	width: 100%;
+	height: auto;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
