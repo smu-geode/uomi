@@ -70,7 +70,7 @@ export class BorrowFormComponent implements OnInit {
 			}, err => console.error(err));
 
 		} else {
-			console.error("invalid currency string");
+			console.log("invalid currency string");
 		}
 	}
 

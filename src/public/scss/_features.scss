@@ -14,11 +14,14 @@
 .feature--page-center-children {
 	// only centers children vertically when there's enough room
 	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	
-	@media screen and (min-width: 768px) and (min-height: 700px) {
-		align-items: center;
+	overflow-y: scroll;
+
+	& > * {
+		margin: auto;
+	}
+
+	@include breakpoint-up(md) {
+		padding: 1rem 0;
 	}
 }
 
