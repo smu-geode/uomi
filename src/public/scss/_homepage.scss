@@ -1,4 +1,6 @@
 
+$reflow-homepage-at: md;
+
 .inverted-header {
 	color: #fff;
 	.page-header-brand {
@@ -10,34 +12,70 @@
 	height: auto;
 	background: linear-gradient(to bottom right, #007991, #78ffd6);
 	color: #fff;
+
 	.has-fixed-header & {
 		padding-top: 0;
 	}
 }
 
-.homepage-hero {
-	padding: 0 1rem;
-	margin-bottom: 3rem;
-}
-
-.homepage-hero-text {
-	font-weight: 700;
-	font-size: 1.5rem;
-	margin-bottom: 1rem;
-}
-
-.homepage-image {
-	width: 100%;
-	padding: 0 1rem;
-}
-
 .homepage-block {
-	@extend .feature--max-width-md;
+	@extend .feature--max-width-lg;
 	@extend .feature--horizontally-centered;
 	width: 100%;
 	height: auto;
 	min-height: 100vh;
+
 	display: flex;
 	flex-direction: column;
+	align-items: stretch;
 	justify-content: center;
+
+	@include breakpoint-up($reflow-homepage-at) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.homepage-block-image, .homepage-hero {
+	@include breakpoint-up($reflow-homepage-at) {
+		flex: 1 0 0;
+	}
+}
+
+.homepage-hero {
+	width: 100%;
+	padding: 0 1rem;
+	margin-bottom: 3rem;
+
+	@include breakpoint-up($reflow-homepage-at) {
+		margin-bottom: 0;
+	}
+}
+
+.homepage-hero-text {
+	font-weight: 700;
+	font-size: 6vw;
+	margin-bottom: 1rem;
+
+	@include breakpoint-up($reflow-homepage-at) {
+		font-size: 4vw;
+	}
+
+	@include breakpoint-up(xl) {
+		font-size: 3rem;
+	}
+}
+
+.homepage-block-image {
+	width: 100%;
+	height: 50vw;
+	max-height: 40vh;
+
+	padding: 0 1rem;
+	margin: 0 auto;
+	background-image: url('../img/uomi-iphone.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center center;
 }
