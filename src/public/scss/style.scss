@@ -2,6 +2,8 @@
 
 @import 'mixins';       // functions for convenience
 
+@import 'animation';
+
 @import 'features';     // classes that implement common layout behavior,
 						// meant to be "@extend"-ed rather than used directly
 

@@ -2,6 +2,8 @@
 $reflow-homepage-at: md;
 
 .inverted-header {
+	@include links-no-underline();
+	@include links-same-color(#fff);
 	color: #fff;
 	.page-header-brand {
 		fill: #fff;
@@ -38,6 +40,7 @@ $reflow-homepage-at: md;
 }
 
 .homepage-block-image, .homepage-hero {
+
 	@include breakpoint-up($reflow-homepage-at) {
 		flex: 1 0 0;
 	}
