@@ -13,7 +13,14 @@
 			<img src="/img/default-profile-picture.png" class="header-user-menu" aria-label="User menu" dropdownOpen>
 			<div class="dropdown-content dropdown-content-left" dropdownContent>
 				<ul class="dropdown-box dropdown-arrow">
-					<li class="dropdown-item" (click)="didClickLogOutButton()">Sign out</li>
+					<li class="dropdown-item" (click)="openModal('settings-modal'); setSettingsTab('general')"
+					>
+						<i class="fa fa-cog" aria-hidden="true"></i>&nbsp;Settings
+					</li>
+					<li class="dropdown-item" (click)="didClickLogOutButton()"
+					>
+						<i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Sign out
+					</li>
 				</ul>
 			</div>
 		</div><!-- .dropdown -->
@@ -114,4 +121,23 @@
 
 <modal id="payment-modal" title="Payment">
 	<payment-form [loan]="loanForPayment" (closeModal)="closeModal('payment-modal')"></payment-form>
+</modal>
+
+<modal id="settings-modal" title="Settings">
+	<nav class="tab-bar">
+		<a class="tab-bar-item" (click)="setSettingsTab('general')" 
+		[ngClass]="{'tab-bar-item-current': (settingsTab == 'general')}">
+			<i class="fa fa-wrench tab-bar-icon" aria-hidden="true"></i>
+			<span class="tab-bar-label">General</span>
+		</a>
+		<a class="tab-bar-item" (click)="setSettingsTab('account')"
+		[ngClass]="{'tab-bar-item-current': (settingsTab == 'account')}">
+			<i class="fa fa-user tab-bar-icon" aria-hidden="true"></i>
+			<span class="tab-bar-label">Account</span>
+		</a>
+	</nav>
+	<settings-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='general'">
+	</settings-form>
+	<update-password-form (closeModal)="closeModal('settings-modal')" *ngIf="settingsTab==='account'">
+	</update-password-form>
 </modal>

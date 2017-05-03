@@ -38,15 +38,25 @@ export class UsersService implements OnInit {
 			.catch(this.handleError);
 	}
 
-	updatePassword(userId: number, email: string, oldPassword: string, newPassword: string): Observable<object> {
+	updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<object> {
 		let accountUpdate = {
-			'email': email,
 			'oldPassword': oldPassword,
 			'newPassword': newPassword
 		};
 
 		let options = this.authService.getRequestOptions();
 		return this.http.put(`api/users/${userId}/`, JSON.stringify(accountUpdate), options)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	updateUserName(userId: number, userName: string): Observable<object> {
+		let name = {
+			'user_name': userName
+		}
+
+		let options = this.authService.getRequestOptions();
+		return this.http.put(`api/users/${userId}/`, JSON.stringify(name), options)
 			.map(this.extractData)
 			.catch(this.handleError);
 	}
@@ -64,10 +74,10 @@ export class UsersService implements OnInit {
 		allowEmailUseBySearch: boolean): Observable<object> {
 		
 		let settings = {
-			'allNotifications': allowNotifications,
-			'borrowingRequests': borrowingRequests,
-			'payBackReminders': payBackReminders,
-			'allowEmailUseBySearch': allowEmailUseBySearch
+			'allow_notifications': allowNotifications,
+			'borrow_requests': borrowingRequests,
+			'payback_reminders': payBackReminders,
+			'view_email': allowEmailUseBySearch
 		};
 
 		let options = this.authService.getRequestOptions();

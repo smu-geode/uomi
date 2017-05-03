@@ -55,7 +55,8 @@ $modal-border-radius: 3px;
 	.modal {
 		width: 100%;
 		max-width: 576px;
-		max-height: 300px;
+		height: auto;
+		max-height: 500px;
 		margin: 1rem;
 		box-shadow: 0px 3px 20px rgba(black, 0.3);
 		overflow: hidden;

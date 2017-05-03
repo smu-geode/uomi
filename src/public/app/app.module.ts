@@ -13,6 +13,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PaymentFormComponent } from './payment-form/payment-form.component';
 import { LendFormComponent } from './lend-form/lend-form.component';
 import { BorrowFormComponent } from './borrow-form/borrow-form.component';
+import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { UpdatePasswordFormComponent } from './update-password-form/update-password-form.component';
 import { UsersService } from './services/users-service';
 import { AuthenticationService } from './services/authentication-service';
 
@@ -51,7 +53,9 @@ var routes = [
 					FrontPageComponent,
 					PaymentFormComponent,
 					LendFormComponent,
-					BorrowFormComponent ],
+					BorrowFormComponent,
+					SettingsFormComponent,
+					UpdatePasswordFormComponent ],
 	bootstrap:    [ AppComponent ],
 	providers:	  [ AuthenticationService, UsersService ]
 })

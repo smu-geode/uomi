@@ -312,3 +312,29 @@ $dropdown-arrow-size: 12px;
 	}
 
 }
+
+.tab-bar {
+	background: #eee;
+}
+
+.tab-bar-item {
+	width: 100px;
+	padding: 0.5rem;
+	display: inline-block;
+}
+
+.tab-bar-item-current {
+	color: $primary-color;
+	background: #ddd;
+}
+
+.tab-bar-icon {
+	display: block;
+	font-size: 2rem;
+	text-align: center;
+}
+
+.tab-bar-label {
+	text-align: center;
+	display: block;
+}

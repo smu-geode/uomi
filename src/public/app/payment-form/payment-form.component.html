@@ -24,11 +24,6 @@
 			required
 			currency
 			>
-			<validation-messages
-				[model]="payment_amount"
-				[messages]="{
-					currency: 'Please enter a valid quantity'}">
-			</validation-messages>
 		</div><!-- .form-item -->
 
 		<div class="form-item form-block" magicFormItem>
@@ -45,13 +40,24 @@
 			#payment_memo="ngModel"
 			pattern="([a-zA-Z 0-9]*)"
 			>
-			<validation-messages
-				[model]="payment_memo"
-				[messages]="{
-					pattern: 'Please enter a valid memo'}">
-			</validation-messages>
 		</div>
 
+		<validation-messages
+			[model]="payment_amount"
+			[messages]="{
+				currency: 'Please enter a valid quantity'}">
+		</validation-messages>
+
+		<validation-messages
+			[model]="payment_memo"
+			[messages]="{
+				pattern: 'Please enter a valid memo'}">
+		</validation-messages>
+
+		<div *ngIf="isError" class="color-danger form-item">
+			{{ errorString }}
+		</div>
+		
 		<div class="row row-padded">
 			<div class="column-xs column-padded form-block">
 				<button class="button button-primary"
@@ -63,11 +69,6 @@
 			<div class="column-xs column-padded form-block">
 				<button class="button button-default" (click)="cancel()">Cancel</button>
 			</div>
-		</div>
-		<div *ngIf="isError">
-			<p>
-				{{ currentError }}
-			</p>
 		</div>
 
 	</form>
