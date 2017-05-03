@@ -194,7 +194,6 @@ class LoanController {
 				return $auth->unathroizedResponse($res, $auth->getErrors());
 			}
 
-			$loan->payments->delete();
 			$loan->delete();
 			$stat = new Status();
 			$stat = $stat->message("Loan deleted");
