@@ -45,6 +45,10 @@ export class UpdatePasswordFormComponent implements OnInit {
 	}
 
 	cancel() {
+		this.userName = "";
+		this.oldPassword = "";
+		this.newPassword = "";
+		this.newPasswordVerify = "";
 		this.closeModal.emit();
 	}
 
