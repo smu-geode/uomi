@@ -12,7 +12,7 @@ $reflow-homepage-at: md;
 
 .homepage {
 	height: auto;
-	background: linear-gradient(to bottom right, #007991, #78ffd6);
+	background: black;
 	color: #fff;
 
 	.has-fixed-header & {
@@ -20,23 +20,38 @@ $reflow-homepage-at: md;
 	}
 }
 
-.homepage-block {
-	@extend .feature--max-width-lg;
-	@extend .feature--horizontally-centered;
+.homepage-block, .homepage-block-contents {
 	width: 100%;
 	height: auto;
 	min-height: 100vh;
+	overflow-x: hidden;
+}
 
+.homepage-block-contents {
+	@extend .feature--max-width-lg;
+	@extend .feature--horizontally-centered;
 	display: flex;
 	flex-direction: column;
-	align-items: stretch;
+	align-items: center;
 	justify-content: center;
+}
 
-	@include breakpoint-up($reflow-homepage-at) {
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
+.homepage-block-1 {
+	background: #007991;
+	background: linear-gradient(to bottom right, #007991, #78ffd6);
+
+	.homepage-block-contents {
+		@include breakpoint-up($reflow-homepage-at) {
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
 	}
+}
+
+.homepage-block-2 {
+	background: #ff512f;
+	background: linear-gradient(to right, #ff512f, #dd2476);
 }
 
 .homepage-block-image, .homepage-hero {
@@ -81,4 +96,49 @@ $reflow-homepage-at: md;
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center center;
+}
+
+.geode-logo {
+	width: 80vw;
+	max-width: 500px;
+	margin: 5rem 2rem 2rem;
+	@include breakpoint-up(sm) {
+		margin-top: -3rem;
+	}
+}
+
+.team-members {
+	width: 100%;
+	margin: 0 2rem 1rem;
+	padding: 0 1rem;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+
+	@include breakpoint-up(sm) {
+		flex-direction: row;
+	}
+}
+
+.team-member {
+	margin: 0 1rem 1rem;
+	flex: 1 0 0;
+	text-align: center;
+}
+
+.team-member-image {
+	width: 64px;
+	height: 64px;
+	margin: 0 auto 1rem;
+	border-radius: 50%;
+	display: block;
+}
+
+.team-member-name {
+	font-size: 1.3rem;
+	display: block;
+}
+
+.team-member-title {
+	opacity: 0.8;
 }
