@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
 				private modalService: ModalService) {}
 
 	ngOnInit() {
-		this.authService.rerouteIfNotAuthenticated('/registration');
+		this.authService.rerouteIfNotAuthenticated('/login');
 
 		let userId = this.authService.getCurrentUserId();
 		this.loansService.getLoansForUser(userId).subscribe(
@@ -86,6 +86,17 @@ export class DashboardComponent implements OnInit {
 
 	didClickLogOutButton() {
 		this.authService.logOut();
+	}
+
+	forgiveLoan(loan: Loan) {
+		console.log(loan);
+		this.loansService.deleteLoan(loan.id).subscribe(x => console.log(x), err => console.error(err));
+		
+		let userId = this.authService.getCurrentUserId();
+		this.loansService.getLoansForUser(userId).subscribe(
+			data => this.didLoadLoanData(data),
+			error => this.errorMessage = <any>error
+		);
 	}
 
 }

@@ -34,7 +34,7 @@ export class AuthenticationService {
 			.subscribe(res => {
 				sessionStorage.clear();
 				this.isAuthenticated.next(false);
-				this.router.navigate(['/registration']);
+				this.router.navigate(['/login']);
 			})
 		;
 	}

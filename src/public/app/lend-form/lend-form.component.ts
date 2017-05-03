@@ -50,12 +50,18 @@ export class LendFormComponent implements OnInit {
 			this.usersService.searchUserByEmail(""+this.toUser)
 			.subscribe(x => {
 				console.log(x);
-				if (x[0] && x[0].email == this.toUser) {
-					this.isError = false;
-					this.newLoan.to = x[0].id;
-					this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
-						this.newLoan.amountCents, +this.newLoan.category)
-						.subscribe(x => {formRef.reset(); this.cancel();}, x => console.log(x));
+				if (x[0]) {
+					if (x[0].id == sessionStorage.getItem('user_id')) {
+						this.errorString = "You cannot lend to yourself";
+						this.isError = true;
+
+					} else if (x[0].email == this.toUser) {
+						this.isError = false;
+						this.newLoan.to = x[0].id;
+						this.loansService.postNewLoan(+this.newLoan.from, +this.newLoan.to, 
+							this.newLoan.amountCents, +this.newLoan.category)
+							.subscribe(x => {formRef.reset(); this.cancel();}, x => console.log(x));
+					}
 				} else {
 					console.error("email does not match a user's email");
 					this.errorString = "Email does not match a user's email";
@@ -66,7 +72,7 @@ export class LendFormComponent implements OnInit {
 			});
 			
 		} else {
-			console.error("invalid currency string");
+			console.log("invalid currency string");
 		}
 		
 	}

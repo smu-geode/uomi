@@ -49,11 +49,6 @@
 									email
 									focusOnLoad
 									/>
-									<validation-messages
-										[model]="user_email"
-										[messages]="{
-											email: 'Please enter a valid email'}">
-									</validation-messages>
 								</div><!-- .form-item -->
 
 								<div class="form-item form-group-last-item" magicFormItem>
@@ -70,14 +65,21 @@
 									#user_password="ngModel"
 									required
 									>
-									<validation-messages
-										[model]="user_password"
-										[messages]="{
-											required: 'Please enter your password'}">
-									</validation-messages>
 								</div><!-- .form-item -->
 							</div><!-- .form-vertical-item-group -->
 
+							<validation-messages
+								[model]="user_email"
+								[messages]="{
+									email: 'Please enter a valid email'}">
+							</validation-messages>
+
+							<validation-messages
+								[model]="user_password"
+								[messages]="{
+									required: 'Please enter your password'}">
+							</validation-messages>
+							
 							<div *ngIf="isServerError" class="color-danger form-item">
 								{{ serverError }}
 							</div>
@@ -91,6 +93,7 @@
 							</button>
 						</form>
 					</div><!-- .form -->
+					
 				</section><!-- .card-content -->
 			</div><!-- .card-sm -->
 

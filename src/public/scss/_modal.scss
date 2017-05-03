@@ -14,9 +14,12 @@ $modal-border-radius: 3px;
 	width: 100%;
 	height: 100%;
 	background: white;
+	display: flex;
+	flex-direction: column;
 }
 
 .modal-header {
+	flex: 0;
 	padding: 0.5rem;
 	background: #527272;
 	color: #fff;
@@ -34,6 +37,11 @@ $modal-border-radius: 3px;
 	text-align: center;
 	font-weight: 500;
 	font-size: 1.2rem;
+}
+
+.modal-content {
+	flex: 1;
+	overflow: auto;
 }
 
 @include breakpoint-up(md) {

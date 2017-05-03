@@ -24,7 +24,9 @@ import {
 				<button class="button modal-header-left-button" (click)="closeModal()">Close</button>
 				<h3 class="modal-title">{{ title || '' }}</h3>
 			</header>
-			<ng-content></ng-content>
+			<section class="modal-content">
+				<ng-content></ng-content>
+			</section>
 		</div>
 	</div>
 	`,
