@@ -151,6 +151,10 @@ class LoanController {
 			$stat = new Status($form);
 			$stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include a category for the loan");
 			return $res->withStatus(400)->withJson($stat);
+		} elseif($to_user === $from_user) {
+			$stat = new Status($form);
+			$stat = $stat->error("DuplicateUser")->message("Please make sure user ID's are unique");
+			return $res->withStatus(400)->withJson($stat);
 		}
 
 
@@ -190,7 +194,7 @@ class LoanController {
 				return $auth->unathroizedResponse($res, $auth->getErrors());
 			}
 
-
+			$loan->payments->delete();
 			$loan->delete();
 			$stat = new Status();
 			$stat = $stat->message("Loan deleted");
@@ -199,6 +203,10 @@ class LoanController {
 			$stat = new Status();
 			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
 			return $res->withStatus(404)->withJson($stat);
+		} catch (\RuntimeExcetpion $e) {
+			$stat = new Status();
+			$stat = $stat->error("RuntimeException")->message("Loan with id:" . $loan_id . " was not deleted");
+			return $res->withStatus(400)->withJson($stat);
 		}
 	}
 }

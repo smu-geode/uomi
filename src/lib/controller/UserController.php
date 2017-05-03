@@ -156,16 +156,29 @@ class UserController {
 
 		$oldPassword = $data['oldPassword'] ?? null;
 		$newPassword = $data['newPassword'] ?? null;
+		$userName = $data['user_name'] ?? null;
 
-		if($oldPassword === null || $newPassword === null) {
-			$stat = new Status();
-			$stat = $stat->error("BadUserUpdate")->message("There was an error updating the user. Password(s) blank.");
-			return $res->withStatus(400)->withJson($stat);
-		}
+		
 		//never check whether a user has proper access to modify; will implement later i suppose
+
 		try {
 			$user = \Uomi\Model\User::findOrFail($req->getAttribute('user_id'));
-			$user->password = HashedPassword::makeFromPlainText($newPassword);  //where does the hashing occur again? i think we'll replace this with better implementation later
+			if(!($oldPassword === null || $newPassword === null)) {
+				
+				$givenHash = HashedPassword::makeFromPlainTextWithSalt($oldPassword, $user->salt);
+				$doesMatch = HashedPassword::compare($givenHash, $user->password);
+
+				if(!$doesMatch) {
+					$stat = new Status();
+					$stat = $stat->error("Unauthorized")->message("Current password is incorrect");
+					return $res->withStatus(401)->withJson($stat);
+				}
+
+				$user->password = HashedPassword::makeFromPlainText($newPassword);  //where does the hashing occur again? i think we'll replace this with better implementation later
+			} elseif(!($userName === null)) {
+				$user->name = $userName;
+			}
+			
 			$user->save();
 
 			$stat = new Status($user);
