@@ -50,8 +50,8 @@ $reflow-homepage-at: md;
 }
 
 .homepage-block-2 {
-	background: #ff512f;
-	background: linear-gradient(to right, #ff512f, #dd2476);
+	background: #434343;
+	background: linear-gradient(to bottom right, #000000, #434343);
 }
 
 .homepage-block-image, .homepage-hero {
@@ -98,19 +98,23 @@ $reflow-homepage-at: md;
 	background-position: center center;
 }
 
+.center-block {
+	width: 100%;
+	margin: auto;
+	padding: 0 1rem;
+}
+
 .geode-logo {
 	width: 80vw;
 	max-width: 500px;
-	margin: 5rem 2rem 2rem;
-	@include breakpoint-up(sm) {
-		margin-top: -3rem;
-	}
+	padding: 2rem;
+	margin: 0 auto;
+	display: block;
 }
 
 .team-members {
 	width: 100%;
-	margin: 0 2rem 1rem;
-	padding: 0 1rem;
+	padding: 0 2rem 1rem;
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
@@ -121,14 +125,15 @@ $reflow-homepage-at: md;
 }
 
 .team-member {
+	width: 100%;
 	margin: 0 1rem 1rem;
 	flex: 1 0 0;
 	text-align: center;
 }
 
 .team-member-image {
-	width: 64px;
-	height: 64px;
+	width: 90px;
+	height: 90px;
 	margin: 0 auto 1rem;
 	border-radius: 50%;
 	display: block;

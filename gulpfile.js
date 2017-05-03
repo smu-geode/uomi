@@ -20,7 +20,7 @@ const colors        = require('colors');
 
 const paths = {
 	html:           './src/public/app/**/*.html',
-	img:            './src/public/img/*.*',
+	img:            './src/public/img/**/*.*',
 	scss:           './src/public/scss/*.scss',
 	js:             './src/public/*.js',
 	php:            './src/**/*.php'
