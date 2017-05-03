@@ -44,7 +44,7 @@ CREATE TABLE `settings` (
 
     KEY `user` (`user_id`),
 
-    CONSTRAINT `user_settings` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    CONSTRAINT `user_settings` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -93,8 +93,8 @@ CREATE TABLE `loans` (
     KEY `lender` (`from_user`),
     KEY `category` (`category_id`),
 
-    CONSTRAINT `borrower` FOREIGN KEY (`to_user`) REFERENCES `users` (`id`),
-    CONSTRAINT `lender` FOREIGN KEY (`from_user`) REFERENCES `users` (`id`),
+    CONSTRAINT `borrower` FOREIGN KEY (`to_user`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `lender` FOREIGN KEY (`from_user`) REFERENCES `users` (`id`) ON DELETE CASCADE,
     CONSTRAINT `category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -120,7 +120,7 @@ CREATE TABLE `payments` (
 
     KEY `loan` (`loan_id`),
     
-    CONSTRAINT `loan` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`)
+    CONSTRAINT `loan` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -141,7 +141,7 @@ CREATE TABLE `sessions` (
 
     KEY `user_sess` (`user_id`),
 
-    CONSTRAINT `user_sess` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    CONSTRAINT `user_sess` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -151,7 +151,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE `analytics` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) unsigned NOT NULL,
+    `user_id` int(11) unsigned DEFAULT NULL,
     `host` varchar(256) DEFAULT NULL,
     `ip` varchar(256) DEFAULT NULL,
     `user_agent` varchar(256) DEFAULT NULL,

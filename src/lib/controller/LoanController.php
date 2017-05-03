@@ -9,6 +9,7 @@ use \Slim\Container;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
+use \Uomi\Authentication;
 
 use \Uomi\Model\Loan;
 use \Uomi\Model\User;
@@ -16,6 +17,7 @@ use \Uomi\Model\User;
 // ROUTES
 $this->group('/loans', function() {
 	$this->post('/', '\Uomi\Controller\LoanController:postLoanCollectionHandler');
+	$this->get('/categories/', '\Uomi\Controller\LoanController:getLoanCategoryCollectionHandler');
 	$this->get('/{loan_id}/', '\Uomi\Controller\LoanController:getLoanHandler');
 	$this->put('/{loan_id}/', '\Uomi\Controller\LoanController:putLoanHandler');
 	$this->delete('/{loan_id}/', '\Uomi\Controller\LoanController:deleteLoanHandler');
@@ -34,21 +36,32 @@ class LoanController {
 	}
 
 	public function getLoanHandler(Request $req, Response $res): Response {
-
+		
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+			
+			$isTo = Authentication::isRequestAuthorized($req, $loan->to_user);
+			$isFrom = Authentication::isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isTo || $isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 			$stat = new Status($loan);
 			$stat = $stat->message("Loan found");
 			return $res->withStatus(200)->withJson($stat);
 		} catch (ModelNotFoundException $e) {
 			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
+			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $req->getAttribute('loan_id') . " is not found");
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}
 
 	public function getUserLoanCollection(Request $req, Response $res): Response {
-
+		$auth = new Authentication();
+		if(!$auth->isRequestAuthorized($req, $req->getAttribute('user_id'))) {
+			return $auth->unauthorizedResponse($res);
+		}
 		try {
 			$user = User::findOrFail( $req->getAttribute('user_id') );
 		} catch(ModelNotFoundException $e) { // user not found
@@ -57,6 +70,10 @@ class LoanController {
 
 		$stat = new Status(['from_me' => $user->loansFrom()->get(), 'to_me' => $user->loansTo()->get()]);
 		return $res->withJson($stat);
+	}
+
+	public function getLoanCategoryCollectionHandler(Request $req, Response $res): Response {
+		return $res->withJson( new Status(\Uomi\Model\Category::all() ));
 	}
 
 	public function putLoanHandler(Request $req, Response $res): Response {
@@ -76,6 +93,14 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 			$loan->details = $details;
 			$loan->category_id = $catModel->id;
 			$loan->save();
@@ -100,6 +125,16 @@ class LoanController {
 		$category_id = $form['category_id'] ?? null;
 
 
+		$auth = new Authentication();
+		$isTo = $auth->isRequestAuthorized($req, $to_user);
+		$auth = new Authentication();
+		$isFrom = $auth->isRequestAuthorized($req, $from_user);
+
+		if(!($isTo || $isFrom)) {
+			return \Authentication\unauthorizedResponse($res);
+		}
+
+
 		if($to_user === null) {
 			$stat = new Status($form);
 			$stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include who the loan is to");
@@ -115,6 +150,10 @@ class LoanController {
 		} elseif($category_id === null) {
 			$stat = new Status($form);
 			$stat = $stat->error("InvalidRequestFormat")->message("Please make sure to include a category for the loan");
+			return $res->withStatus(400)->withJson($stat);
+		} elseif($to_user === $from_user) {
+			$stat = new Status($form);
+			$stat = $stat->error("DuplicateUser")->message("Please make sure user ID's are unique");
 			return $res->withStatus(400)->withJson($stat);
 		}
 
@@ -146,6 +185,15 @@ class LoanController {
 
 		try {
 			$loan = \Uomi\Model\Loan::findOrFail( $req->getAttribute('loan_id') );
+
+
+			$auth = new Authentication();
+			$isFrom = $auth->isRequestAuthorized($req, $loan->from_user);
+
+			if(!($isFrom)) {
+				return $auth->unathroizedResponse($res, $auth->getErrors());
+			}
+
 			$loan->delete();
 			$stat = new Status();
 			$stat = $stat->message("Loan deleted");
@@ -154,6 +202,10 @@ class LoanController {
 			$stat = new Status();
 			$stat = $stat->error("ResourceNotFound")->message("Loan with id:" . $loan_id . " is not found");
 			return $res->withStatus(404)->withJson($stat);
+		} catch (\RuntimeExcetpion $e) {
+			$stat = new Status();
+			$stat = $stat->error("RuntimeException")->message("Loan with id:" . $loan_id . " was not deleted");
+			return $res->withStatus(400)->withJson($stat);
 		}
 	}
 }

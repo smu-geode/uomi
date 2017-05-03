@@ -1,6 +1,6 @@
 <?php
 
-namespace Uomi;
+namespace Uomi\Factory;
 
 use \Slim\Http\Request;
 use \Slim\Http\Response;
@@ -8,9 +8,11 @@ use \Slim\Container;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use \Uomi\Model\Analytic;
 use \Uomi\Status;
+use \Uomi\Authentication;
 
-class AnalyticsController {
+class AnalyticFactory {
 
 	private $container;
 
@@ -18,14 +20,16 @@ class AnalyticsController {
 		$this->container = $c;
 	}
 
-	public function track(Request $req, int $user_id) {
+	public function track(Request $req) {
 		$header = $req->getHeaders();
+
+		$user_id = Authentication::getCurrentUserId($req);
 
 		$host = null;
 		$ip = $_SERVER['REMOTE_ADDR'];
 		$user_agent = null;
 		$language = null;
-
+		
 		foreach($header as $name => $value) {
 			if($name == 'Host') {
 				$host = reset($value) ?? NULL;
@@ -35,16 +39,15 @@ class AnalyticsController {
 				$language = reset($value) ?? NULL;
 			}
 		}
-
-		$analytic = new \Uomi\Model\Analytic();
 		
-
+		$analytic = new Analytic();
+		
 		$analytic->user_id = $user_id;
 		$analytic->host = $host;
 		$analytic->ip = $ip;
 		$analytic->user_agent = $user_agent;
 		$analytic->accept_language = $language;
-
+		
 		$analytic->save();
 	}
 }

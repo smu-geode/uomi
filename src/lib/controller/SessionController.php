@@ -6,12 +6,11 @@ use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \Slim\Container;
 
-use \Uomi\Controller\AnalyticsController;
-
 use \Uomi\Factory\SessionFactory;
 use \Uomi\HashedPassword;
 use \Uomi\Status;
 use \Uomi\Analytics;
+use \Uomi\Authentication;
 
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -29,17 +28,18 @@ class SessionController {
 		$this->container = $c;
 	}
 
-	public function postSessionCollectionHandler(Request $req, Response $res): Response{
+	public function postSessionCollectionHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
 
 		// Create the user
 		$factory = new SessionFactory($this->container);
 		try {
 			$session = $factory->submitLogInForm($data);
-			AnalyticsController::track($req, $session->user_id);
 		} catch(\RuntimeException $e) {
 			return self::badLogInResponse($res, $factory->getErrors());
 		}
+
+		\Uomi\Factory\AnalyticFactory::track($req, $session->user_id);
 		
 		$stat = new Status($session);
 		$stat = $stat->message('Session successfully created.');
@@ -47,25 +47,21 @@ class SessionController {
 	}
 
 	public function deleteSessionCollectionHandler(Request $req, Response $res): Response {
-		$form = $req->getParsedBody();
-
-		$session_key = $form['session_key'] ?? null;
-
-		if($session_key === null) {
-			$stat = new Status($req);
-			$stat = $stat->error("InvalidRequestFormat")->message("Please include a password attribute");
-			return $res->withStatus(400)->withJson($stat);
+		
+		try {
+			$token = Authentication::getSessionToken($req);
+		} catch(\RuntimeException $e) {
+			return Authentication::unauthorizedResponse($res);
 		}
 
 		try {
-			$sessModel = \Uomi\Model\Session::where('session_key', $session_key)->first();
+			$sessModel = \Uomi\Model\Session::where('token', $token)->firstOrFail();
 			$sessModel->delete();
 			$stat = new Status();
-			$stat = $stat->message("Session deleted. User is now logged out.");
-			return $res->withStatus(200)->withJson($stat);
-		}catch(ModelNotFound $e) {
+			return $res->withStatus(201)->withJson($stat);
+		} catch(ModelNotFoundException $e) {
 			$stat = new Status();
-			$stat = $stat->error("ResourceNotFound")->message("Resource not found in the database");
+			$stat = $stat->error('SessionNotFound');
 			return $res->withStatus(404)->withJson($stat);
 		}
 	}

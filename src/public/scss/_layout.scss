@@ -1,5 +1,7 @@
-$header-background: white;
-$header-height: 50px;
+$header-background: transparent;
+$logo-color: black;
+$header-height: 60px;
+$card-border-radius: 3px;
 
 .nav {
 	display: block;
@@ -8,6 +10,12 @@ $header-height: 50px;
 .nav-item {
 	display: inline-block;
 }
+
+.color-default { color: $default-color; }
+.color-primary { color: $primary-color; }
+.color-warning { color: $warning-color; }
+.color-success { color: $success-color; }
+.color-danger { color: $danger-color; }
 
 // the principal container, usually <body>
 .page-layout {
@@ -19,14 +27,13 @@ $header-height: 50px;
 .page-header {
 	width: 100%;
 	height: $header-height;
-	padding: 5px 0;
 	background: $header-background;
-	
 
 	.has-fixed-header & {
 		position: fixed;
 		top: 0;
 		left: 0;
+		z-index: 10;
 	}
 }
 
@@ -34,14 +41,30 @@ $header-height: 50px;
 	@extend .feature--max-width-xl;
 	@extend .feature--horizontally-centered;
 	height: 100%;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .page-header-brand {
-	text-align: center;
-	height: 100%;
+	text-align: left;
+	display: inline-block;
+	fill: $logo-color;
+}
+
+.header-user-menu {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	vertical-align: middle;
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 	
-	img {
-		max-height: 100%;
+	&, &:active, &:hover:active {
+		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	}
+	&:hover {
+		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 	}
 }
 
@@ -68,13 +91,12 @@ $header-height: 50px;
 
 // in this case, the loading text.
 .placeholder-message {
-	color: rgba(0,0,0,0.5);
-	font-size: 2rem;
-	font-style: italic;
-	font-weight: 300;
+	color: rgba(0,0,0,0.6);
+	font-size: 1.1rem;
 	text-align: center;
 	display: block;
-	padding: 1rem;
+	padding: 1.3rem;
+	text-transform: uppercase;
 }
 
 .card-header {
@@ -100,24 +122,21 @@ $header-height: 50px;
 	height: 100%;
 }
 
+.card-content {
+	background: white;
+	padding: 1px 0;
+}
+
 @each $name, $_ in $breakpoints {
 	.card-#{$name} {
 		@extend .feature--max-width-#{$name} !optional;
 		width: 100%;
 
-		.card-content {
-			background: white;
-			padding: 1px 0;
-			border-top: 1px solid $global-divider-color;
-			border-bottom: 1px solid $global-divider-color;
-		}
-
 		@include breakpoint-up($name) {
-			margin: 1rem;
+			// margin: 1rem;
 			.card-content {
-				border-radius: 0.5rem;
-				box-shadow: 0px 2px 8px rgba(black, 0.3);
-				border: none;
+				border-radius: $card-border-radius;
+				box-shadow: 0 0 3px rgba(black, .1);
 			}
 		}
 	}

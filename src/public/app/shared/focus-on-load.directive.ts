@@ -3,11 +3,9 @@ import { Directive, ElementRef, AfterContentChecked } from '@angular/core';
 @Directive({ selector: '[focusOnLoad]' })
 export class FocusOnLoadDirective implements AfterContentChecked { 
 
-	private isFocused: boolean;
+	private isFocused: boolean = false;
 
-	constructor(private element: ElementRef) {
-		this.isFocused = false;
-	}
+	constructor(private element: ElementRef) {}
 
 	ngAfterContentChecked() {
 		this.doFocus();

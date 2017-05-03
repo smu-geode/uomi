@@ -1,0 +1,149 @@
+
+$reflow-homepage-at: md;
+
+.inverted-header {
+	@include links-no-underline();
+	@include links-same-color(#fff);
+	color: #fff;
+	.page-header-brand {
+		fill: #fff;
+	}
+}
+
+.homepage {
+	height: auto;
+	background: black;
+	color: #fff;
+
+	.has-fixed-header & {
+		padding-top: 0;
+	}
+}
+
+.homepage-block, .homepage-block-contents {
+	width: 100%;
+	height: auto;
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+.homepage-block-contents {
+	@extend .feature--max-width-lg;
+	@extend .feature--horizontally-centered;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.homepage-block-1 {
+	background: #007991;
+	background: linear-gradient(to bottom right, #007991, #78ffd6);
+
+	.homepage-block-contents {
+		@include breakpoint-up($reflow-homepage-at) {
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+}
+
+.homepage-block-2 {
+	background: #434343;
+	background: linear-gradient(to bottom right, #000000, #434343);
+}
+
+.homepage-block-image, .homepage-hero {
+
+	@include breakpoint-up($reflow-homepage-at) {
+		flex: 1 0 0;
+	}
+}
+
+.homepage-hero {
+	width: 100%;
+	padding: 0 1rem;
+	margin-bottom: 3rem;
+
+	@include breakpoint-up($reflow-homepage-at) {
+		margin-bottom: 0;
+	}
+}
+
+.homepage-hero-text {
+	font-weight: 700;
+	font-size: 6vw;
+	margin-bottom: 1rem;
+
+	@include breakpoint-up($reflow-homepage-at) {
+		font-size: 4vw;
+	}
+
+	@include breakpoint-up(xl) {
+		font-size: 3rem;
+	}
+}
+
+.homepage-block-image {
+	width: 100%;
+	height: 50vw;
+	max-height: 40vh;
+
+	padding: 0 1rem;
+	margin: 0 auto;
+	background-image: url('../img/uomi-iphone.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center center;
+}
+
+.center-block {
+	width: 100%;
+	margin: auto;
+	padding: 0 1rem;
+}
+
+.geode-logo {
+	width: 80vw;
+	max-width: 500px;
+	padding: 2rem;
+	margin: 0 auto;
+	display: block;
+}
+
+.team-members {
+	width: 100%;
+	padding: 0 2rem 1rem;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+
+	@include breakpoint-up(sm) {
+		flex-direction: row;
+	}
+}
+
+.team-member {
+	width: 100%;
+	margin: 0 1rem 1rem;
+	flex: 1 0 0;
+	text-align: center;
+}
+
+.team-member-image {
+	width: 90px;
+	height: 90px;
+	margin: 0 auto 1rem;
+	border-radius: 50%;
+	display: block;
+}
+
+.team-member-name {
+	font-size: 1.3rem;
+	display: block;
+}
+
+.team-member-title {
+	opacity: 0.8;
+}

@@ -21,6 +21,11 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	//     'validated' => 'boolean',
 	// ];
 
+	// called as ::like($field, $value)
+	public function scopeLike($query, $field, $value) {
+		return $query->where($field, 'LIKE', "%$value%");
+	}
+
 	public function loansFrom() {
 		return $this->hasMany('\Uomi\Model\Loan', 'from_user');
 	}

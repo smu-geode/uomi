@@ -1,38 +1,45 @@
-import { Injectable , OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class AuthenticationService implements OnInit { 
+export class AuthenticationService { 
 
 	private baseUrl = 'http://uomi.dev';
 	private resource = 'api/sessions';
 
+	public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(null); 
+
 	constructor(private http: Http,
 				private router: Router) {
-
+		let status = this.checkUserAuthenticated();
+		this.isAuthenticated.next(status);
 	}
 
-	ngOnInit() {}
-
-	logIn(user: any) {
-		console.log(JSON.stringify(user));
+	logIn(logInForm: any) {
 		let options = this.getRequestOptions();
 
-		this.http.post(`${this.baseUrl}/${this.resource}/`, JSON.stringify(user), options)
+		return this.http.post(`api/sessions/`, logInForm, options)
+			.map(this.extractData)
+			.catch(this.handleError)
+		;
+	}
+
+	logOut() {
+		let options = this.getRequestOptions();
+		this.http.delete(`api/sessions/`, options)
 			.map(this.extractData)
 			.catch(this.handleError)
 			.subscribe(res => {
-				// place data payload in sessionStorage
-				sessionStorage.setItem('user_id', res.data.user_id);
-				sessionStorage.setItem('token', res.data.token);
-				this.router.navigate(['/dashboard']);
-			}
-		);
+				sessionStorage.clear();
+				this.isAuthenticated.next(false);
+				this.router.navigate(['/login']);
+			})
+		;
 	}
 
-	isUserAuthenticated(): boolean {
+	checkUserAuthenticated(): boolean {
 		return sessionStorage.getItem('token') !== null;
 	}
 
@@ -40,15 +47,21 @@ export class AuthenticationService implements OnInit {
 		return +sessionStorage.getItem('user_id');
 	}
 
-	rerouteIfNotAuthenticated(route: string): void {
-		if (!this.isUserAuthenticated()) {
+	rerouteIfAuthenticated(route: string) {
+		if (this.isAuthenticated.getValue() === true) {
+			this.router.navigate([route]);
+		}
+	}
+
+	rerouteIfNotAuthenticated(route: string) {
+		if (this.isAuthenticated.getValue() === false) {
 			this.router.navigate([route]);
 		}
 	}
 
 	getRequestOptions(): RequestOptions {
 		let headers = {'Content-Type': 'application/json'};
-		if(this.isUserAuthenticated()) {
+		if(this.isAuthenticated.getValue() === true) {
 			headers['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
 		}
 		return new RequestOptions({headers: new Headers(headers)});
@@ -60,16 +73,17 @@ export class AuthenticationService implements OnInit {
 
 	handleError(error: Response | any) {
 		let errorMessage: string;
+		let err: string;
 		if (error instanceof Response) {
 			let body = error.json() || '';
-			let err = body.error || JSON.stringify(body);
+			err = body.error || JSON.stringify(body);
 			errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
 		} 
 		else {
 			errorMessage = error._body.message ? error._body.message : error.toString();
 		}
 		console.error(errorMessage);
-		return Observable.throw(errorMessage);
+		return Observable.throw(err);
 	}
 
 }	

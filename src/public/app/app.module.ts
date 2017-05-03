@@ -1,6 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { FormsModule }	 from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
@@ -9,6 +10,11 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
+import { LendFormComponent } from './lend-form/lend-form.component';
+import { BorrowFormComponent } from './borrow-form/borrow-form.component';
+import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { UpdatePasswordFormComponent } from './update-password-form/update-password-form.component';
 import { UsersService } from './services/users-service';
 import { AuthenticationService } from './services/authentication-service';
 
@@ -35,6 +41,7 @@ var routes = [
 
 @NgModule({
 	imports:      [ BrowserModule,
+					BrowserAnimationsModule,
 					FormsModule,
 					HttpModule,
 					RouterModule.forRoot(routes),
@@ -43,7 +50,12 @@ var routes = [
 					RegistrationComponent,
 					LoginComponent,
 					DashboardComponent,
-					FrontPageComponent ],
+					FrontPageComponent,
+					PaymentFormComponent,
+					LendFormComponent,
+					BorrowFormComponent,
+					SettingsFormComponent,
+					UpdatePasswordFormComponent ],
 	bootstrap:    [ AppComponent ],
 	providers:	  [ AuthenticationService, UsersService ]
 })
