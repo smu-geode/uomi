@@ -133,6 +133,10 @@ $button-disabled-color: #999;
 	}
 }
 
+.button-inverse {
+	@include button-style($inverse-color);
+}
+
 .button-default {
 	@include button-style($default-color);
 }
