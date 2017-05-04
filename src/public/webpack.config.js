@@ -15,7 +15,8 @@ function root(p) {
 
 module.exports = {
 
-	devtool: 'cheap-module-source-map',
+	cache: true,
+	// devtool: 'cheap-module-source-map',
 	target: 'web',
 
 	entry: {
@@ -29,7 +30,19 @@ module.exports = {
 		modules: [
 			root('./src/public/app'),
 			root('./node_modules')
-		]
+		],
+		alias: {
+			'@angular/core$': root('./node_modules/@angular/core/bundles/core.umd.min.js'),
+			'@angular/compiler$': root('./node_modules/@angular/compiler/bundles/compiler.umd.min.js'),
+			'@angular/common$': root('./node_modules/@angular/common/bundles/common.umd.min.js'),
+			'@angular/http$': root('./node_modules/@angular/http/bundles/http.umd.min.js'),
+			'@angular/router$': root('./node_modules/@angular/router/bundles/router.umd.min.js'),
+			'@angular/forms$': root('./node_modules/@angular/forms/bundles/forms.umd.min.js'),
+			'@angular/platform-browser$': root('./node_modules/@angular/platform-browser/bundles/platform-browser.umd.min.js'),
+			'@angular/platform-browser-dynamic$': root('./node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min.js'),
+			'@angular/platform-browser/animations$': root('./node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.min.js'),
+			'@angular/animations$': root('./node_modules/@angular/animations/bundles/animations.umd.min.js')
+		}
 	},
 
 	output: {
@@ -65,7 +78,22 @@ module.exports = {
 		]
 	},
 
-	stats: 'errors-only',
+	stats: {
+		colors: true,
+		hash: false,
+		version: false,
+		timings: false,
+		assets: false,
+		chunks: false,
+		modules: false,
+		reasons: false,
+		children: false,
+		source: false,
+		errors: false,
+		errorDetails: false,
+		warnings: false,
+		publicPath: false
+	},
 
 	plugins: [
 
@@ -85,7 +113,9 @@ module.exports = {
 		),
 
 		new webpack.optimize.CommonsChunkPlugin({
-			name: ['app', 'vendor', 'polyfills']
+			// name: ['app', 'vendor', 'polyfills']
+			name: ['vendor', 'polyfills'],
+			minChunks: Infinity
 		}),
 
 		new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
