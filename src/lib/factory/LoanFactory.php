@@ -17,7 +17,7 @@ class LoanFactory {
 	private $container;
 	private $errors;
 
-	function __construct(Contianer $c) {
+	function __construct(\Slim\Container $c) {
 		$this->container = $c;
 		$this->errors = [];
 	}
