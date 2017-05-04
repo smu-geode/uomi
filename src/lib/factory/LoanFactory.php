@@ -77,6 +77,7 @@ class LoanFactory {
 		$form->addField(
 			\Uomi\Field::make()->name('Category', 'category')
 		);
+		return $form;
 	}
 }
 
