@@ -43,7 +43,7 @@ class LoanFactory {
 			$categoryModel = \Uomi\Model\Category::where('name', $name)->firstOrFail();
 		} catch(ModelNotFoundException $e) {
 			try {
-				$categoryModel = \Uomi\Modle\Category::findOfFail(4);
+				$categoryModel = \Uomi\Model\Category::findOfFail(4);
 			} catch (ModelNotFoundException $f) {
 				$this->errors += [$f];
 				throw new \RuntimeException();
