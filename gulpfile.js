@@ -122,9 +122,9 @@ function webpack(options, done) {
 	});
 	cmd.on('error', (error) => {
 		process.stderr.write(colors.red('[Webpack] ' + error));
-		return;
+		done();
 	});
-	cmd.on('exit', done);
+	cmd.on('exit', () => { done(); });
 }
 
 gulp.task('app', (done) => {

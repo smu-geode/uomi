@@ -39,9 +39,10 @@ module.exports = {
 			'@angular/router$': root('./node_modules/@angular/router/bundles/router.umd.min.js'),
 			'@angular/forms$': root('./node_modules/@angular/forms/bundles/forms.umd.min.js'),
 			'@angular/platform-browser$': root('./node_modules/@angular/platform-browser/bundles/platform-browser.umd.min.js'),
-			'@angular/platform-browser-dynamic$': root('./node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min.js'),
+			'@angular/platform-browser-dynamic$': root('./node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamicgit.umd.min.js'),
 			'@angular/platform-browser/animations$': root('./node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.min.js'),
-			'@angular/animations$': root('./node_modules/@angular/animations/bundles/animations.umd.min.js')
+			'@angular/animations$': root('./node_modules/@angular/animations/bundles/animations.umd.min.js'),
+			// 'rxjs$': root('./node_modules/rxjs/bundles/Rx.min.js')
 		}
 	},
 
@@ -120,7 +121,7 @@ module.exports = {
 
 		new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
 			mangle: false,
-			sourceMap: true
+			// sourceMap: true
 		}),
 
 		new HtmlWebpackPlugin({
