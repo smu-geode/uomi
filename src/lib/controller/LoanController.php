@@ -132,7 +132,7 @@ class LoanController {
 		}
 	}
 
-	public function postLoanCollectinoHandler(Request $req, Response $res): Response {
+	public function postLoanCollectionHandler(Request $req, Response $res): Response {
 		$data = $req->getParsedBody();
 
 		$auth = new Authentication();
