@@ -27,16 +27,14 @@ export class SettingsFormComponent implements OnInit {
 				private route: ActivatedRoute) {}
 
 	ngOnInit() {
-		this.authService.rerouteIfAuthenticated('/dashboard');
-		this.authService.rerouteIfNotAuthenticated('/login');
 		this.usersService.getSettings(+sessionStorage.getItem('user_id')).subscribe(x => {
 			console.log(x);
 			this.settings = x;
-			this._allow_notifications = (x['allow_notifications'] == "0" ? false : true);
-			this._borrow_requests = (x['borrow_requests'] == "0" ? false : true);
-			this._payback_reminders = (x['payback_reminders'] == "0" ? false : true);
-			this._view_email = (x['view_email'] == "0" ? false : true);
-		}, err =>{
+			this._allow_notifications = (x['allow_notifications'] == "1");
+			this._borrow_requests = (x['borrow_requests'] == "1");
+			this._payback_reminders = (x['payback_reminders'] == "1");
+			this._view_email = (x['view_email'] == "1");
+		}, err => {
 			console.error(err);
 		});
 	}

@@ -314,7 +314,8 @@ $dropdown-arrow-size: 12px;
 }
 
 .tab-bar {
-	background: #eee;
+	background: white;
+	border-bottom: 1px solid #ccc;
 }
 
 .tab-bar-item {
@@ -325,7 +326,7 @@ $dropdown-arrow-size: 12px;
 
 .tab-bar-item-current {
 	color: $primary-color;
-	background: #ddd;
+	background: #eee;
 }
 
 .tab-bar-icon {

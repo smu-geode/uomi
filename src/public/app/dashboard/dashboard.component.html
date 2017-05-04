@@ -13,6 +13,9 @@
 			<img src="/img/default-profile-picture.png" class="header-user-menu" aria-label="User menu" dropdownOpen>
 			<div class="dropdown-content dropdown-content-left" dropdownContent>
 				<ul class="dropdown-box dropdown-arrow">
+					<li class="dropdown-item">
+						<em *ngIf="user">Hi, {{ user.name || user.email }}</em>
+					</li>
 					<li class="dropdown-item" (click)="openModal('settings-modal'); setSettingsTab('general')"
 					>
 						<i class="fa fa-cog" aria-hidden="true"></i>&nbsp;Settings
