@@ -23,6 +23,14 @@ mark {
 	border-bottom: 1px solid hsla(60,100,48,1);
 }
 
+em {
+	font-style: italic;
+}
+
+strong {
+	font-weight: bold;
+}
+
 .screen-reader {
 	@extend .feature--expose-to-screen-reader;
 }

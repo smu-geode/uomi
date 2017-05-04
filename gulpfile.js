@@ -4,7 +4,7 @@ const gulp          = require('gulp');
 const util          = require('gulp-util');
 
 const sass          = require('gulp-sass');
-const imagemin      = require('gulp-imagemin');
+// const imagemin      = require('gulp-imagemin');
 const sourcemaps    = require('gulp-sourcemaps');
 const flatten       = require('gulp-flatten');
 
@@ -80,7 +80,7 @@ gulp.task('watch:html', () => {
 
 gulp.task('img', (done) => {
 	gulp.src(paths.img)
-		.pipe(imagemin())
+		// .pipe(imagemin())
 		.pipe(gulp.dest(buildPaths.img));
 	done();
 });
@@ -186,8 +186,8 @@ function docker(cmdName, done) {
 }
 
 function dockerSsh() {
-	let ssh = spawn('sudo', ['-E', `bin/ssh.sh`], { 
-		stdio: [0, 1, 2], 
+	let ssh = spawn('sudo', ['-E', `bin/ssh.sh`], {
+		stdio: [0, 1, 2],
 		env: {
 			PATH: '/usr/local/bin:'+process.env.PATH,
 			GULP_TARGET: TARGET,

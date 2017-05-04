@@ -4,6 +4,7 @@ import { AuthenticationService } from '../services/authentication-service';
 import { LoansService } from '../services/loans-service';
 import { ModalService } from '../services/modal-service';
 import { Loan } from '../services/loan';
+import { User } from '../services/user';
 
 // export enum SettingsTab {
 // 	General,
@@ -30,6 +31,8 @@ export class DashboardComponent implements OnInit {
 	loansToMe: Loan[] = [];
 	errorMessage: any;
 
+	user: User;
+
 	lentTotal: number;
 	borrowedTotal: number;
 
@@ -46,6 +49,15 @@ export class DashboardComponent implements OnInit {
 		let userId = this.authService.getCurrentUserId();
 		this.loansService.getLoansForUser(userId).subscribe(
 			data => this.didLoadLoanData(data),
+			error => this.errorMessage = <any>error
+		);
+
+		this.usersService.getUserInfo(userId).subscribe(
+			data => {
+				this.user = new User();
+				this.user = this.user.deserialize(data);
+				console.log(this.user);
+			},
 			error => this.errorMessage = <any>error
 		);
 	}

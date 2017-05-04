@@ -35,8 +35,8 @@ export class PaymentFormComponent {
 	}
 
 	completePayment() {
-		if(!this.isValidCurrenyString(this.amount)) {
-			console.log("Invalid amount for payment");
+		if(!this.isValidCurrencyString(this.amount)) {
+			console.log("Please enter a valid amount.");
 			return;
 		}
 
@@ -49,7 +49,7 @@ export class PaymentFormComponent {
 					this.cancel();
 				});
 		} else {
-			this.errorString = "Cannot payback more then loan amount";
+			this.errorString = "You cannot pay back more than you owe.";
 			this.isError = true;
 		}
 
@@ -63,7 +63,7 @@ export class PaymentFormComponent {
 		this.closeModal.emit();
 	}
 
-	isValidCurrenyString(amount: string): boolean {
+	isValidCurrencyString(amount: string): boolean {
 		let regex = /^\d+(?:\.\d{0,2})?$/;
 		return regex.test(amount);
 	}

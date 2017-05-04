@@ -103,14 +103,16 @@ $caption-color: rgba(0,0,0,0.7);
 	}
 	.loan-category-name {
 		color: $color;
-		text-transform: uppercase;
-		font-size: 0.9rem;
 	}
 }
 
 .loan-category-name {
 	display: inline-block;
 	margin-left: 0.5rem;
+
+	color: #555;
+	text-transform: uppercase;
+	font-size: 0.9rem;
 
 	opacity: 0;
 	transform: rotateX(90deg);
@@ -133,10 +135,11 @@ $caption-color: rgba(0,0,0,0.7);
 	padding: 0.5rem;
 	text-align: center;
 	color: white;
+	background: #555;
 }
 
 .category-food {
-	@include category-label-style(#CC3FC6);
+	@include category-label-style(#ab52cc);
 }
 
 .category-bills {
@@ -145,4 +148,8 @@ $caption-color: rgba(0,0,0,0.7);
 
 .category-entertainment {
 	@include category-label-style(#CC3C3C);
+}
+
+.category-transport {
+	@include category-label-style(#e09500);
 }
