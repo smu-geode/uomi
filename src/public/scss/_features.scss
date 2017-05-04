@@ -1,0 +1,35 @@
+// Classes that can be "@extend"-ed to be added to a class.
+
+@each $name, $breakpoint in $breakpoints {
+	.feature--max-width-#{$name} {
+		$sizes: map-get($breakpoints, $name);
+		max-width: map-get($sizes, min); // breakpoints['lg'].min
+	}
+}
+
+.feature--horizontally-centered {
+	margin: 0 auto;
+}
+
+.feature--page-center-children {
+	// only centers children vertically when there's enough room
+	display: flex;
+	overflow-y: scroll;
+
+	& > * {
+		margin: auto;
+	}
+
+	@include breakpoint-up(md) {
+		padding: 1rem 0;
+	}
+}
+
+.feature--expose-to-screen-reader {
+	// [CITE] https://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-how/
+	clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}

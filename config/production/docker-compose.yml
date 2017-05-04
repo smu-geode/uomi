@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+    web:
+        image: abiosoft/caddy:php
+        restart: always
+        stdin_open: true
+        tty: true
+        ports:
+            - 80:80
+            - 443:443
+        links:
+            - database
+        volumes:
+            - ./caddy/Caddyfile:/etc/Caddyfile
+            - ./php/php.ini:/etc/php7/php.ini
+            - caddy_data:/etc/caddycerts
+            - ../../build:/var/www/uomi
+            - ../../logs/caddy:/var/log/caddy
+            - ../../logs/php:/var/log/php7
+            - ../../logs/api:/var/log/api
+        environment:
+            CADDYPATH: /etc/caddycerts
+            UOMI_DEBUG: 0
+            UOMI_DB_HOST: 127.0.0.1
+            UOMI_DB_PORT: 3306
+            UOMI_DB_NAME: uomi
+            UOMI_DB_USERNAME: uomi
+            UOMI_DB_PASSWORD: repress-glimmer-trigram-uncoil
+
+    database:
+        image: mysql:latest
+        restart: always
+        expose:
+            - 3306
+        volumes:
+            - database_data:/var/lib/mysql
+            - ../../data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: grandma-ill-fray-parch
+            MYSQL_DATABASE: uomi
+            MYSQL_USER: uomi
+            MYSQL_PASSWORD: repress-glimmer-trigram-uncoil
+
+volumes:
+    caddy_data:
+    database_data:

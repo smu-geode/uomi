@@ -1,0 +1,143 @@
+$header-background: transparent;
+$logo-color: black;
+$header-height: 60px;
+$card-border-radius: 3px;
+
+.nav {
+	display: block;
+}
+
+.nav-item {
+	display: inline-block;
+}
+
+.color-default { color: $default-color; }
+.color-primary { color: $primary-color; }
+.color-warning { color: $warning-color; }
+.color-success { color: $success-color; }
+.color-danger { color: $danger-color; }
+
+// the principal container, usually <body>
+.page-layout {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.page-header {
+	width: 100%;
+	height: $header-height;
+	background: $header-background;
+
+	.has-fixed-header & {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 10;
+	}
+}
+
+.page-header-contents {
+	@extend .feature--max-width-xl;
+	@extend .feature--horizontally-centered;
+	height: 100%;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.page-header-brand {
+	text-align: left;
+	display: inline-block;
+	fill: $logo-color;
+}
+
+.header-user-menu {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	vertical-align: middle;
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	
+	&, &:active, &:hover:active {
+		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	}
+	&:hover {
+		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	}
+}
+
+// the main body
+.page {
+	width: 100%;
+	height: 100%;
+
+	.has-fixed-header & {
+		padding-top: $header-height;
+	}
+}
+
+.page-center {
+	width: 100%;
+	height: 100%;
+	@extend .feature--page-center-children;
+	position: relative;
+}
+
+.page-loader {
+	padding: 1rem;
+}
+
+// in this case, the loading text.
+.placeholder-message {
+	color: rgba(0,0,0,0.6);
+	font-size: 1.1rem;
+	text-align: center;
+	display: block;
+	padding: 1.3rem;
+	text-transform: uppercase;
+}
+
+.card-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.card-header-text {
+	font-size: 2rem;
+	font-weight: 300;
+	padding: 1rem;
+}
+
+.card-header-nav {
+	@include links-no-underline();
+	@include links-same-color(rgba(0,0,0,0.5));
+}
+
+.card-header-nav-item {
+	padding: 1rem;
+	height: 100%;
+}
+
+.card-content {
+	background: white;
+	padding: 1px 0;
+}
+
+@each $name, $_ in $breakpoints {
+	.card-#{$name} {
+		@extend .feature--max-width-#{$name} !optional;
+		width: 100%;
+
+		@include breakpoint-up($name) {
+			// margin: 1rem;
+			.card-content {
+				border-radius: $card-border-radius;
+				box-shadow: 0 0 3px rgba(black, .1);
+			}
+		}
+	}
+}

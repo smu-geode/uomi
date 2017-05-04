@@ -4,8 +4,11 @@
 
 # Based on a combination of github/gitignore templates.
 
+# BUILD RESULTS
+/build/
+
 # ENV FILE
-env.php
+.env
 
 # NPM
 /node_modules/
@@ -21,6 +24,9 @@ composer.phar
 
 # ELOQUENT
 *.sqlite
+
+# LOGS
+*.log
 
 # WINDOWS
 # Windows image file caches

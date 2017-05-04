@@ -1,0 +1,23 @@
+uomi.cash:443
+
+root /var/www/uomi/public
+tls pherz@smu.edu
+gzip
+log /var/log/caddy/access.log
+errors /var/log/caddy/error.log
+
+rewrite /api {
+	regexp .*
+	to ../api.php?{query}
+}
+
+rewrite / {
+	regexp .*
+	ext /
+	to {path} {path}/ /index.html
+}
+
+
+
+fastcgi ../api.php 0.0.0.0:9000 php
+startup php-fpm7

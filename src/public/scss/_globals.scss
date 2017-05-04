@@ -1,0 +1,21 @@
+
+// FONTS
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+$font-stack:          'Roboto', sans-serif;
+
+
+// COLORS
+
+$site-background:      #f5f5f5;
+
+$global-divider-color: rgba(0,0,0,0.3);
+$uomi-green:           rgb(25,169,29);
+$uomi-dark-green:      darken($uomi-green, 20%);
+
+$inverse-color:        #ffffff;
+$default-color:        #333030;
+$primary-color:        #2b90d9;
+$warning-color:        #e0a400;
+$success-color:        #3ac569;
+$danger-color:         #F32C52;

@@ -1,0 +1,72 @@
+
+$breakpoints: (
+	xs:                     (min: 0px,   max: 575px),
+	sm:                     (min: 576px, max: 767px),
+	md:                     (min: 768px, max: 991px),
+	lg:                     (min: 992px, max: 1199px),
+	xl:                     (min: 1200px)
+);
+
+@mixin breakpoint-only($name) {
+	@if map-has-key($breakpoints, $name) {
+		$breakpoint: map-get($breakpoints, $name);
+		@if map-has-key($breakpoint, min) and map-has-key($breakpoint, max) {
+			@media screen and
+			(min-width: #{map-get($breakpoint,min)}) and
+			(max-width: #{map-get($breakpoint,max)}) {
+				@content;
+			}
+		}
+	}
+}
+
+@mixin breakpoint-up($name) {
+	@if map-has-key($breakpoints, $name) {
+		$breakpoint: map-get($breakpoints, $name);
+		@if map-has-key($breakpoint, min) {
+			@media screen and
+			(min-width: #{map-get($breakpoint,min)}) {
+				@content;
+			}
+		}
+	}
+}
+
+@mixin breakpoint-down($name) {
+	@if map-has-key($breakpoints, $name) {
+		$breakpoint: map-get($breakpoints, $name);
+		@if map-has-key($breakpoint, max) {
+			@media screen and
+			(max-width: #{map-get($breakpoint,max)}) {
+				@content;
+			}
+		}
+	}
+}
+
+@mixin links() {
+	a, a:hover, a:visited, a:active {
+		@content
+	}
+}
+
+@mixin links-same-color($color) {
+	@include links {
+		color: $color;
+	}
+}
+
+@mixin links-no-underline() {
+	@include links {
+		text-decoration: none !important;
+	}
+}
+
+@mixin circle($size) {
+	width: $size;
+	height: $size;
+	border-radius: $size;
+	display: block;
+	content: '';
+	padding: 0;
+}
