@@ -7,6 +7,7 @@ use \Slim\Container;
 use \Respect\Validation\Validator as v;
 use \Respect\Validation\Exceptions\ValidationException;
 use \Respect\Validation\Exceptions\NestedValidationException;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
 use \Uomi\Model\Loan;
@@ -17,7 +18,7 @@ class LoanFactory {
 	private $container;
 	private $errors;
 
-	function __construct(Contianer $c) {
+	function __construct(\Slim\Container $c) {
 		$this->container = $c;
 		$this->errors = [];
 	}
@@ -27,23 +28,23 @@ class LoanFactory {
 		$formResult = [];
 
 		try {
-			$fromResult = $form->submit($data);
+			$formResult = $form->submit($data);
 		} catch(\RuntimeException $e) {
 			$this->errors += $form->getErrors();
 			throw $e;
 		}
 
-		$loan = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['name']);
+		$loan = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['category_id']);
 		$loan->save();
 		return $loan;
 	}
 
-	public function create(string $to_user, string $from_user, string $amount_cents, string $name): Loan {
+	public function create(string $to_user, string $from_user, string $amount_cents, string $category_id): Loan {
 		try {
-			$categoryModel = \Uomi\Model\Category::where('name', $name)->firstOrFail();
+			$categoryModel = \Uomi\Model\Category::findOrFail($category_id);
 		} catch(ModelNotFoundException $e) {
 			try {
-				$categoryModel = \Uomi\Modle\Category::findOfFail(4);
+				$categoryModel = \Uomi\Model\Category::findOrFail($category_id);
 			} catch (ModelNotFoundException $f) {
 				$this->errors += [$f];
 				throw new \RuntimeException();
@@ -68,15 +69,16 @@ class LoanFactory {
 		$form->addField(
 			\Uomi\Field::make()->name('To User', 'to_user')->required()
 		);
-		$from->addField(
+		$form->addField(
 			\Uomi\Field::make()->name('From User', 'from_user')->required()
 		);
 		$form->addField(
 			\Uomi\Field::make()->name('Loan amount(Cents)', 'amount_cents')->required()
 		);
 		$form->addField(
-			\Uomi\Field::make()->name('Category', 'category')
+			\Uomi\Field::make()->name('Category', 'category_id')
 		);
+		return $form;
 	}
 }
 
