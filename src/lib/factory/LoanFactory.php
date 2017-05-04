@@ -27,7 +27,7 @@ class LoanFactory {
 		$formResult = [];
 
 		try {
-			$fromResult = $form->submit($data);
+			$formResult = $form->submit($data);
 		} catch(\RuntimeException $e) {
 			$this->errors += $form->getErrors();
 			throw $e;
