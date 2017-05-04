@@ -91,7 +91,7 @@ module.exports = {
 		reasons: false,
 		children: false,
 		source: false,
-		errors: true,
+		errors: false,
 		errorDetails: false,
 		warnings: false,
 		publicPath: false
