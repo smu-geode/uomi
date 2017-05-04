@@ -1,4 +1,4 @@
-testing.uomi.cash {
+testing.uomi.cash:80 {
 	root /var/www/uomi/public
 	tls off
 	gzip
