@@ -7,6 +7,7 @@ use \Slim\Container;
 use \Respect\Validation\Validator as v;
 use \Respect\Validation\Exceptions\ValidationException;
 use \Respect\Validation\Exceptions\NestedValidationException;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use \Uomi\Status;
 use \Uomi\Model\Loan;
