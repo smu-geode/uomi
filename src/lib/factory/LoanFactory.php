@@ -68,7 +68,7 @@ class LoanFactory {
 		$form->addField(
 			\Uomi\Field::make()->name('To User', 'to_user')->required()
 		);
-		$from->addField(
+		$form->addField(
 			\Uomi\Field::make()->name('From User', 'from_user')->required()
 		);
 		$form->addField(
