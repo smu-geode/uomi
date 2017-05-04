@@ -39,12 +39,12 @@ class LoanFactory {
 		return $loan;
 	}
 
-	public function create(string $to_user, string $from_user, string $amount_cents, string $name): Loan {
+	public function create(string $to_user, string $from_user, string $amount_cents, string $category_id): Loan {
 		try {
-			$categoryModel = \Uomi\Model\Category::where('name', $name)->firstOrFail();
+			$categoryModel = \Uomi\Model\Category::findOrFail($category_id);
 		} catch(ModelNotFoundException $e) {
 			try {
-				$categoryModel = \Uomi\Model\Category::findOfFail(4);
+				$categoryModel = \Uomi\Model\Category::findOrFail($category_id);
 			} catch (ModelNotFoundException $f) {
 				$this->errors += [$f];
 				throw new \RuntimeException();
