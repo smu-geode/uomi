@@ -33,7 +33,7 @@ class LoanFactory {
 			throw $e;
 		}
 
-		$loan = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['name']);
+		$loan = $this->create($formResult['to_user'], $formResult['from_user'], $formResult['amount_cents'], $formResult['category_id']);
 		$loan->save();
 		return $loan;
 	}
@@ -75,7 +75,7 @@ class LoanFactory {
 			\Uomi\Field::make()->name('Loan amount(Cents)', 'amount_cents')->required()
 		);
 		$form->addField(
-			\Uomi\Field::make()->name('Category', 'category')
+			\Uomi\Field::make()->name('Category', 'category_id')
 		);
 		return $form;
 	}
