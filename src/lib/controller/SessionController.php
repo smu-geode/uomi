@@ -39,7 +39,7 @@ class SessionController {
 			return self::badLogInResponse($res, $factory->getErrors());
 		}
 
-		\Uomi\Factory\AnalyticFactory::track($req, $session->user_id);
+		\Uomi\Factory\AnalyticFactory::track($req);
 		
 		$stat = new Status($session);
 		$stat = $stat->message('Session successfully created.');
