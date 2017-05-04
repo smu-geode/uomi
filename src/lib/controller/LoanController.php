@@ -91,7 +91,7 @@ class LoanController {
 			$fromResult = $form->submit($req->getParsedBody());
 		} catch(\RuntimeException $e) {
 			$$stat = new Status(['error' => $form->getErrors()]);
-			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a lona");
+			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a loan");
 			return $res->withStatus(400)->withJson($stat);
 		}
 
@@ -136,12 +136,11 @@ class LoanController {
 		$data = $req->getParsedBody();
 
 		$auth = new Authentication();
-		$isTo = $auth->isRequestAuthorized($req, $to_user);
-		$auth = new Authentication();
-		$isFrom = $auth->isRequestAuthorized($req, $from_user);
+		$isTo = Authentication::isRequestAuthorized($req, $data['from_user'] ?? -1);
+		$isFrom = Authentication::isRequestAuthorized($req, $data['to_user'] ?? -1);
 
-		if(!($isTo || $isFrom)) {
-			return $auth->unathroizedResponse($res, $auth->getErrors());
+		if(!$isTo && !$isFrom) {
+			return $auth->unauthorizedResponse($res, $auth->getErrors());
 		}
 
 		$factory = new LoanFactory($this->container);
@@ -150,7 +149,7 @@ class LoanController {
 			$loan = $factory->submitLoanCreationForm($data);
 		} catch(RuntimeException $e) {
 			$stat = new Status(['error' => $factory->getErrors()]);
-			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a lona");
+			$stat = $stat->error("BadLoanCreation")->message("There was an error in creating a loan");
 			return $res->withStatus(400)->withJson($stat);
 		}
 
